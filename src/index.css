@@ -232,7 +232,8 @@ figcaption,
 }
 
 .status-grid {
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
 }
 
 
@@ -374,10 +375,11 @@ figcaption,
 }
 
 .status-card {
-  padding: 22px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
+  min-height: 100%;
 }
 
 .status-head {
@@ -634,4 +636,63 @@ figcaption,
   margin-top: 14px;
   color: rgba(196, 206, 226, 0.68);
   font-size: 0.94rem;
+}
+
+
+.status-endpoint {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  color: rgba(183, 208, 255, 0.92);
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.status-endpoint:hover {
+  color: rgba(222, 235, 255, 0.98);
+}
+
+.metrics-grid-compact {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.metrics-grid-compact .metric-box:last-child {
+  grid-column: span 1;
+}
+
+.status-card h3 {
+  font-size: 1.15rem;
+  line-height: 1.15;
+  margin-bottom: 0;
+}
+
+.status-description {
+  margin-bottom: 0;
+  min-height: 92px;
+}
+
+
+@media (max-width: 1180px) {
+  .status-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .status-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .metrics-grid-compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .metrics-grid-compact .metric-box:last-child {
+    grid-column: span 2;
+  }
+
+  .status-description {
+    min-height: 0;
+  }
 }

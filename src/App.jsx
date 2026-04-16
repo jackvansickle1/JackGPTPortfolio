@@ -327,12 +327,21 @@ function formatCheckedAt(value) {
     return new Date(value).toLocaleTimeString([], {
       hour: "numeric",
       minute: "2-digit",
-      second: "2-digit",
     });
   } catch {
     return "Waiting for first check";
   }
 }
+
+function formatEndpointHost(value) {
+  if (!value) return "";
+  try {
+    return new URL(value).host;
+  } catch {
+    return value.replace(/^https?:\/\//, "");
+  }
+}
+
 
 const accessLinks = [
 
@@ -471,10 +480,10 @@ function HomePage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
         >
-          <StatCard label="Projects" value="7" />
+          <StatCard label="Projects" value={String(projects.length)} />
           <StatCard label="Public services" value="4" />
           <StatCard label="Core stack" value="React, Docker, Cloudflare" />
-          <StatCard label="Focus" value="AI systems and operations" />
+          <StatCard label="Focus" value="FinTech, AI, and automation" />
         </motion.div>
       </header>
 
@@ -519,7 +528,7 @@ function HomePage() {
         <div className="section-header">
           <div>
             <span className="eyebrow">Projects</span>
-            <h2>Selected work</h2>
+            <h2>Projects</h2>
           </div>
           <p>
             Click any project to view a dedicated page with overview, implementation
@@ -600,13 +609,16 @@ function HomePage() {
         </div>
         <h3>{status.name}</h3>
         <p className="status-description">{status.description}</p>
-        <div className="metrics-grid">
+        <a className="status-endpoint" href={status.endpoint} target="_blank" rel="noreferrer">
+          {formatEndpointHost(status.endpoint)}
+          <ArrowUpRight size={14} />
+        </a>
+        <div className="metrics-grid metrics-grid-compact">
           <MetricBox
             label="Latency"
             value={typeof status.latencyMs === "number" ? `${status.latencyMs} ms` : "—"}
           />
           <MetricBox label="HTTP" value={status.httpStatus ?? "—"} />
-          <MetricBox label="Endpoint" value={status.endpoint} />
           <MetricBox label="Checked" value={formatCheckedAt(status.checkedAt)} />
         </div>
       </motion.article>
