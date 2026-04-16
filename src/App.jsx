@@ -11,6 +11,7 @@ import {
   ExternalLink,
   Globe,
   Image as ImageIcon,
+  LineChart,
   MonitorSmartphone,
   Search,
   Server,
@@ -205,6 +206,31 @@ const projects = [
       "Designed the system for iterative tuning and monitoring.",
     ],
     tech: ["Python", "Kalshi API", "Trading logic", "Risk controls"],
+    screenshots: [],
+  },
+
+  {
+    id: "ninjatrader-bot",
+    name: "NinjaTrader Bot",
+    subtitle: "Algorithmic futures trading and execution",
+    icon: LineChart,
+    accent: "orange",
+    tags: ["NinjaTrader", "Futures", "Automation", "Risk controls"],
+    summary:
+      "A rules-based trading bot built to automate futures trade execution and risk management.",
+    description:
+      "This project centers on a NinjaTrader-based trading bot designed to automate entries, exits, and risk-management rules in futures markets. It is intended to reduce manual execution error, apply consistent decision rules, and support repeatable evaluation of strategy performance.",
+    howItWorks: [
+      "The strategy evaluates market conditions and generates entries according to predefined rules.",
+      "Once in a position, the bot manages stop-losses, targets, and other trade constraints automatically.",
+      "Trade data can be reviewed for performance analysis and iterative strategy improvement.",
+    ],
+    developed: [
+      "Implemented strategy logic and order-management rules within NinjaTrader.",
+      "Added risk controls such as stop-loss and profit-target behavior.",
+      "Tested execution behavior through simulation and strategy review.",
+    ],
+    tech: ["NinjaTrader", "C# / NinjaScript", "Futures", "Risk controls"],
     screenshots: [],
   },
   {
