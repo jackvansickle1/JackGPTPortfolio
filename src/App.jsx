@@ -7,15 +7,17 @@ import {
   ArrowUpRight,
   Bot,
   BrainCircuit,
-  Cloud,
   Cpu,
   ExternalLink,
   Globe,
   Image as ImageIcon,
-  LineChart,
   MonitorSmartphone,
+  Search,
+  Server,
   Shield,
   TrendingUp,
+  TerminalSquare,
+  Cloud,
   X,
 } from "lucide-react";
 import "./index.css";
@@ -31,16 +33,16 @@ const projects = [
     summary:
       "A private AI workspace that combines conversational assistance, web search, and image generation behind a clean web interface.",
     description:
-      "JackGPT is a self-hosted AI platform built on OpenWebUI and published through a Cloudflare Tunnel. It provides conversational responses, web-enabled answers, and image generation through a single consistent interface at app.jackgpt.org.",
+      "JackGPT is a self-hosted AI platform built on OpenWebUI and exposed through a Cloudflare Tunnel. It provides conversational responses, web-enabled answers, and image generation through a single consistent interface at app.jackgpt.org. The system is designed to be reliable, easy to access remotely, and flexible enough to grow with additional models and tools.",
     howItWorks: [
-      "OpenWebUI provides the browser-based chat interface and routes requests to underlying model services.",
-      "The system can perform web searches for current information and generate images from natural-language prompts.",
-      "Cloudflare Tunnel exposes the application securely without opening local ports to the public internet.",
+      "OpenWebUI provides the browser-based chat interface and routes requests to the underlying model services.",
+      "The system can perform web searches when live information is needed and can generate images for visual requests.",
+      "Cloudflare Tunnel publishes the application securely without exposing local ports directly to the internet.",
     ],
     developed: [
-      "Configured a self-hosted deployment and routed traffic securely through Cloudflare.",
-      "Integrated web-search and image-generation capabilities into a single interface.",
-      "Focused on reliability, usability, and extensibility so the system can grow with additional models and tools.",
+      "Configured a self-hosted deployment and exposed it through Cloudflare.",
+      "Integrated model routing and image-generation capabilities into a single interface.",
+      "Focused on usability, stable access, and a clean user experience for day-to-day use.",
     ],
     tech: ["OpenWebUI", "Cloudflare Tunnel", "Self-hosted inference", "Custom routing"],
     links: [{ label: "app.jackgpt.org", href: "https://app.jackgpt.org" }],
@@ -51,11 +53,11 @@ const projects = [
       },
       {
         src: "/project-images/jackgpt/web-search-capabilities.png",
-        caption: "Web-search example with cited current results",
+        caption: "Web search example with cited, current results",
       },
       {
         src: "/project-images/jackgpt/image-generation-capabilities.png",
-        caption: "Image-generation example produced from a natural-language prompt",
+        caption: "Image generation example from a natural-language prompt",
       },
     ],
   },
@@ -69,18 +71,18 @@ const projects = [
     summary:
       "A local AI environment for serving language models through a modern web interface.",
     description:
-      "This project combines OpenWebUI with Ollama to provide a local environment for running and testing language models. It allows models to be served on local hardware while users interact through a browser interface with persistent conversations and model selection.",
+      "This project combines OpenWebUI with Ollama to provide a local environment for running and testing language models. It allows models to be served on local hardware while users interact through a browser interface with persistent conversations and prompt history.",
     howItWorks: [
-      "Ollama serves local language models on the host system.",
-      "OpenWebUI provides a user-friendly interface for conversations, history, and model selection.",
-      "The environment can be used privately on a local network or exposed securely through Cloudflare when needed.",
+      "Ollama runs local language models on the host machine.",
+      "OpenWebUI provides a user-friendly interface for conversations, prompt history, and model selection.",
+      "The service can be used privately on a local network or exposed securely through Cloudflare if needed.",
     ],
     developed: [
       "Installed and configured OpenWebUI and Ollama for local inference.",
-      "Validated service availability and model integration with the broader JackGPT ecosystem.",
-      "Used the environment as the foundation for self-hosted AI experimentation and workflows.",
+      "Validated service availability and integration with upstream tools.",
+      "Used the environment as the foundation for the broader JackGPT ecosystem.",
     ],
-    tech: ["OpenWebUI", "Ollama", "Local inference", "Cloudflare"],
+    tech: ["OpenWebUI", "Ollama", "Cloudflare Tunnel", "Local inference"],
     links: [{ label: "app.jackgpt.org", href: "https://app.jackgpt.org" }],
     screenshots: [
       {
@@ -99,15 +101,15 @@ const projects = [
     summary:
       "A containerized AUTOMATIC1111 deployment exposed securely at images.jackgpt.org for browser-based image generation.",
     description:
-      "This project packages AUTOMATIC1111 in Docker with GPU access and publishes it through Cloudflare Tunnel. It provides a stable, remotely accessible image-generation service that can be started automatically with Docker and used through a browser.",
+      "This project packages AUTOMATIC1111 in Docker with GPU access and publishes it through Cloudflare Tunnel. It provides a stable, remotely accessible image-generation service that can be started automatically with Docker and used through a browser without manual PowerShell commands.",
     howItWorks: [
       "A Docker container runs AUTOMATIC1111 with GPU acceleration on local hardware.",
       "Cloudflare Tunnel exposes the service at images.jackgpt.org without directly opening local ports to the public internet.",
-      "The service supports prompt-based image generation and can be managed alongside the rest of the home-lab infrastructure.",
+      "The service supports prompt-based image generation and can be managed alongside the rest of the JackGPT infrastructure.",
     ],
     developed: [
       "Created a Docker-based deployment for AUTOMATIC1111 and configured GPU support.",
-      "Set up Cloudflare Tunnel and hostname routing for secure external access.",
+      "Set up Cloudflare Tunnel and hostname routing for external access.",
       "Verified container startup, public reachability, and model loading during testing.",
     ],
     tech: ["Docker", "NVIDIA GPU", "AUTOMATIC1111", "Cloudflare Tunnel"],
@@ -165,13 +167,13 @@ const projects = [
     accent: "blue",
     tags: ["Python", "APIs", "Automation", "Trading signals"],
     summary:
-      "A bot designed to monitor weather-based prediction markets and evaluate potential opportunities.",
+      "A bot designed to monitor weather-based prediction markets and evaluate market opportunities.",
     description:
-      "This project monitors Kalshi weather contracts and compares market pricing with temperature forecasts and other data sources. The goal is to identify pricing inefficiencies and surface trade ideas based on measurable weather conditions.",
+      "This project monitors weather-market contracts and compares market pricing against temperature forecasts and other data sources. The goal is to identify market inefficiencies and surface trade opportunities based on quantifiable conditions.",
     howItWorks: [
-      "The bot retrieves market data and weather-forecast information from relevant APIs.",
-      "It compares implied probabilities with expected weather outcomes.",
-      "The system flags actionable scenarios and can be extended with alerts or automated order placement.",
+      "The bot retrieves market data and weather forecast information from relevant APIs.",
+      "It applies rules or analysis to compare implied probabilities with expected weather outcomes.",
+      "The system flags actionable scenarios and can be extended with notifications or order placement.",
     ],
     developed: [
       "Built data-ingestion and monitoring logic around weather and market feeds.",
@@ -179,7 +181,6 @@ const projects = [
       "Structured the project for future expansion into more automated execution.",
     ],
     tech: ["Python", "Weather APIs", "Kalshi API", "Automation"],
-    links: [],
     screenshots: [],
   },
   {
@@ -199,112 +200,135 @@ const projects = [
       "The strategy can be tuned based on volatility, expected value, and inventory constraints.",
     ],
     developed: [
-      "Researched exchange behavior and market structure.",
+      "Researched exchange behavior and trading constraints.",
       "Implemented order-management logic and tested execution flow.",
       "Designed the system for iterative tuning and monitoring.",
     ],
     tech: ["Python", "Kalshi API", "Trading logic", "Risk controls"],
-    links: [],
     screenshots: [],
   },
   {
-    id: "ninjatrader-bot",
-    name: "NinjaTrader Bot",
-    subtitle: "Algorithmic futures trading and execution",
-    icon: LineChart,
-    accent: "orange",
-    tags: ["NinjaTrader", "Futures", "Automation", "Risk management"],
+    id: "windows-use",
+    name: "Windows-use Agent",
+    subtitle: "GUI automation with AI assistance",
+    icon: TerminalSquare,
+    accent: "rose",
+    tags: ["Automation", "Windows", "Agent workflows"],
     summary:
-      "A rules-based trading bot built to automate futures trade execution and risk controls.",
+      "An agent-based approach to automating Windows tasks through interface interaction.",
     description:
-      "This project centers on a NinjaTrader-based trading bot designed to automate entries, exits, and risk-management rules in futures markets. It is intended to reduce manual execution error, apply consistent decision rules, and support repeatable evaluation of strategy performance.",
+      "This project explores using an AI-guided agent to interact with Windows applications and user interfaces. It is intended to automate repetitive tasks and demonstrate how language-model reasoning can be applied to real desktop environments.",
     howItWorks: [
-      "The strategy evaluates market conditions and generates entries according to predefined rules.",
-      "Once in a position, the bot manages stop-losses, targets, and other trade constraints automatically.",
-      "Trade data can be reviewed for performance analysis and iterative strategy improvement.",
+      "The agent interprets instructions and performs actions within a Windows environment.",
+      "It interacts with the GUI to navigate applications, enter data, and respond to on-screen context.",
+      "The system can be extended with guardrails and monitoring for repeatable workflows.",
     ],
     developed: [
-      "Implemented strategy logic and order-management rules within NinjaTrader.",
-      "Added risk controls such as stop-loss and profit-target behavior.",
-      "Tested execution behavior through simulation and strategy review.",
+      "Tested tools for controlling and reading Windows interfaces.",
+      "Developed workflows for repeatable task execution.",
+      "Explored practical applications of agent-based desktop automation.",
     ],
-    tech: ["NinjaTrader", "C# / NinjaScript", "Futures", "Risk controls"],
-    links: [],
-    screenshots: [],
-  },
-  {
-    id: "windows-use-agent-mode",
-    name: "Windows-use Agent Mode",
-    subtitle: "Desktop automation and task execution",
-    icon: MonitorSmartphone,
-    accent: "blue",
-    tags: ["Windows", "Automation", "Agentic workflows", "Browser control"],
-    summary:
-      "A Windows-based agent environment for automating desktop and browser tasks through natural-language instructions.",
-    description:
-      "This project explores Windows agent mode for carrying out multi-step tasks across desktop applications and the web. It translates natural-language instructions into on-screen actions such as opening programs, navigating interfaces, and completing repeatable workflows.",
-    howItWorks: [
-      "Accepts task instructions and plans a series of actions within a Windows environment.",
-      "Interacts with desktop applications and web interfaces to complete multi-step tasks.",
-      "Can be used for workflow automation, browser navigation, and repetitive operational tasks.",
-    ],
-    developed: [
-      "Set up a Windows-based environment for agent-driven task execution and evaluation.",
-      "Tested workflows across desktop applications and web interfaces to understand capabilities and limitations.",
-      "Documented representative tasks for future demonstrations and iteration.",
-    ],
-    tech: ["Windows", "Automation", "Browser control", "Agentic AI"],
-    links: [],
+    tech: ["Windows", "Automation", "AI agent workflows"],
     screenshots: [],
   },
 ];
 
-const serviceAccess = [
+
+const fallbackStatuses = [
   {
-    name: "app.jackgpt.org",
-    description: "JackGPT chat interface and model tools",
+    key: "openwebui",
+    name: "OpenWebUI + Ollama",
+    description: "Checking the public chat interface and model routing.",
+    endpoint: "https://app.jackgpt.org",
+    latencyMs: null,
+    httpStatus: "—",
+    checkedAt: null,
+    status: "checking",
+  },
+  {
+    key: "automatic1111",
+    name: "AUTOMATIC1111",
+    description: "Checking the public image-generation interface.",
+    endpoint: "https://images.jackgpt.org",
+    latencyMs: null,
+    httpStatus: "—",
+    checkedAt: null,
+    status: "checking",
+  },
+  {
+    key: "images",
+    name: "images.jackgpt.org",
+    description: "Checking the public image-generation endpoint.",
+    endpoint: "https://images.jackgpt.org",
+    latencyMs: null,
+    httpStatus: "—",
+    checkedAt: null,
+    status: "checking",
+  },
+  {
+    key: "meshcentral",
+    name: "mesh.jackgpt.org",
+    description: "Checking the remote-management portal.",
+    endpoint: "https://mesh.jackgpt.org",
+    latencyMs: null,
+    httpStatus: "—",
+    checkedAt: null,
+    status: "checking",
+  },
+  {
+    key: "website",
+    name: "JackGPT Platform",
+    description: "Checking the portfolio homepage.",
+    endpoint: "https://jackgpt.org",
+    latencyMs: null,
+    httpStatus: "—",
+    checkedAt: null,
+    status: "checking",
+  },
+];
+
+function mergeStatuses(incoming) {
+  if (!Array.isArray(incoming) || incoming.length === 0) return fallbackStatuses;
+  return fallbackStatuses.map((fallback) => {
+    const match = incoming.find((item) => item.key === fallback.key);
+    return match ? { ...fallback, ...match } : fallback;
+  });
+}
+
+function formatCheckedAt(value) {
+  if (!value) return "Waiting for first check";
+  try {
+    return new Date(value).toLocaleTimeString([], {
+      hour: "numeric",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+  } catch {
+    return "Waiting for first check";
+  }
+}
+
+const accessLinks = [
+
+  {
+    label: "app.jackgpt.org",
     href: "https://app.jackgpt.org",
+    description: "Primary AI workspace and chat interface",
   },
   {
-    name: "images.jackgpt.org",
-    description: "Public image-generation endpoint",
+    label: "images.jackgpt.org",
     href: "https://images.jackgpt.org",
+    description: "Public image generation endpoint",
   },
   {
-    name: "mesh.jackgpt.org",
-    description: "Remote device-management portal",
+    label: "mesh.jackgpt.org",
     href: "https://mesh.jackgpt.org",
-  },
-];
-
-const statuses = [
-  {
-    name: "app.jackgpt.org",
-    description: "Primary chat interface and model routing",
-    latency: "142 ms",
-    uptime: "99.94%",
-    checked: "4/16/2026 5:19 AM",
+    description: "Remote management portal",
   },
   {
-    name: "images.jackgpt.org",
-    description: "Public image-generation service",
-    latency: "126 ms",
-    uptime: "99.91%",
-    checked: "4/16/2026 5:19 AM",
-  },
-  {
-    name: "mesh.jackgpt.org",
-    description: "Remote-management endpoint",
-    latency: "151 ms",
-    uptime: "99.88%",
-    checked: "4/16/2026 5:19 AM",
-  },
-  {
-    name: "JackGPT website",
-    description: "Portfolio site and routing",
-    latency: "118 ms",
-    uptime: "99.98%",
-    checked: "4/16/2026 5:19 AM",
+    label: "jackgpt.org",
+    href: "https://jackgpt.org",
+    description: "Public portfolio homepage",
   },
 ];
 
@@ -331,7 +355,65 @@ function App() {
   return <HomePage />;
 }
 
+
 function HomePage() {
+  const [liveStatuses, setLiveStatuses] = useState(fallbackStatuses);
+  const [statusMeta, setStatusMeta] = useState({
+    loading: true,
+    error: "",
+    source: "/api/status/summary",
+  });
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadStatuses = async () => {
+      try {
+        const response = await fetch("/api/status/summary", {
+          headers: { accept: "application/json" },
+          cache: "no-store",
+        });
+
+        if (!response.ok) {
+          throw new Error(`Status endpoint returned ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (cancelled) return;
+
+        setLiveStatuses(mergeStatuses(data.services));
+        setStatusMeta({
+          loading: false,
+          error: "",
+          source: "/api/status/summary",
+        });
+      } catch (error) {
+        if (cancelled) return;
+
+        setLiveStatuses((current) =>
+          current.map((item) => ({
+            ...item,
+            status: item.checkedAt ? item.status : "checking",
+          }))
+        );
+        setStatusMeta({
+          loading: false,
+          error: error instanceof Error ? error.message : "Status check failed",
+          source: "/api/status/summary",
+        });
+      }
+    };
+
+    loadStatuses();
+    const intervalId = setInterval(loadStatuses, 60000);
+
+    return () => {
+      cancelled = true;
+      clearInterval(intervalId);
+    };
+  }, []);
+
   return (
     <div className="app-shell">
       <header className="hero section">
@@ -341,13 +423,12 @@ function HomePage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <span className="eyebrow">Jack Vansickle</span>
-          <h1>FinTech, trading automation, and self-hosted systems</h1>
+          <span className="eyebrow">JackGPT</span>
+          <h1>AI, automation, and self-hosted infrastructure projects</h1>
           <p className="hero-text">
-            A portfolio centered on quantitative trading ideas, market automation,
-            and the infrastructure used to build and operate them. Projects span
-            prediction-market bots, a NinjaTrader execution bot, self-hosted AI tools,
-            and secure remote services.
+            A portfolio of practical projects spanning AI interfaces, image generation,
+            remote management, trading automation, and local infrastructure exposed
+            securely through Cloudflare.
           </p>
           <div className="hero-actions">
             <a href="#projects" className="button primary">
@@ -358,47 +439,51 @@ function HomePage() {
             </a>
           </div>
         </motion.div>
-
         <motion.div
           className="hero-stats"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
         >
-          <StatCard label="Projects" value={String(projects.length)} />
-          <StatCard label="Focus" value="FinTech & automation" />
-          <StatCard label="Live services" value="3 public endpoints" />
-          <StatCard label="Stack" value="Python, React, Docker, Cloudflare" />
+          <StatCard label="Projects" value="7" />
+          <StatCard label="Public services" value="4" />
+          <StatCard label="Core stack" value="React, Docker, Cloudflare" />
+          <StatCard label="Focus" value="AI systems and operations" />
         </motion.div>
       </header>
 
-      <section className="section" id="access">
-        <div className="section-header compact">
+      <section className="section">
+        <div className="section-header">
           <div>
             <span className="eyebrow">Access</span>
-            <h2>Public services</h2>
+            <h2>Live services and public endpoints</h2>
           </div>
-          <p>Direct links to live endpoints and interfaces.</p>
+          <p>
+            Direct links to the live interfaces that are published as part of the
+            JackGPT environment.
+          </p>
         </div>
+
         <div className="access-grid">
-          {serviceAccess.map((service, index) => (
+          {accessLinks.map((link, index) => (
             <motion.a
-              key={service.name}
-              href={service.href}
+              key={link.href}
+              href={link.href}
               target="_blank"
               rel="noreferrer"
               className="access-card"
               initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.15 }}
-              transition={{ duration: 0.35, delay: index * 0.05 }}
+              transition={{ duration: 0.35, delay: index * 0.04 }}
             >
-              <div>
-                <span className="status-label">Public endpoint</span>
-                <h3>{service.name}</h3>
-                <p>{service.description}</p>
+              <div className="access-top">
+                <span className="status-label">Live endpoint</span>
+                <ArrowUpRight size={18} className="card-arrow" />
               </div>
-              <ExternalLink size={18} className="card-arrow" />
+              <h3>{link.label}</h3>
+              <p className="project-summary">{link.description}</p>
+              <span className="view-link">Open service</span>
             </motion.a>
           ))}
         </div>
@@ -408,11 +493,11 @@ function HomePage() {
         <div className="section-header">
           <div>
             <span className="eyebrow">Projects</span>
-            <h2>Projects</h2>
+            <h2>Selected work</h2>
           </div>
           <p>
-            Click any project to view a dedicated page with an overview,
-            implementation notes, and demonstration images where available.
+            Click any project to view a dedicated page with overview, implementation
+            details, and demonstration images.
           </p>
         </div>
 
@@ -452,61 +537,76 @@ function HomePage() {
         </div>
       </section>
 
-      <section id="status" className="section">
-        <div className="section-header compact">
-          <div>
-            <span className="eyebrow">Live monitoring</span>
-            <h2>Real-time service status</h2>
-          </div>
-          <p>
-            Status cards are designed to consume same-origin health-check endpoints
-            and display live availability, latency, and most recent check times.
-          </p>
-        </div>
+<section id="status" className="section">
+  <div className="section-header">
+    <div>
+      <span className="eyebrow">Live monitoring</span>
+      <h2>Real-time service status</h2>
+    </div>
+    <p>
+      Live checks are pulled from a same-origin Pages Function so visitors can
+      see current reachability, response time, and the most recent check time.
+    </p>
+  </div>
 
-        <div className="status-list">
-          {statuses.map((status, index) => (
-            <motion.article
-              key={status.name}
-              className="status-row"
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.15 }}
-              transition={{ duration: 0.35, delay: index * 0.04 }}
-            >
-              <div className="status-main">
-                <div className="status-title-row">
-                  <h3>{status.name}</h3>
-                  <span className="status-pill">
-                    <Activity size={14} /> Online
-                  </span>
-                </div>
-                <p className="status-description">{status.description}</p>
-              </div>
-              <div className="status-metrics">
-                <MetricInline label="Latency" value={status.latency} />
-                <MetricInline label="Uptime" value={status.uptime} />
-                <MetricInline label="Checked" value={status.checked} />
-              </div>
-            </motion.article>
-          ))}
+  <div className="status-grid">
+    {liveStatuses.map((status, index) => (
+      <motion.article
+        key={status.name}
+        className="status-card"
+        initial={{ opacity: 0, y: 18 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.15 }}
+        transition={{ duration: 0.35, delay: index * 0.04 }}
+      >
+        <div className="status-head">
+          <span className="status-label">Live system status</span>
+          <span className={`status-pill ${status.status}`}>
+            <Activity size={14} />
+            {status.status === "online"
+              ? "Online"
+              : status.status === "degraded"
+                ? "Degraded"
+                : status.status === "offline"
+                  ? "Offline"
+                  : "Checking"}
+          </span>
         </div>
-      </section>
+        <h3>{status.name}</h3>
+        <p className="status-description">{status.description}</p>
+        <div className="metrics-grid">
+          <MetricBox
+            label="Latency"
+            value={typeof status.latencyMs === "number" ? `${status.latencyMs} ms` : "—"}
+          />
+          <MetricBox label="HTTP" value={status.httpStatus ?? "—"} />
+          <MetricBox label="Endpoint" value={status.endpoint} />
+          <MetricBox label="Checked" value={formatCheckedAt(status.checkedAt)} />
+        </div>
+      </motion.article>
+    ))}
+  </div>
+  <p className="status-footnote">
+    {statusMeta.loading
+      ? "Running first live check..."
+      : statusMeta.error
+        ? `Last refresh error: ${statusMeta.error}`
+        : "Status checks refresh automatically every 60 seconds."}
+  </p>
+</section>
+
     </div>
   );
 }
 
 function ProjectDetail({ project }) {
   const Icon = project.icon;
-  const [activeScreenshot, setActiveScreenshot] = useState(null);
+  const [selectedShot, setSelectedShot] = useState(null);
 
   useEffect(() => {
-    const onKeyDown = (event) => {
-      if (event.key === "Escape") setActiveScreenshot(null);
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
+    setSelectedShot(null);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [project.id]);
 
   return (
     <div className="app-shell project-detail-page">
@@ -524,113 +624,121 @@ function ProjectDetail({ project }) {
           <div>
             <span className="eyebrow">Project overview</span>
             <h1>{project.name}</h1>
-            <p className="detail-subtitle">{project.subtitle}</p>
+            <p className="project-subtitle detail-subtitle">{project.subtitle}</p>
           </div>
         </div>
-
-        <div className="detail-summary">
-          <p>{project.description}</p>
-          <div className="tag-row detail-tags">
-            {project.tags.map((tag) => (
-              <span key={tag} className="tag">
-                {tag}
-              </span>
-            ))}
-          </div>
+        <p className="detail-description">{project.description}</p>
+        <div className="tag-row">
+          {project.tags.map((tag) => (
+            <span className="tag" key={tag}>
+              {tag}
+            </span>
+          ))}
+        </div>
+        {project.links?.length > 0 && (
           <div className="detail-links">
-            {project.links?.map((link) => (
-              <a key={link.href} href={link.href} className="button primary" target="_blank" rel="noreferrer">
-                {link.label}
-                <ArrowUpRight size={16} />
+            {project.links.map((link) => (
+              <a key={link.href} href={link.href} target="_blank" rel="noreferrer" className="button primary small">
+                {link.label} <ExternalLink size={16} />
               </a>
             ))}
           </div>
-        </div>
+        )}
       </section>
 
-      <section className="detail-columns section">
-        <div className="detail-card">
-          <h3>
-            <Cpu size={18} /> How it works
-          </h3>
+      <section className="section detail-grid">
+        <article className="detail-card">
+          <div className="detail-card-header">
+            <Server size={18} />
+            <h2>How it works</h2>
+          </div>
           <ul className="detail-list">
-            {project.howItWorks.map((item, index) => (
-              <li key={index}>{item}</li>
+            {project.howItWorks.map((item) => (
+              <li key={item}>{item}</li>
             ))}
           </ul>
-        </div>
+        </article>
 
-        <div className="detail-card">
-          <h3>
-            <Shield size={18} /> How it was developed
-          </h3>
+        <article className="detail-card">
+          <div className="detail-card-header">
+            <Cpu size={18} />
+            <h2>How it was developed</h2>
+          </div>
           <ul className="detail-list">
-            {project.developed.map((item, index) => (
-              <li key={index}>{item}</li>
+            {project.developed.map((item) => (
+              <li key={item}>{item}</li>
             ))}
           </ul>
-        </div>
+        </article>
 
-        <div className="detail-card">
-          <h3>
-            <Globe size={18} /> Key technologies
-          </h3>
-          <div className="tag-row detail-tags">
-            {project.tech.map((item) => (
-              <span key={item} className="tag">
-                {item}
+        <article className="detail-card">
+          <div className="detail-card-header">
+            <Globe size={18} />
+            <h2>Key technologies</h2>
+          </div>
+          <div className="tag-row">
+            {project.tech.map((tech) => (
+              <span className="tag" key={tech}>
+                {tech}
               </span>
             ))}
           </div>
-        </div>
+        </article>
       </section>
 
-      <section className="detail-gallery section">
-        <div className="section-header compact">
+      <section className="section">
+        <div className="section-header">
           <div>
             <span className="eyebrow">Demonstration</span>
             <h2>Screenshots</h2>
           </div>
           <p>
-            Selected screenshots illustrating the project in use. Click an image to enlarge it.
+            {project.screenshots.length > 0
+              ? "Selected screenshots showing the project in use."
+              : "Screenshots will be added as more images are captured."}
           </p>
         </div>
 
-        {project.screenshots?.length ? (
+        {project.screenshots.length > 0 ? (
           <div className="gallery-grid">
-            {project.screenshots.map((image) => (
-              <figure
-                key={image.src}
-                className="gallery-card gallery-large"
-                onClick={() => setActiveScreenshot(image)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter" || event.key === " ") {
-                    setActiveScreenshot(image);
-                  }
-                }}
+            {project.screenshots.map((shot) => (
+              <button
+                type="button"
+                className="gallery-card gallery-button"
+                key={shot.src}
+                onClick={() => setSelectedShot(shot)}
               >
-                <img src={image.src} alt={image.caption} />
-                <figcaption>{image.caption}</figcaption>
-              </figure>
+                <figure>
+                  <img src={shot.src} alt={shot.caption} />
+                  <figcaption>{shot.caption}</figcaption>
+                </figure>
+              </button>
             ))}
           </div>
         ) : (
           <div className="empty-state">
-            <p>Screenshots will be added as the project is documented further.</p>
+            <Shield size={20} />
+            <span>Screenshot set in progress</span>
           </div>
         )}
       </section>
 
-      {activeScreenshot && (
-        <div className="lightbox" onClick={() => setActiveScreenshot(null)}>
-          <button className="lightbox-close" onClick={() => setActiveScreenshot(null)}>
-            <X size={18} />
-          </button>
-          <div className="lightbox-content" onClick={(event) => event.stopPropagation()}>
-            <img src={activeScreenshot.src} alt={activeScreenshot.caption} />
-            <p>{activeScreenshot.caption}</p>
+      {selectedShot && (
+        <div className="lightbox" onClick={() => setSelectedShot(null)}>
+          <div
+            className="lightbox-content"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="lightbox-close"
+              onClick={() => setSelectedShot(null)}
+              aria-label="Close screenshot"
+            >
+              <X size={20} />
+            </button>
+            <img src={selectedShot.src} alt={selectedShot.caption} />
+            <p>{selectedShot.caption}</p>
           </div>
         </div>
       )}
@@ -647,11 +755,11 @@ function StatCard({ label, value }) {
   );
 }
 
-function MetricInline({ label, value }) {
+function MetricBox({ label, value }) {
   return (
-    <div className="metric-inline">
-      <span className="metric-inline-label">{label}</span>
-      <span className="metric-inline-value">{value}</span>
+    <div className="metric-box">
+      <span className="metric-label">{label}</span>
+      <span className="metric-value">{value}</span>
     </div>
   );
 }
