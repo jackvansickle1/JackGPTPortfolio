@@ -260,6 +260,57 @@ figcaption,
   box-shadow: 0 26px 60px rgba(0, 0, 0, 0.3);
 }
 
+.access-carousel-shell {
+  overflow: hidden;
+}
+
+.access-carousel-controls {
+  display: none;
+}
+
+.carousel-button {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(242, 246, 255, 0.96);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+
+.carousel-button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(130, 186, 255, 0.26);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.carousel-dots {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.carousel-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  border: 0;
+  padding: 0;
+  background: rgba(190, 204, 230, 0.28);
+  cursor: pointer;
+  transition: transform 0.18s ease, background 0.18s ease, width 0.18s ease;
+}
+
+.carousel-dot.active {
+  width: 28px;
+  background: rgba(116, 191, 255, 0.95);
+}
+
 .access-top {
   display: flex;
   align-items: center;
@@ -530,6 +581,31 @@ figcaption,
   .button {
     width: 100%;
     justify-content: center;
+  }
+
+  .access-carousel-shell {
+    overflow: hidden;
+  }
+
+  .access-carousel-track {
+    display: flex;
+    gap: 0;
+    transition: transform 0.28s ease;
+    will-change: transform;
+  }
+
+  .access-card {
+    flex: 0 0 100%;
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .access-carousel-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-top: 16px;
   }
 }
 

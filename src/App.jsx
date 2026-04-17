@@ -393,6 +393,7 @@ function App() {
 
 function HomePage() {
   const [liveStatuses, setLiveStatuses] = useState(fallbackStatuses);
+  const [activeAccessIndex, setActiveAccessIndex] = useState(0);
   const [statusMeta, setStatusMeta] = useState({
     loading: true,
     error: "",
@@ -499,28 +500,74 @@ function HomePage() {
           </p>
         </div>
 
-        <div className="access-grid">
-          {accessLinks.map((link, index) => (
-            <motion.a
-              key={link.href}
-              href={link.href}
-              target="_blank"
-              rel="noreferrer"
-              className="access-card"
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.15 }}
-              transition={{ duration: 0.35, delay: index * 0.04 }}
+        <div className="access-carousel-shell">
+          <div
+            className="access-grid access-carousel-track"
+            style={{ transform: `translateX(-${activeAccessIndex * 100}%)` }}
+          >
+            {accessLinks.map((link, index) => (
+              <motion.a
+                key={link.href}
+                href={link.href}
+                target="_blank"
+                rel="noreferrer"
+                className="access-card"
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ duration: 0.35, delay: index * 0.04 }}
+              >
+                <div className="access-top">
+                  <span className="status-label">Live endpoint</span>
+                  <ArrowUpRight size={18} className="card-arrow" />
+                </div>
+                <h3>{link.label}</h3>
+                <p className="project-summary">{link.description}</p>
+                <span className="view-link">Open service</span>
+              </motion.a>
+            ))}
+          </div>
+
+          <div className="access-carousel-controls" aria-label="Access panel controls">
+            <button
+              type="button"
+              className="carousel-button"
+              onClick={() =>
+                setActiveAccessIndex((current) =>
+                  current === 0 ? accessLinks.length - 1 : current - 1
+                )
+              }
+              aria-label="Previous endpoint"
             >
-              <div className="access-top">
-                <span className="status-label">Live endpoint</span>
-                <ArrowUpRight size={18} className="card-arrow" />
-              </div>
-              <h3>{link.label}</h3>
-              <p className="project-summary">{link.description}</p>
-              <span className="view-link">Open service</span>
-            </motion.a>
-          ))}
+              <ArrowLeft size={18} />
+            </button>
+
+            <div className="carousel-dots" aria-label="Endpoint pages">
+              {accessLinks.map((link, index) => (
+                <button
+                  key={link.href}
+                  type="button"
+                  className={`carousel-dot ${index === activeAccessIndex ? "active" : ""}`}
+                  onClick={() => setActiveAccessIndex(index)}
+                  aria-label={`Go to ${link.label}`}
+                  aria-pressed={index === activeAccessIndex}
+                />
+              ))}
+            </div>
+
+            <button
+              type="button"
+              className="carousel-button"
+              onClick={() =>
+                setActiveAccessIndex((current) =>
+                  current === accessLinks.length - 1 ? 0 : current + 1
+                )
+              }
+              aria-label="Next endpoint"
+            >
+              <ArrowRight size={18} />
+            </button>
+          </div>
         </div>
       </section>
 
