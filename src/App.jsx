@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { motion } from "framer-motion";
+﻿import { useEffect, useMemo, useState } from "react";
+import { motion as Motion } from "framer-motion";
 import {
   Activity,
   ArrowLeft,
@@ -161,6 +161,36 @@ const projects = [
     ],
   },
   {
+    id: "searxng",
+    name: "JackGPT Search",
+    subtitle: "Private metasearch endpoint powered by SearXNG",
+    icon: Search,
+    accent: "cyan",
+    tags: ["SearXNG", "Docker", "Metasearch", "Cloudflare Tunnel"],
+    summary:
+      "A branded SearXNG deployment exposed at search.jackgpt.org for private, browser-based metasearch.",
+    description:
+      "JackGPT Search runs SearXNG in Docker with persistent configuration, a custom JackGPT visual identity, and public routing through Cloudflare Tunnel at search.jackgpt.org. It gives the JackGPT stack a dedicated search surface alongside chat, image generation, and remote-management services.",
+    howItWorks: [
+      "SearXNG aggregates results from multiple search engines while keeping the public interface under the JackGPT domain.",
+      "A Docker container serves the search app with mounted configuration and branded template overrides.",
+      "Cloudflare Tunnel routes search.jackgpt.org to the container without exposing the host directly.",
+    ],
+    developed: [
+      "Deployed SearXNG in Docker with persistent settings and Valkey-backed service support.",
+      "Added a branded splash screen, favicon set, PWA colors, and custom theme assets.",
+      "Connected the service to the public JackGPT homepage and live status checks.",
+    ],
+    tech: ["SearXNG", "Docker Compose", "Cloudflare Tunnel", "Custom theme"],
+    links: [{ label: "search.jackgpt.org", href: "https://search.jackgpt.org" }],
+    screenshots: [
+      {
+        src: "/project-images/searxng/jackgpt-search-brand.png",
+        caption: "JackGPT Search brand mark used across the SearXNG theme",
+      },
+    ],
+  },
+  {
     id: "kalshi-temperature-bot",
     name: "Kalshi Temperature Bot",
     subtitle: "Automated weather-market monitoring",
@@ -196,7 +226,7 @@ const projects = [
     description:
       "This bot is designed to place and manage orders in Kalshi BTC-related markets with the goal of capturing spread and liquidity opportunities. It monitors market conditions and updates order placement according to configurable rules.",
     howItWorks: [
-      "The bot pulls market data, evaluates bid–ask spreads, and determines where to place orders.",
+      "The bot pulls market data, evaluates bidâ€“ask spreads, and determines where to place orders.",
       "It manages risk using position limits and order-update logic.",
       "The strategy can be tuned based on volatility, expected value, and inventory constraints.",
     ],
@@ -267,7 +297,7 @@ const fallbackStatuses = [
     description: "Checking the public chat interface and model routing.",
     endpoint: "https://app.jackgpt.org",
     latencyMs: null,
-    httpStatus: "—",
+    httpStatus: "â€”",
     checkedAt: null,
     status: "checking",
   },
@@ -277,7 +307,7 @@ const fallbackStatuses = [
     description: "Checking the public image-generation interface.",
     endpoint: "https://images.jackgpt.org",
     latencyMs: null,
-    httpStatus: "—",
+    httpStatus: "â€”",
     checkedAt: null,
     status: "checking",
   },
@@ -287,7 +317,7 @@ const fallbackStatuses = [
     description: "Checking the public image-generation endpoint.",
     endpoint: "https://images.jackgpt.org",
     latencyMs: null,
-    httpStatus: "—",
+    httpStatus: "â€”",
     checkedAt: null,
     status: "checking",
   },
@@ -297,7 +327,17 @@ const fallbackStatuses = [
     description: "Checking the remote-management portal.",
     endpoint: "https://mesh.jackgpt.org",
     latencyMs: null,
-    httpStatus: "—",
+    httpStatus: "â€”",
+    checkedAt: null,
+    status: "checking",
+  },
+  {
+    key: "searxng",
+    name: "search.jackgpt.org",
+    description: "Checking the branded JackGPT Search endpoint.",
+    endpoint: "https://search.jackgpt.org",
+    latencyMs: null,
+    httpStatus: "â€”",
     checkedAt: null,
     status: "checking",
   },
@@ -307,7 +347,7 @@ const fallbackStatuses = [
     description: "Checking the portfolio homepage.",
     endpoint: "https://jackgpt.org",
     latencyMs: null,
-    httpStatus: "—",
+    httpStatus: "â€”",
     checkedAt: null,
     status: "checking",
   },
@@ -359,6 +399,11 @@ const accessLinks = [
     label: "mesh.jackgpt.org",
     href: "https://mesh.jackgpt.org",
     description: "Remote management portal",
+  },
+  {
+    label: "search.jackgpt.org",
+    href: "https://search.jackgpt.org",
+    description: "Branded private metasearch endpoint",
   },
   {
     label: "jackgpt.org",
@@ -453,7 +498,7 @@ function HomePage() {
   return (
     <div className="app-shell">
       <header className="hero section">
-        <motion.div
+        <Motion.div
           className="hero-copy"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -474,18 +519,18 @@ function HomePage() {
               Live status
             </a>
           </div>
-        </motion.div>
-        <motion.div
+        </Motion.div>
+        <Motion.div
           className="hero-stats"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
         >
           <StatCard label="Projects" value={String(projects.length)} />
-          <StatCard label="Public services" value="4" />
+          <StatCard label="Public services" value={String(accessLinks.length)} />
           <StatCard label="Core stack" value="React, Docker, Cloudflare" />
           <StatCard label="Focus" value="FinTech, AI, and automation" />
-        </motion.div>
+        </Motion.div>
       </header>
 
       <section className="section">
@@ -506,7 +551,7 @@ function HomePage() {
             style={{ transform: `translateX(-${activeAccessIndex * 100}%)` }}
           >
             {accessLinks.map((link, index) => (
-              <motion.a
+              <Motion.a
                 key={link.href}
                 href={link.href}
                 target="_blank"
@@ -524,7 +569,7 @@ function HomePage() {
                 <h3>{link.label}</h3>
                 <p className="project-summary">{link.description}</p>
                 <span className="view-link">Open service</span>
-              </motion.a>
+              </Motion.a>
             ))}
           </div>
 
@@ -587,7 +632,7 @@ function HomePage() {
           {projects.map((project, index) => {
             const Icon = project.icon;
             return (
-              <motion.a
+              <Motion.a
                 key={project.id}
                 href={`#/project/${project.id}`}
                 className="project-card"
@@ -613,7 +658,7 @@ function HomePage() {
                   ))}
                 </div>
                 <span className="view-link">Open project page</span>
-              </motion.a>
+              </Motion.a>
             );
           })}
         </div>
@@ -633,7 +678,7 @@ function HomePage() {
 
   <div className="status-grid">
     {liveStatuses.map((status, index) => (
-      <motion.article
+      <Motion.article
         key={status.name}
         className="status-card"
         initial={{ opacity: 0, y: 18 }}
@@ -663,12 +708,12 @@ function HomePage() {
         <div className="metrics-grid metrics-grid-compact">
           <MetricBox
             label="Latency"
-            value={typeof status.latencyMs === "number" ? `${status.latencyMs} ms` : "—"}
+            value={typeof status.latencyMs === "number" ? `${status.latencyMs} ms` : "â€”"}
           />
-          <MetricBox label="HTTP" value={status.httpStatus ?? "—"} />
+          <MetricBox label="HTTP" value={status.httpStatus ?? "â€”"} />
           <MetricBox label="Checked" value={formatCheckedAt(status.checkedAt)} />
         </div>
-      </motion.article>
+      </Motion.article>
     ))}
   </div>
   <p className="status-footnote">
@@ -686,10 +731,14 @@ function HomePage() {
 
 function ProjectDetail({ project }) {
   const Icon = project.icon;
-  const [selectedShot, setSelectedShot] = useState(null);
+  const [selectedShotState, setSelectedShotState] = useState({
+    projectId: project.id,
+    shot: null,
+  });
+  const selectedShot =
+    selectedShotState.projectId === project.id ? selectedShotState.shot : null;
 
   useEffect(() => {
-    setSelectedShot(null);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [project.id]);
 
@@ -791,7 +840,7 @@ function ProjectDetail({ project }) {
                 type="button"
                 className="gallery-card gallery-button"
                 key={shot.src}
-                onClick={() => setSelectedShot(shot)}
+                onClick={() => setSelectedShotState({ projectId: project.id, shot })}
               >
                 <figure>
                   <img src={shot.src} alt={shot.caption} />
@@ -809,7 +858,10 @@ function ProjectDetail({ project }) {
       </section>
 
       {selectedShot && (
-        <div className="lightbox" onClick={() => setSelectedShot(null)}>
+        <div
+          className="lightbox"
+          onClick={() => setSelectedShotState({ projectId: project.id, shot: null })}
+        >
           <div
             className="lightbox-content"
             onClick={(event) => event.stopPropagation()}
@@ -817,7 +869,7 @@ function ProjectDetail({ project }) {
             <button
               type="button"
               className="lightbox-close"
-              onClick={() => setSelectedShot(null)}
+              onClick={() => setSelectedShotState({ projectId: project.id, shot: null })}
               aria-label="Close screenshot"
             >
               <X size={20} />

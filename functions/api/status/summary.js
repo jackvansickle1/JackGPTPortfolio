@@ -25,6 +25,12 @@ const SERVICE_TARGETS = [
     description: "Remote-management endpoint is reachable.",
   },
   {
+    key: "searxng",
+    name: "search.jackgpt.org",
+    endpoint: "https://search.jackgpt.org",
+    description: "Branded JackGPT Search endpoint is reachable.",
+  },
+  {
     key: "website",
     name: "JackGPT Platform",
     endpoint: "https://jackgpt.org",
@@ -107,7 +113,7 @@ async function checkTarget(target) {
   }
 }
 
-export async function onRequestGet(context) {
+export async function onRequestGet() {
   const checks = await Promise.all(SERVICE_TARGETS.map(checkTarget));
 
   return new Response(
