@@ -191,6 +191,31 @@ const projects = [
     ],
   },
   {
+    id: "market-desk",
+    name: "JackGPT Market Desk",
+    subtitle: "AI-powered equity research and market intelligence terminal",
+    icon: LineChart,
+    accent: "emerald",
+    tags: ["Finance", "AI", "Docker", "React", "FastAPI", "Portfolio"],
+    summary:
+      "A Dockerized finance intelligence terminal combining public market data, local AI summaries, risk flags, and recruiter-facing product design.",
+    description:
+      "JackGPT Market Desk is a public portfolio demo at market.jackgpt.org. It combines a polished React terminal interface with a FastAPI backend, free public market data, local Ollama-powered research summaries when available, deterministic fallback briefs, and transparent dependency status.",
+    howItWorks: [
+      "The React frontend gives visitors a responsive market terminal with ticker search, stat cards, charting, and system-status badges.",
+      "A FastAPI backend sanitizes ticker input, fetches public delayed quote data, and enriches snapshots when public sources are available.",
+      "Ollama can generate analyst-style research briefs locally, while deterministic fallback logic keeps the demo useful if AI or data enrichment is unavailable.",
+    ],
+    developed: [
+      "Built a Dockerized React/Vite and FastAPI service with a public health endpoint.",
+      "Added Cloudflare Tunnel routing for market.jackgpt.org without disrupting existing JackGPT services.",
+      "Designed the UI to match the JackGPT command-center theme with accessible contrast, responsive cards, and honest degraded states.",
+    ],
+    tech: ["React", "Vite", "FastAPI", "Docker Compose", "Ollama", "Cloudflare Tunnel"],
+    links: [{ label: "market.jackgpt.org", href: "https://market.jackgpt.org" }],
+    screenshots: [],
+  },
+  {
     id: "kalshi-temperature-bot",
     name: "Kalshi Temperature Bot",
     subtitle: "Automated weather-market monitoring",
@@ -342,6 +367,16 @@ const fallbackStatuses = [
     status: "checking",
   },
   {
+    key: "market-desk",
+    name: "Market Desk",
+    description: "Checking the AI-powered equity research dashboard.",
+    endpoint: "https://market.jackgpt.org/health",
+    latencyMs: null,
+    httpStatus: "â€”",
+    checkedAt: null,
+    status: "checking",
+  },
+  {
     key: "website",
     name: "JackGPT Platform",
     description: "Checking the portfolio homepage.",
@@ -404,6 +439,12 @@ const accessLinks = [
     label: "search.jackgpt.org",
     href: "https://search.jackgpt.org",
     description: "Branded private search endpoint",
+  },
+  {
+    label: "market.jackgpt.org",
+    href: "https://market.jackgpt.org",
+    description:
+      "AI-powered equity research dashboard with live market snapshots and generated bull/bear analysis.",
   },
   {
     label: "jackgpt.org",

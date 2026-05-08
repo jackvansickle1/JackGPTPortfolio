@@ -31,6 +31,12 @@ const SERVICE_TARGETS = [
     description: "Branded JackGPT Search endpoint is reachable.",
   },
   {
+    key: "market-desk",
+    name: "Market Desk",
+    endpoint: "https://market.jackgpt.org/health",
+    description: "AI-powered equity research dashboard health endpoint is reachable.",
+  },
+  {
     key: "website",
     name: "JackGPT Platform",
     endpoint: "https://jackgpt.org",
