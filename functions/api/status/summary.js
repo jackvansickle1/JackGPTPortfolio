@@ -25,7 +25,7 @@ const SERVICE_TARGETS = [
     description: "Remote-management endpoint is reachable.",
   },
   {
-    key: "searxng",
+    key: "jackgpt-search",
     name: "search.jackgpt.org",
     endpoint: "https://search.jackgpt.org",
     description: "Branded JackGPT Search endpoint is reachable.",

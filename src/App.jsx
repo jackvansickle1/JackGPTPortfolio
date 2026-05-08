@@ -161,32 +161,32 @@ const projects = [
     ],
   },
   {
-    id: "searxng",
+    id: "jackgpt-search",
     name: "JackGPT Search",
-    subtitle: "Private metasearch endpoint powered by SearXNG",
+    subtitle: "Private search endpoint for the JackGPT ecosystem",
     icon: Search,
     accent: "cyan",
-    tags: ["SearXNG", "Docker", "Metasearch", "Cloudflare Tunnel"],
+    tags: ["Private search", "Docker", "Cloudflare Tunnel", "Custom theme"],
     summary:
-      "A branded SearXNG deployment exposed at search.jackgpt.org for private, browser-based metasearch.",
+      "A branded JackGPT Search deployment exposed at search.jackgpt.org for fast, browser-based search.",
     description:
-      "JackGPT Search runs SearXNG in Docker with persistent configuration, a custom JackGPT visual identity, and public routing through Cloudflare Tunnel at search.jackgpt.org. It gives the JackGPT stack a dedicated search surface alongside chat, image generation, and remote-management services.",
+      "JackGPT Search runs in Docker with persistent configuration, a custom JackGPT visual identity, and public routing through Cloudflare Tunnel at search.jackgpt.org. It gives the JackGPT stack a dedicated search surface alongside chat, image generation, and remote-management services.",
     howItWorks: [
-      "SearXNG aggregates results from multiple search engines while keeping the public interface under the JackGPT domain.",
+      "JackGPT Search aggregates web results while keeping the public interface under the JackGPT domain.",
       "A Docker container serves the search app with mounted configuration and branded template overrides.",
       "Cloudflare Tunnel routes search.jackgpt.org to the container without exposing the host directly.",
     ],
     developed: [
-      "Deployed SearXNG in Docker with persistent settings and Valkey-backed service support.",
+      "Deployed JackGPT Search in Docker with persistent settings and supporting service storage.",
       "Added a branded splash screen, favicon set, PWA colors, and custom theme assets.",
       "Connected the service to the public JackGPT homepage and live status checks.",
     ],
-    tech: ["SearXNG", "Docker Compose", "Cloudflare Tunnel", "Custom theme"],
+    tech: ["Private search", "Docker Compose", "Cloudflare Tunnel", "Custom theme"],
     links: [{ label: "search.jackgpt.org", href: "https://search.jackgpt.org" }],
     screenshots: [
       {
-        src: "/project-images/searxng/jackgpt-search-brand.png",
-        caption: "JackGPT Search brand mark used across the SearXNG theme",
+        src: "/project-images/jackgpt-search/jackgpt-search-brand.png",
+        caption: "JackGPT Search brand mark used across the search theme",
       },
     ],
   },
@@ -332,7 +332,7 @@ const fallbackStatuses = [
     status: "checking",
   },
   {
-    key: "searxng",
+    key: "jackgpt-search",
     name: "search.jackgpt.org",
     description: "Checking the branded JackGPT Search endpoint.",
     endpoint: "https://search.jackgpt.org",
@@ -403,7 +403,7 @@ const accessLinks = [
   {
     label: "search.jackgpt.org",
     href: "https://search.jackgpt.org",
-    description: "Branded private metasearch endpoint",
+    description: "Branded private search endpoint",
   },
   {
     label: "jackgpt.org",
