@@ -268,20 +268,7 @@ const projects = [
     ],
     tech: ["Python", "Weather APIs", "Kalshi API", "Automation"],
     links: [{ label: "GitHub demo", href: "https://github.com/jackvansickle1/kalshi-weather-resolver-demo" }],
-    screenshots: [
-      {
-        src: "/project-images/kalshi-temperature-bot/kalshi-weather-architecture.png",
-        caption: "Architecture capture showing forecast ingestion, Kalshi market data, storage, and resolution flow",
-      },
-      {
-        src: "/project-images/kalshi-temperature-bot/kalshi-weather-risk-engine.png",
-        caption: "Signal and risk engine snippets covering sizing, order-book checks, and observation exits",
-      },
-      {
-        src: "/project-images/kalshi-temperature-bot/kalshi-weather-calibration.png",
-        caption: "Persisted calibration artifacts and optimized weather-model weights from local project data",
-      },
-    ],
+    screenshots: [],
   },
   {
     id: "kalshi-btc-bot",
@@ -306,20 +293,7 @@ const projects = [
     ],
     tech: ["Python", "Kalshi API", "Trading logic", "Risk controls"],
     links: [{ label: "GitHub demo", href: "https://github.com/jackvansickle1/kalshi-market-maker-simulator" }],
-    screenshots: [
-      {
-        src: "/project-images/kalshi-btc-bot/kalshi-btc-configuration.png",
-        caption: "Parallel market-making configuration for BTC and related prediction-market strategies",
-      },
-      {
-        src: "/project-images/kalshi-btc-bot/kalshi-btc-avellaneda-engine.png",
-        caption: "Avellaneda-Stoikov quote engine with inventory skew, spread caps, and position limits",
-      },
-      {
-        src: "/project-images/kalshi-btc-bot/kalshi-btc-runtime-log.png",
-        caption: "Sanitized runtime trace showing market polling, inventory checks, and order maintenance",
-      },
-    ],
+    screenshots: [],
   },
 
   {
@@ -345,16 +319,7 @@ const projects = [
     ],
     tech: ["NinjaTrader", "C# / NinjaScript", "Futures", "Risk controls"],
     links: [{ label: "GitHub demo", href: "https://github.com/jackvansickle1/ninjatrader-risk-controls-demo" }],
-    screenshots: [
-      {
-        src: "/project-images/ninjatrader-bot/ninjatrader-strategy-overview.png",
-        caption: "NinjaScript strategy source showing the regime-aware OnBarUpdate execution flow",
-      },
-      {
-        src: "/project-images/ninjatrader-bot/ninjatrader-risk-controls.png",
-        caption: "Risk-control implementation for stops, targets, ATR sizing, and daily loss limits",
-      },
-    ],
+    screenshots: [],
   },
   {
     id: "windows-use",
