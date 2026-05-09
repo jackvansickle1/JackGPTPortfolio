@@ -18,12 +18,16 @@
 
 html {
   scroll-behavior: smooth;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
   background:
     linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
     linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
@@ -43,6 +47,8 @@ body::before {
 
 #root {
   min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 img {
@@ -60,7 +66,9 @@ a {
 }
 
 .app-shell {
-  width: min(1180px, calc(100% - 48px));
+  width: calc(100% - 48px);
+  max-width: 1180px;
+  overflow-x: hidden;
   margin: 0 auto;
   padding: 32px 0 72px;
 }
@@ -98,7 +106,12 @@ h1 {
   font-size: clamp(2.5rem, 4vw, 4rem);
   line-height: 1.05;
   margin-bottom: 18px;
-  letter-spacing: -0.03em;
+  letter-spacing: 0;
+  overflow-wrap: break-word;
+}
+
+.hero-title span {
+  display: block;
 }
 
 h2 {
@@ -131,6 +144,7 @@ figcaption,
   font-size: 1.08rem;
   max-width: 62ch;
   margin-bottom: 24px;
+  overflow-wrap: break-word;
 }
 
 .hero-actions,
@@ -175,6 +189,7 @@ figcaption,
   display: grid;
   gap: 12px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-width: 0;
 }
 
 .stat-card,
@@ -217,6 +232,7 @@ figcaption,
   gap: 28px;
   align-items: start;
   margin-bottom: 24px;
+  min-width: 0;
 }
 
 .project-grid,
@@ -562,11 +578,44 @@ figcaption,
 
 @media (max-width: 720px) {
   .app-shell {
-    width: min(100% - 30px, 1180px);
+    width: calc(100% - 30px);
+    max-width: 1180px;
   }
 
   h1 {
-    font-size: clamp(2.1rem, 8vw, 3rem);
+    font-size: clamp(1.75rem, 7.5vw, 2rem);
+    line-height: 1.08;
+    overflow-wrap: anywhere;
+  }
+
+  h2,
+  h3,
+  p,
+  .stat-value,
+  .metric-value {
+    overflow-wrap: anywhere;
+  }
+
+  .hero,
+  .hero-copy,
+  .section-header,
+  .project-grid,
+  .status-grid,
+  .gallery-grid {
+    min-width: 0;
+  }
+
+  .hero-copy,
+  .hero-title,
+  .hero-text,
+  .hero-actions,
+  .hero-stats,
+  .button {
+    max-width: 360px;
+  }
+
+  .hero-text {
+    font-size: 1rem;
   }
 
   .hero-stats,

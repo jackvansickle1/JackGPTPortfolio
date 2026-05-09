@@ -634,7 +634,11 @@ function HomePage() {
           transition={{ duration: 0.5 }}
         >
           <span className="eyebrow">JackGPT</span>
-          <h1>AI, automation, and self-hosted infrastructure projects</h1>
+          <h1 className="hero-title">
+            <span>AI, automation, and</span>
+            <span>self-hosted</span>
+            <span>infrastructure projects</span>
+          </h1>
           <p className="hero-text">
             A portfolio of practical projects spanning AI interfaces, image generation,
             remote management, trading automation, and local infrastructure exposed
