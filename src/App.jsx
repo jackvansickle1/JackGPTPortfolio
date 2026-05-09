@@ -46,7 +46,10 @@ const projects = [
       "Focused on usability, stable access, and a clean user experience for day-to-day use.",
     ],
     tech: ["OpenWebUI", "Cloudflare Tunnel", "Self-hosted inference", "Custom routing"],
-    links: [{ label: "app.jackgpt.org", href: "https://app.jackgpt.org" }],
+    links: [
+      { label: "app.jackgpt.org", href: "https://app.jackgpt.org" },
+      { label: "GitHub: stack template", href: "https://github.com/jackvansickle1/jackgpt-selfhosted-stack-template" },
+    ],
     screenshots: [
       {
         src: "/project-images/jackgpt/jackgpt-chat-home.png",
@@ -80,7 +83,10 @@ const projects = [
       "Used the environment as the foundation for the broader JackGPT ecosystem.",
     ],
     tech: ["OpenWebUI", "Ollama", "Cloudflare Tunnel", "Local inference"],
-    links: [{ label: "app.jackgpt.org", href: "https://app.jackgpt.org" }],
+    links: [
+      { label: "app.jackgpt.org", href: "https://app.jackgpt.org" },
+      { label: "GitHub: brand kit", href: "https://github.com/jackvansickle1/jackgpt-openwebui-brand-kit" },
+    ],
     screenshots: [
       {
         src: "/project-images/openwebui/openwebui-model-home.png",
@@ -220,7 +226,10 @@ const projects = [
       "Designed the UI to match the JackGPT command-center theme with accessible contrast, responsive cards, and honest degraded states.",
     ],
     tech: ["React", "Vite", "FastAPI", "Docker Compose", "Ollama", "Cloudflare Tunnel"],
-    links: [{ label: "market.jackgpt.org", href: "https://market.jackgpt.org" }],
+    links: [
+      { label: "market.jackgpt.org", href: "https://market.jackgpt.org" },
+      { label: "GitHub", href: "https://github.com/jackvansickle1/jackgpt-market-desk" },
+    ],
     screenshots: [
       {
         src: "/project-images/market-desk/market-desk-terminal.png",
@@ -258,6 +267,7 @@ const projects = [
       "Structured the project for future expansion into more automated execution.",
     ],
     tech: ["Python", "Weather APIs", "Kalshi API", "Automation"],
+    links: [{ label: "GitHub demo", href: "https://github.com/jackvansickle1/kalshi-weather-resolver-demo" }],
     screenshots: [
       {
         src: "/project-images/kalshi-temperature-bot/kalshi-weather-architecture.png",
@@ -295,6 +305,7 @@ const projects = [
       "Designed the system for iterative tuning and monitoring.",
     ],
     tech: ["Python", "Kalshi API", "Trading logic", "Risk controls"],
+    links: [{ label: "GitHub demo", href: "https://github.com/jackvansickle1/kalshi-market-maker-simulator" }],
     screenshots: [
       {
         src: "/project-images/kalshi-btc-bot/kalshi-btc-configuration.png",
@@ -333,6 +344,7 @@ const projects = [
       "Tested execution behavior through simulation and strategy review.",
     ],
     tech: ["NinjaTrader", "C# / NinjaScript", "Futures", "Risk controls"],
+    links: [{ label: "GitHub demo", href: "https://github.com/jackvansickle1/ninjatrader-risk-controls-demo" }],
     screenshots: [
       {
         src: "/project-images/ninjatrader-bot/ninjatrader-strategy-overview.png",
