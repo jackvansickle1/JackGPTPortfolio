@@ -40,6 +40,7 @@ const SERVICE_TARGETS = [
     key: "minecraft",
     name: "Minecraft Server",
     endpoint: "https://market.jackgpt.org/api/minecraft/health",
+    showEndpoint: false,
     description: "Minecraft server is answering the internal status probe.",
   },
   {

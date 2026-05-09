@@ -446,6 +446,7 @@ const fallbackStatuses = [
     name: "Minecraft Server",
     description: "Checking the public Minecraft server status probe.",
     endpoint: "https://market.jackgpt.org/api/minecraft/health",
+    showEndpoint: false,
     latencyMs: null,
     httpStatus: "â€”",
     checkedAt: null,
@@ -817,10 +818,12 @@ function HomePage() {
         </div>
         <h3>{status.name}</h3>
         <p className="status-description">{status.description}</p>
-        <a className="status-endpoint" href={status.endpoint} target="_blank" rel="noreferrer">
-          {formatEndpointHost(status.endpoint)}
-          <ArrowUpRight size={14} />
-        </a>
+        {status.endpoint && status.showEndpoint !== false ? (
+          <a className="status-endpoint" href={status.endpoint} target="_blank" rel="noreferrer">
+            {formatEndpointHost(status.endpoint)}
+            <ArrowUpRight size={14} />
+          </a>
+        ) : null}
         <div className="metrics-grid metrics-grid-compact">
           <MetricBox
             label="Latency"
