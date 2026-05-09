@@ -377,6 +377,16 @@ const fallbackStatuses = [
     status: "checking",
   },
   {
+    key: "minecraft",
+    name: "Minecraft Server",
+    description: "Checking the public Minecraft server status probe.",
+    endpoint: "https://market.jackgpt.org/api/minecraft/health",
+    latencyMs: null,
+    httpStatus: "â€”",
+    checkedAt: null,
+    status: "checking",
+  },
+  {
     key: "website",
     name: "JackGPT Platform",
     description: "Checking the portfolio homepage.",
