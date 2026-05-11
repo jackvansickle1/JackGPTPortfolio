@@ -37,6 +37,12 @@ const SERVICE_TARGETS = [
     description: "AI-powered equity research dashboard health endpoint is reachable.",
   },
   {
+    key: "craps-table",
+    name: "JackGPT Craps",
+    endpoint: "https://craps.jackgpt.org/health",
+    description: "Playable craps table health endpoint is reachable.",
+  },
+  {
     key: "minecraft",
     name: "Minecraft Server",
     endpoint: "https://market.jackgpt.org/api/minecraft/health",
