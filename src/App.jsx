@@ -20,6 +20,7 @@ import {
   TrendingUp,
   TerminalSquare,
   Cloud,
+  Trophy,
   X,
 } from "lucide-react";
 import "./index.css";
@@ -247,36 +248,44 @@ const projects = [
     ],
   },
   {
-    id: "craps-table",
-    name: "JackGPT Craps",
-    subtitle: "Playable browser craps table with standard, bubble, and crapless modes",
-    icon: Dices,
+    id: "casino",
+    name: "JackGPT Casino",
+    subtitle: "Playable browser casino with craps tables and animated horse racing",
+    icon: Trophy,
     accent: "amber",
-    tags: ["React", "Docker", "Game UI", "Cloudflare Tunnel", "Portfolio"],
+    tags: ["React", "Docker", "Game UI", "Animation", "Cloudflare Tunnel", "Portfolio"],
     summary:
-      "A polished public craps table with real bankroll accounting, pass-line point logic, odds, place bets, hardways, field bets, and bubble-craps auto-roll.",
+      "A polished public casino demo with standard craps, bubble craps, crapless craps, animated horse racing, bankroll accounting, and responsive game controls.",
     description:
-      "JackGPT Craps is a Dockerized browser game at craps.jackgpt.org. It turns a casino craps layout into a responsive portfolio-ready web app with standard craps, bubble craps, and crapless craps modes, all styled to match the JackGPT command-center visual system.",
+      "JackGPT Casino is a Dockerized browser game at casino.jackgpt.org. It combines casino-style craps layouts with a live animated horse racing track, all styled to match the JackGPT command-center visual system.",
     howItWorks: [
-      "The React frontend runs the game state instantly in the browser, including chip placement, point state, dice rolls, payout resolution, and roll history.",
+      "The React frontend runs game state instantly in the browser, including chip placement, point state, dice rolls, payout resolution, horse movement, odds, and race history.",
       "A small FastAPI backend serves the compiled app and exposes a public health endpoint for status monitoring.",
-      "Cloudflare Tunnel routes craps.jackgpt.org to the local Docker container without exposing the host directly.",
+      "Cloudflare Tunnel routes casino.jackgpt.org to the local Docker container without exposing the host directly.",
     ],
     developed: [
-      "Implemented standard craps and crapless pass-line resolution with field, proposition, place, hardway, and odds bets.",
-      "Designed a responsive felt-table interface with chip rack controls, animated dice, bubble-craps mode, and mobile-safe layout behavior.",
-      "Integrated the service into the JackGPT Docker stack, tunnel routing, homepage cards, and live status checks.",
+      "Implemented standard, bubble, and crapless craps with table-specific visual treatments and rule differences.",
+      "Built an animated horse racing game with selectable runners, odds, wager sizing, live lane movement, and finish-line resolution.",
+      "Integrated the service into the JackGPT Docker stack, tunnel routing, homepage cards, screenshots, and live status checks.",
     ],
     tech: ["React", "Vite", "FastAPI", "Docker Compose", "Cloudflare Tunnel"],
-    links: [{ label: "craps.jackgpt.org", href: "https://craps.jackgpt.org" }],
+    links: [{ label: "casino.jackgpt.org", href: "https://casino.jackgpt.org" }],
     screenshots: [
       {
-        src: "/project-images/craps-table/jackgpt-craps-standard.png",
-        caption: "JackGPT Craps standard table with active chip controls, dice, and pass-line betting",
+        src: "/project-images/casino/casino-standard.png",
+        caption: "Standard craps table with active chips, dice, line bets, number boxes, and center action",
       },
       {
-        src: "/project-images/craps-table/jackgpt-craps-crapless.png",
-        caption: "Crapless craps mode showing the expanded point layout and casino-style table controls",
+        src: "/project-images/casino/casino-crapless.png",
+        caption: "Crapless craps layout with expanded point numbers and no don't-side betting boxes",
+      },
+      {
+        src: "/project-images/casino/casino-bubble.png",
+        caption: "Bubble craps machine-style table with dice dome, touch-panel betting zones, and auto-roll controls",
+      },
+      {
+        src: "/project-images/casino/casino-racing.png",
+        caption: "Animated horse racing game with live track positions, runner odds, and a betting slip",
       },
     ],
   },
@@ -454,10 +463,10 @@ const fallbackStatuses = [
     status: "checking",
   },
   {
-    key: "craps-table",
-    name: "JackGPT Craps",
-    description: "Checking the playable craps table endpoint.",
-    endpoint: "https://craps.jackgpt.org/health",
+    key: "casino",
+    name: "JackGPT Casino",
+    description: "Checking the playable casino game endpoint.",
+    endpoint: "https://casino.jackgpt.org/health",
     latencyMs: null,
     httpStatus: "-",
     checkedAt: null,
@@ -545,9 +554,9 @@ const accessLinks = [
       "AI-powered equity research dashboard with live market snapshots and generated bull/bear analysis.",
   },
   {
-    label: "craps.jackgpt.org",
-    href: "https://craps.jackgpt.org",
-    description: "Playable JackGPT craps table with standard, bubble, and crapless modes.",
+    label: "casino.jackgpt.org",
+    href: "https://casino.jackgpt.org",
+    description: "Playable JackGPT casino with craps tables and animated horse racing.",
   },
   {
     label: "jackgpt.org",
