@@ -327,7 +327,7 @@ const projects = [
     description:
       "This bot is designed to place and manage orders in Kalshi BTC-related markets with the goal of capturing spread and liquidity opportunities. It monitors market conditions and updates order placement according to configurable rules.",
     howItWorks: [
-      "The bot pulls market data, evaluates bidâ€“ask spreads, and determines where to place orders.",
+      "The bot pulls market data, evaluates bid-ask spreads, and determines where to place orders.",
       "It manages risk using position limits and order-update logic.",
       "The strategy can be tuned based on volatility, expected value, and inventory constraints.",
     ],
@@ -532,37 +532,98 @@ const accessLinks = [
     label: "app.jackgpt.org",
     href: "https://app.jackgpt.org",
     description: "Primary AI workspace and chat interface",
+    accessLabel: "Login required",
+    accessTone: "limited",
+    note: "Best viewed with a provided reviewer account; signups are intentionally controlled.",
   },
   {
     label: "images.jackgpt.org",
     href: "https://images.jackgpt.org",
     description: "Public image generation endpoint",
+    accessLabel: "Public demo",
+    accessTone: "public",
+    note: "Try prompt-to-image generation from the live GPU-backed image service.",
   },
   {
     label: "mesh.jackgpt.org",
     href: "https://mesh.jackgpt.org",
     description: "Remote management portal",
+    accessLabel: "Private admin",
+    accessTone: "private",
+    note: "Shown for infrastructure context and uptime; device access is restricted.",
   },
   {
     label: "search.jackgpt.org",
     href: "https://search.jackgpt.org",
     description: "Branded private search endpoint",
+    accessLabel: "Public demo",
+    accessTone: "public",
+    note: "A good quick demo of the JackGPT-branded utility services.",
   },
   {
     label: "market.jackgpt.org",
     href: "https://market.jackgpt.org",
     description:
       "AI-powered equity research dashboard with live market snapshots and generated bull/bear analysis.",
+    accessLabel: "Best first stop",
+    accessTone: "featured",
+    note: "Search a ticker like NVDA, MSFT, or AAPL to see the full product demo.",
   },
   {
     label: "casino.jackgpt.org",
     href: "https://casino.jackgpt.org",
     description: "Playable JackGPT casino with craps tables and animated horse racing.",
+    accessLabel: "Public demo",
+    accessTone: "public",
+    note: "A fast interactive demo of game logic, UI polish, and animation.",
   },
   {
     label: "jackgpt.org",
     href: "https://jackgpt.org",
     description: "Public portfolio homepage",
+    accessLabel: "You are here",
+    accessTone: "home",
+    note: "Use this page to jump into demos, case studies, code, and live status.",
+  },
+];
+
+const visitorPath = [
+  {
+    eyebrow: "1",
+    title: "Try a live demo",
+    body:
+      "Start with Market Desk, Casino, Search, or Images. These are the fastest ways to see the stack working without extra context.",
+    href: "#live-services",
+    cta: "View live demos",
+    icon: Globe,
+  },
+  {
+    eyebrow: "2",
+    title: "Open a case study",
+    body:
+      "Project cards drill into what was built, why it exists, how it works, screenshots, and public-safe code links when available.",
+    href: "#projects",
+    cta: "Browse projects",
+    icon: ImageIcon,
+  },
+  {
+    eyebrow: "3",
+    title: "Check what is online",
+    body:
+      "The status section shows live reachability and response times so visitors know whether a demo is healthy right now.",
+    href: "#status",
+    cta: "See status",
+    icon: Activity,
+  },
+  {
+    eyebrow: "4",
+    title: "Review public code",
+    body:
+      "GitHub contains recruiter-safe repos, demos, and templates while private credentials and valuable strategy code stay out of public view.",
+    href: "https://github.com/jackvansickle1",
+    cta: "Open GitHub",
+    icon: FolderGit,
+    external: true,
   },
 ];
 
@@ -652,12 +713,7 @@ function HomePage() {
   return (
     <div className="app-shell">
       <header className="hero section">
-        <Motion.div
-          className="hero-copy"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
+        <div className="hero-copy">
           <span className="eyebrow">JackGPT</span>
           <h1 className="hero-title">
             <span>AI, automation, and</span>
@@ -671,7 +727,10 @@ function HomePage() {
             with implementation notes, screenshots, and live links.
           </p>
           <div className="hero-actions">
-            <a href="#projects" className="button primary">
+            <a href="#start" className="button primary">
+              Start here <ArrowRight size={16} />
+            </a>
+            <a href="#projects" className="button secondary">
               View projects <ArrowRight size={16} />
             </a>
             <a href="#status" className="button secondary">
@@ -689,21 +748,68 @@ function HomePage() {
               <ArrowUpRight size={14} />
             </a>
           </div>
-        </Motion.div>
-        <Motion.div
-          className="hero-stats"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-        >
+        </div>
+        <div className="hero-stats">
           <StatCard label="Projects" value={String(projects.length)} />
           <StatCard label="Public services" value={String(accessLinks.length)} />
           <StatCard label="Core stack" value="React, Docker, Cloudflare" />
           <StatCard label="Focus" value="FinTech, AI, and automation" />
-        </Motion.div>
+        </div>
       </header>
 
-      <section className="section">
+      <section id="start" className="section">
+        <div className="section-header">
+          <div>
+            <span className="eyebrow">New visitor path</span>
+            <h2>What to do first</h2>
+          </div>
+          <p>
+            If you are seeing JackGPT without a walkthrough, use this quick path:
+            try a public demo, open the case studies, check live health, then review
+            the public code.
+          </p>
+        </div>
+
+        <div className="visitor-path">
+          {visitorPath.map((item) => {
+            const Icon = item.icon;
+            return (
+              <a
+                key={item.title}
+                href={item.href}
+                target={item.external ? "_blank" : undefined}
+                rel={item.external ? "noreferrer" : undefined}
+                className="visitor-card"
+              >
+                <div className="visitor-card-top">
+                  <span className="step-badge">{item.eyebrow}</span>
+                  <Icon size={18} />
+                </div>
+                <h3>{item.title}</h3>
+                <p>{item.body}</p>
+                <span className="view-link">
+                  {item.cta}
+                  {item.external ? <ArrowUpRight size={15} /> : <ArrowRight size={15} />}
+                </span>
+              </a>
+            );
+          })}
+        </div>
+
+        <div className="visitor-note">
+          <Shield size={19} />
+          <div>
+            <strong>Some endpoints are demos, some are controlled operations surfaces.</strong>
+            <p>
+              Public services are labeled below. Admin tools and account-based AI surfaces
+              stay visible for architecture and status context, but access is intentionally
+              limited.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="live-services" className="section">
         <div className="section-header">
           <div>
             <span className="eyebrow">Access</span>
@@ -711,7 +817,8 @@ function HomePage() {
           </div>
           <p>
             Direct links to the live interfaces that are published as part of the
-            JackGPT environment.
+            JackGPT environment. Badges show which services are easy public demos
+            and which ones are intentionally restricted.
           </p>
         </div>
 
@@ -733,11 +840,12 @@ function HomePage() {
                 transition={{ duration: 0.35, delay: index * 0.04 }}
               >
                 <div className="access-top">
-                  <span className="status-label">Live endpoint</span>
+                  <span className={`access-badge ${link.accessTone}`}>{link.accessLabel}</span>
                   <ArrowUpRight size={18} className="card-arrow" />
                 </div>
                 <h3>{link.label}</h3>
                 <p className="project-summary">{link.description}</p>
+                <p className="access-note">{link.note}</p>
                 <span className="view-link">Open service</span>
               </Motion.a>
             ))}
@@ -793,18 +901,19 @@ function HomePage() {
             <h2>Projects</h2>
           </div>
           <p>
-            Click any project to view a dedicated page with overview, implementation
-            details, and demonstration images.
+            Click any project card to open a dedicated case-study page with overview,
+            implementation details, screenshots, and demo links.
           </p>
         </div>
 
         <div className="project-guide" aria-label="How to review projects">
           <div>
             <span className="guide-kicker">Recruiter guide</span>
-            <strong>Every project card is a case study.</strong>
+            <strong>Every project card opens into a deeper walkthrough.</strong>
             <p>
-              Open a card to see what it does, how it was built, the core technologies,
-              screenshots, and any public demo links.
+              Start with Market Desk or JackGPT Casino if you want the quickest
+              product demo, then use the screenshots and architecture notes to inspect
+              the rest of the ecosystem.
             </p>
           </div>
           <div className="guide-steps">
@@ -899,9 +1008,9 @@ function HomePage() {
         <div className="metrics-grid metrics-grid-compact">
           <MetricBox
             label="Latency"
-            value={typeof status.latencyMs === "number" ? `${status.latencyMs} ms` : "â€”"}
+            value={typeof status.latencyMs === "number" ? `${status.latencyMs} ms` : "-"}
           />
-          <MetricBox label="HTTP" value={status.httpStatus ?? "â€”"} />
+          <MetricBox label="HTTP" value={status.httpStatus ?? "-"} />
           <MetricBox label="Checked" value={formatCheckedAt(status.checkedAt)} />
         </div>
       </Motion.article>
