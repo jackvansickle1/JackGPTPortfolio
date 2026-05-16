@@ -10,6 +10,7 @@ import {
   Cpu,
   Dices,
   ExternalLink,
+  FolderGit,
   Globe,
   Image as ImageIcon,
   LineChart,
@@ -675,6 +676,17 @@ function HomePage() {
             </a>
             <a href="#status" className="button secondary">
               Live status
+            </a>
+            <a
+              href="https://github.com/jackvansickle1"
+              className="button secondary"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Open Jack VanSickle's GitHub profile"
+            >
+              <FolderGit size={16} />
+              GitHub
+              <ArrowUpRight size={14} />
             </a>
           </div>
         </Motion.div>
