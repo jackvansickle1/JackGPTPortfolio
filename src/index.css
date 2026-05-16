@@ -495,6 +495,12 @@ figcaption,
   background: rgba(60, 156, 255, 0.16);
 }
 
+.access-badge.signup {
+  color: #c9e8ff;
+  border-color: rgba(112, 190, 255, 0.24);
+  background: rgba(60, 156, 255, 0.16);
+}
+
 .access-badge.limited {
   color: #ffe1a3;
   border-color: rgba(255, 208, 121, 0.2);

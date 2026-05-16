@@ -532,9 +532,9 @@ const accessLinks = [
     label: "app.jackgpt.org",
     href: "https://app.jackgpt.org",
     description: "Primary AI workspace and chat interface",
-    accessLabel: "Login required",
-    accessTone: "limited",
-    note: "Best viewed with a provided reviewer account; signups are intentionally controlled.",
+    accessLabel: "Sign up to try",
+    accessTone: "signup",
+    note: "Create an account from the sign-in page to explore the public AI workspace.",
   },
   {
     label: "images.jackgpt.org",
@@ -799,11 +799,11 @@ function HomePage() {
         <div className="visitor-note">
           <Shield size={19} />
           <div>
-            <strong>Some endpoints are demos, some are controlled operations surfaces.</strong>
+            <strong>Some endpoints are instant demos, some ask visitors to sign up first.</strong>
             <p>
-              Public services are labeled below. Admin tools and account-based AI surfaces
-              stay visible for architecture and status context, but access is intentionally
-              limited.
+              Public services are labeled below. Account-based AI surfaces can be
+              joined from their sign-in page, while admin tools stay visible for
+              architecture and status context but remain restricted.
             </p>
           </div>
         </div>
@@ -817,8 +817,8 @@ function HomePage() {
           </div>
           <p>
             Direct links to the live interfaces that are published as part of the
-            JackGPT environment. Badges show which services are easy public demos
-            and which ones are intentionally restricted.
+            JackGPT environment. Badges show which services are instant public demos,
+            which ones use signup, and which ones are intentionally restricted.
           </p>
         </div>
 
