@@ -406,9 +406,9 @@ const fallbackStatuses = [
     key: "openwebui",
     name: "OpenWebUI + Ollama",
     description: "Checking the public chat interface and model routing.",
-    endpoint: "https://app.jackgpt.org",
+    endpoint: "https://app.jackgpt.org/api/version",
     latencyMs: null,
-    httpStatus: "â€”",
+    httpStatus: "-",
     checkedAt: null,
     status: "checking",
   },
@@ -416,9 +416,9 @@ const fallbackStatuses = [
     key: "automatic1111",
     name: "AUTOMATIC1111",
     description: "Checking the public image-generation interface.",
-    endpoint: "https://images.jackgpt.org",
+    endpoint: "https://images.jackgpt.org/sdapi/v1/memory",
     latencyMs: null,
-    httpStatus: "â€”",
+    httpStatus: "-",
     checkedAt: null,
     status: "checking",
   },
@@ -426,9 +426,9 @@ const fallbackStatuses = [
     key: "images",
     name: "images.jackgpt.org",
     description: "Checking the public image-generation endpoint.",
-    endpoint: "https://images.jackgpt.org",
+    endpoint: "https://images.jackgpt.org/sdapi/v1/sd-models",
     latencyMs: null,
-    httpStatus: "â€”",
+    httpStatus: "-",
     checkedAt: null,
     status: "checking",
   },
@@ -438,7 +438,7 @@ const fallbackStatuses = [
     description: "Checking the remote-management portal.",
     endpoint: "https://mesh.jackgpt.org",
     latencyMs: null,
-    httpStatus: "â€”",
+    httpStatus: "-",
     checkedAt: null,
     status: "checking",
   },
@@ -448,7 +448,7 @@ const fallbackStatuses = [
     description: "Checking the branded JackGPT Search endpoint.",
     endpoint: "https://search.jackgpt.org",
     latencyMs: null,
-    httpStatus: "â€”",
+    httpStatus: "-",
     checkedAt: null,
     status: "checking",
   },
@@ -458,7 +458,7 @@ const fallbackStatuses = [
     description: "Checking the AI-powered equity research dashboard.",
     endpoint: "https://market.jackgpt.org/health",
     latencyMs: null,
-    httpStatus: "â€”",
+    httpStatus: "-",
     checkedAt: null,
     status: "checking",
   },
@@ -479,7 +479,7 @@ const fallbackStatuses = [
     endpoint: "https://market.jackgpt.org/api/minecraft/health",
     showEndpoint: false,
     latencyMs: null,
-    httpStatus: "â€”",
+    httpStatus: "-",
     checkedAt: null,
     status: "checking",
   },
@@ -489,7 +489,7 @@ const fallbackStatuses = [
     description: "Checking the portfolio homepage.",
     endpoint: "https://jackgpt.org",
     latencyMs: null,
-    httpStatus: "â€”",
+    httpStatus: "-",
     checkedAt: null,
     status: "checking",
   },
@@ -605,7 +605,7 @@ function HomePage() {
       try {
         const response = await fetch("/api/status/summary", {
           headers: { accept: "application/json" },
-          cache: "no-store",
+          cache: "default",
         });
 
         if (!response.ok) {
@@ -666,7 +666,8 @@ function HomePage() {
           <p className="hero-text">
             A portfolio of practical projects spanning AI interfaces, image generation,
             remote management, trading automation, and local infrastructure exposed
-            securely through Cloudflare.
+            securely through Cloudflare. Project cards open into detailed case studies
+            with implementation notes, screenshots, and live links.
           </p>
           <div className="hero-actions">
             <a href="#projects" className="button primary">
@@ -785,6 +786,22 @@ function HomePage() {
           </p>
         </div>
 
+        <div className="project-guide" aria-label="How to review projects">
+          <div>
+            <span className="guide-kicker">Recruiter guide</span>
+            <strong>Every project card is a case study.</strong>
+            <p>
+              Open a card to see what it does, how it was built, the core technologies,
+              screenshots, and any public demo links.
+            </p>
+          </div>
+          <div className="guide-steps">
+            <span><ArrowUpRight size={15} /> Click a card</span>
+            <span><Server size={15} /> Read architecture</span>
+            <span><ImageIcon size={15} /> View screenshots</span>
+          </div>
+        </div>
+
         <div className="project-grid">
           {projects.map((project, index) => {
             const Icon = project.icon;
@@ -814,7 +831,10 @@ function HomePage() {
                     </span>
                   ))}
                 </div>
-                <span className="view-link">Open project page</span>
+                <div className="project-card-footer">
+                  <span>{project.screenshots.length > 0 ? `${project.screenshots.length} screenshots` : "Overview page"}</span>
+                  <span className="view-link">View case study <ArrowRight size={15} /></span>
+                </div>
               </Motion.a>
             );
           })}

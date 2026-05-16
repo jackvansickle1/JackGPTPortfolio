@@ -3,19 +3,19 @@ const SERVICE_TARGETS = [
   {
     key: "openwebui",
     name: "OpenWebUI + Ollama",
-    endpoint: "https://app.jackgpt.org",
+    endpoint: "https://app.jackgpt.org/api/version",
     description: "Public chat interface and model routing are reachable.",
   },
   {
     key: "automatic1111",
     name: "AUTOMATIC1111",
-    endpoint: "https://images.jackgpt.org",
+    endpoint: "https://images.jackgpt.org/sdapi/v1/memory",
     description: "Image-generation service is reachable.",
   },
   {
     key: "images",
     name: "images.jackgpt.org",
-    endpoint: "https://images.jackgpt.org",
+    endpoint: "https://images.jackgpt.org/sdapi/v1/sd-models",
     description: "Public image-generation endpoint is reachable.",
   },
   {
@@ -68,7 +68,7 @@ function buildTimeoutSignal(ms) {
 
 async function checkTarget(target) {
   const startedAt = Date.now();
-  const { signal, clear } = buildTimeoutSignal(8000);
+  const { signal, clear } = buildTimeoutSignal(4500);
 
   try {
     let response;
@@ -78,10 +78,8 @@ async function checkTarget(target) {
         method: "HEAD",
         redirect: "follow",
         signal,
-        cf: { cacheTtl: 0, cacheEverything: false },
+        cf: { cacheTtl: 20, cacheEverything: true },
         headers: {
-          "cache-control": "no-store",
-          pragma: "no-cache",
           "user-agent": "jackgpt-status-probe",
         },
       });
@@ -90,10 +88,8 @@ async function checkTarget(target) {
         method: "GET",
         redirect: "follow",
         signal,
-        cf: { cacheTtl: 0, cacheEverything: false },
+        cf: { cacheTtl: 20, cacheEverything: true },
         headers: {
-          "cache-control": "no-store",
-          pragma: "no-cache",
           "user-agent": "jackgpt-status-probe",
         },
       });
@@ -147,7 +143,7 @@ export async function onRequestGet() {
     {
       headers: {
         "content-type": "application/json; charset=utf-8",
-        "cache-control": "no-store, no-cache, must-revalidate, max-age=0",
+        "cache-control": "public, max-age=20, s-maxage=20, stale-while-revalidate=40",
       },
     },
   );
