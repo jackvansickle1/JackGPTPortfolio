@@ -46,7 +46,8 @@ const SERVICE_TARGETS = [
     key: "kalshi-temperature-bot",
     name: "Kalshi Temperature Bot",
     endpoint: "https://kalshi.jackgpt.org/health",
-    description: "Automated Kalshi weather scanner dashboard health endpoint is reachable.",
+    description: "Kalshi Climate Desk scanner heartbeat is reachable.",
+    readJsonStatus: true,
   },
   {
     key: "minecraft",
@@ -79,42 +80,71 @@ async function checkTarget(target) {
   try {
     let response;
 
-    try {
-      response = await fetch(target.endpoint, {
-        method: "HEAD",
-        redirect: "follow",
-        signal,
-        cf: { cacheTtl: 20, cacheEverything: true },
-        headers: {
-          "user-agent": "jackgpt-status-probe",
-        },
-      });
-    } catch {
+    if (target.readJsonStatus) {
       response = await fetch(target.endpoint, {
         method: "GET",
         redirect: "follow",
         signal,
         cf: { cacheTtl: 20, cacheEverything: true },
         headers: {
+          accept: "application/json",
           "user-agent": "jackgpt-status-probe",
         },
       });
+    } else {
+      try {
+        response = await fetch(target.endpoint, {
+          method: "HEAD",
+          redirect: "follow",
+          signal,
+          cf: { cacheTtl: 20, cacheEverything: true },
+          headers: {
+            "user-agent": "jackgpt-status-probe",
+          },
+        });
+      } catch {
+        response = await fetch(target.endpoint, {
+          method: "GET",
+          redirect: "follow",
+          signal,
+          cf: { cacheTtl: 20, cacheEverything: true },
+          headers: {
+            "user-agent": "jackgpt-status-probe",
+          },
+        });
+      }
     }
 
     const latencyMs = Date.now() - startedAt;
     const httpStatus = response.status;
-    const status =
+    let status =
       response.ok
         ? latencyMs > 2000
           ? "degraded"
           : "online"
         : "offline";
+    let description = target.description;
+
+    if (target.readJsonStatus) {
+      try {
+        const data = await response.clone().json();
+        if (["online", "degraded", "offline"].includes(data.status)) {
+          status = data.status;
+        }
+        if (data.scanner) {
+          description = `Kalshi Climate Desk reports scanner ${data.scanner}; health endpoint is reachable.`;
+        }
+      } catch {
+        status = response.ok ? status : "offline";
+      }
+    }
 
     return {
       ...target,
       status,
       httpStatus,
       latencyMs,
+      description,
       checkedAt: new Date().toISOString(),
     };
   } catch (error) {

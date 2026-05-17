@@ -302,24 +302,33 @@ const projects = [
     subtitle: "Live weather-market scanner and operations dashboard",
     icon: Cloud,
     accent: "blue",
-    tags: ["Python", "Kalshi API", "Automation", "Docker", "Cloudflare Tunnel"],
+    tags: ["Python", "Kalshi API", "Automation", "Operations Dashboard", "Docker", "Cloudflare Tunnel"],
     summary:
-      "An automated Kalshi weather-market scanner with startup supervision, daily maintenance, and a live public operations dashboard.",
+      "An automated Kalshi weather-market scanner with startup supervision, daily maintenance, and a live public trading-operations dashboard.",
     description:
-      "Kalshi Temperature Bot monitors weather-market contracts and keeps the scanner process alive throughout the day. The dashboard at kalshi.jackgpt.org exposes a public-safe operating view with scanner health, heartbeat, maintenance state, and aggregate activity counts while keeping strategy logic and calculations private.",
+      "Kalshi Temperature Bot monitors weather-market contracts and keeps the scanner process alive throughout the day. The dashboard at kalshi.jackgpt.org exposes a public-safe operating view with scanner health, active positions, estimated open P/L, realized gains/losses, recent sanitized trades, bankroll history, and city-level exposure while keeping strategy logic, order IDs, keys, logs, and model weights private.",
     howItWorks: [
       "A private Python scanner retrieves market and weather inputs, then evaluates opportunities using non-public strategy logic.",
       "A Windows startup supervisor keeps scanner.py running, and each morning it stops the scanner, runs resolve.py and auto_optimize.py, then restarts scanner.py.",
-      "A Dockerized FastAPI dashboard reports public-safe health data through a read-only mount without exposing formulas, logs, model weights, or trade-level rows.",
+      "A Dockerized FastAPI dashboard reads the bot database through a read-only mount and publishes sanitized operational telemetry, including positions, P/L, trade activity, exposure, and a fast heartbeat health endpoint.",
     ],
     developed: [
       "Installed an all-day scanner supervisor that starts on Windows login and recovers the bot if the process exits.",
       "Added morning maintenance automation for trade resolution, model optimization, and scanner restart.",
-      "Built and deployed a Cloudflare Tunnel-ready dashboard service for live operational visibility.",
+      "Built and deployed a Cloudflare Tunnel-ready Kalshi Climate Desk with mark-to-market position cards, recent trade rows, bankroll curve, pending-order disclosure, and mobile-responsive JackGPT styling.",
     ],
     tech: ["Python", "SQLite", "FastAPI", "Docker Compose", "Cloudflare Tunnel", "Windows startup automation"],
     links: [{ label: "kalshi.jackgpt.org", href: "https://kalshi.jackgpt.org" }],
-    screenshots: [],
+    screenshots: [
+      {
+        src: "/project-images/kalshi-temperature-bot/kalshi-climate-desk-overview.png",
+        caption: "Kalshi Climate Desk showing scanner health, bankroll, open exposure, estimated open P/L, realized P/L, and active positions",
+      },
+      {
+        src: "/project-images/kalshi-temperature-bot/kalshi-climate-desk-trades.png",
+        caption: "Operations dashboard with sanitized recent trades, city exposure, and public-safe pending-order disclosure",
+      },
+    ],
   },
   {
     id: "kalshi-btc-bot",
@@ -482,7 +491,7 @@ const fallbackStatuses = [
   {
     key: "kalshi-temperature-bot",
     name: "Kalshi Temperature Bot",
-    description: "Checking the automated Kalshi scanner dashboard.",
+    description: "Checking the Kalshi Climate Desk scanner heartbeat.",
     endpoint: "https://kalshi.jackgpt.org/health",
     latencyMs: null,
     httpStatus: "-",
@@ -596,10 +605,10 @@ const accessLinks = [
   {
     label: "kalshi.jackgpt.org",
     href: "https://kalshi.jackgpt.org",
-    description: "Live Kalshi weather-market bot dashboard and scanner health.",
+    description: "Live Kalshi weather-market bot operations dashboard.",
     accessLabel: "Live status",
     accessTone: "public",
-    note: "Watch scanner uptime, maintenance state, and aggregate activity without exposing private strategy details.",
+    note: "Watch scanner uptime, active positions, P/L, exposure, recent trades, and bankroll history without exposing private strategy details.",
   },
   {
     label: "jackgpt.org",
