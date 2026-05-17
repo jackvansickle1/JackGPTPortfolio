@@ -306,11 +306,11 @@ const projects = [
     summary:
       "An automated Kalshi weather-market scanner with startup supervision, daily maintenance, and a live public operations dashboard.",
     description:
-      "Kalshi Temperature Bot monitors weather-market contracts, compares market pricing against temperature forecasts, and keeps the scanner process alive throughout the day. The dashboard at kalshi.jackgpt.org exposes a public-safe operating view with scanner health, bankroll, open exposure, model weights, recent activity, and sanitized log output.",
+      "Kalshi Temperature Bot monitors weather-market contracts and keeps the scanner process alive throughout the day. The dashboard at kalshi.jackgpt.org exposes a public-safe operating view with scanner health, heartbeat, maintenance state, and aggregate activity counts while keeping strategy logic and calculations private.",
     howItWorks: [
-      "A Python scanner retrieves Kalshi market data, weather forecasts, and METAR readings, then evaluates contract prices against model probabilities.",
+      "A private Python scanner retrieves market and weather inputs, then evaluates opportunities using non-public strategy logic.",
       "A Windows startup supervisor keeps scanner.py running, and each morning it stops the scanner, runs resolve.py and auto_optimize.py, then restarts scanner.py.",
-      "A Dockerized FastAPI dashboard reads the bot database, run files, optimizer output, and sanitized logs through a read-only mount for live status reporting.",
+      "A Dockerized FastAPI dashboard reports public-safe health data through a read-only mount without exposing formulas, logs, model weights, or trade-level rows.",
     ],
     developed: [
       "Installed an all-day scanner supervisor that starts on Windows login and recovers the bot if the process exits.",
@@ -602,7 +602,7 @@ const accessLinks = [
     description: "Live Kalshi weather-market bot dashboard and scanner health.",
     accessLabel: "Live status",
     accessTone: "public",
-    note: "Watch scanner uptime, open exposure, optimizer weights, and recent sanitized activity.",
+    note: "Watch scanner uptime, maintenance state, and aggregate activity without exposing private strategy details.",
   },
   {
     label: "jackgpt.org",
