@@ -700,6 +700,7 @@ function App() {
 function HomePage() {
   const [liveStatuses, setLiveStatuses] = useState(fallbackStatuses);
   const [activeAccessIndex, setActiveAccessIndex] = useState(0);
+  const [isCompanionOpen, setIsCompanionOpen] = useState(false);
   const [companionMessages, setCompanionMessages] = useState([initialCompanionMessage]);
   const [companionInput, setCompanionInput] = useState("");
   const [companionLoading, setCompanionLoading] = useState(false);
@@ -760,9 +761,23 @@ function HomePage() {
     };
   }, []);
 
+  useEffect(() => {
+    const openFromGuideHash = () => {
+      if (window.location.hash === "#guide") {
+        setIsCompanionOpen(true);
+      }
+    };
+
+    openFromGuideHash();
+    window.addEventListener("hashchange", openFromGuideHash);
+    return () => window.removeEventListener("hashchange", openFromGuideHash);
+  }, []);
+
   const askCompanion = async (rawQuestion = companionInput) => {
     const question = rawQuestion.trim();
     if (!question || companionLoading) return;
+
+    setIsCompanionOpen(true);
 
     const outgoingMessages = [
       ...companionMessages,
@@ -922,21 +937,9 @@ function HomePage() {
         </div>
       </section>
 
-      <section id="guide" className="section companion-section">
-        <div className="section-header">
-          <div>
-            <span className="eyebrow">AI companion</span>
-            <h2>Ask the JackGPT guide</h2>
-          </div>
-          <p>
-            A project-aware assistant for recruiters and first-time visitors. It
-            knows the public JackGPT ecosystem, where to start, what each demo
-            shows, and how the infrastructure fits together.
-          </p>
-        </div>
-
-        <div className="companion-layout">
-          <article className="companion-panel">
+      <div id="guide" className={`companion-widget ${isCompanionOpen ? "open" : ""}`}>
+        {isCompanionOpen ? (
+          <article className="companion-panel" aria-label="JackGPT AI guide">
             <div className="companion-head">
               <div className="companion-title">
                 <span className="companion-icon">
@@ -947,10 +950,20 @@ function HomePage() {
                   <p>{companionStatus}</p>
                 </div>
               </div>
-              <span className={`status-pill ${companionLoading ? "checking" : "online"}`}>
-                {companionLoading ? <LoaderCircle size={14} className="spin-icon" /> : <MessageCircle size={14} />}
-                {companionLoading ? "Thinking" : "Ready"}
-              </span>
+              <div className="companion-actions">
+                <span className={`status-pill ${companionLoading ? "checking" : "online"}`}>
+                  {companionLoading ? <LoaderCircle size={14} className="spin-icon" /> : <MessageCircle size={14} />}
+                  {companionLoading ? "Thinking" : "Ready"}
+                </span>
+                <button
+                  type="button"
+                  className="companion-close"
+                  onClick={() => setIsCompanionOpen(false)}
+                  aria-label="Close JackGPT guide"
+                >
+                  <X size={17} />
+                </button>
+              </div>
             </div>
 
             <div className="companion-messages" aria-live="polite">
@@ -976,6 +989,26 @@ function HomePage() {
                   </div>
                 </div>
               ) : null}
+            </div>
+
+            <div className="companion-prompts compact" aria-label="Suggested questions">
+              <div className="companion-prompt-head">
+                <Compass size={16} />
+                <h3>Try asking</h3>
+              </div>
+              <div className="prompt-row">
+                {companionPrompts.map((prompt) => (
+                  <button
+                    key={prompt}
+                    type="button"
+                    className="prompt-chip"
+                    onClick={() => askCompanion(prompt)}
+                    disabled={companionLoading}
+                  >
+                    {prompt}
+                  </button>
+                ))}
+              </div>
             </div>
 
             <form
@@ -1005,32 +1038,23 @@ function HomePage() {
               </button>
             </form>
           </article>
-
-          <aside className="companion-prompts" aria-label="Suggested questions">
-            <div className="companion-prompt-head">
-              <Compass size={18} />
-              <h3>Try asking</h3>
-            </div>
-            {companionPrompts.map((prompt) => (
-              <button
-                key={prompt}
-                type="button"
-                className="prompt-chip"
-                onClick={() => askCompanion(prompt)}
-                disabled={companionLoading}
-              >
-                {prompt}
-                <ArrowRight size={15} />
-              </button>
-            ))}
-            <p>
-              The guide uses public-safe portfolio context. It can explain demos,
-              deployment choices, navigation, and what a recruiter should inspect
-              without exposing private strategy code or secrets.
-            </p>
-          </aside>
-        </div>
-      </section>
+        ) : (
+          <button
+            type="button"
+            className="companion-launcher"
+            onClick={() => setIsCompanionOpen(true)}
+            aria-label="Open JackGPT AI guide"
+          >
+            <span className="launcher-icon">
+              <MessageCircle size={24} />
+            </span>
+            <span className="launcher-copy">
+              <strong>Ask JackGPT</strong>
+              <small>Project guide</small>
+            </span>
+          </button>
+        )}
+      </div>
 
       <section id="live-services" className="section">
         <div className="section-header">
