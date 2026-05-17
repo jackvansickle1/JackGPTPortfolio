@@ -49,6 +49,10 @@ function fallbackAnswer(question) {
   }
 
   if (/(search|web search|engine)/.test(text)) {
+    if (/(power|powered|backend|technical|technically|underlying)/.test(text)) {
+      return "JackGPT Search at search.jackgpt.org is the branded public search surface. At the backend level it is powered by SearXNG, wrapped in JackGPT branding and kept free of private configuration details.";
+    }
+
     return "JackGPT Search at search.jackgpt.org is the branded public web-search endpoint. Recruiters can use it directly, and JackGPT 3.1 can use web search inside the AI workspace. Implementation details stay quiet unless someone asks specifically for backend architecture.";
   }
 
