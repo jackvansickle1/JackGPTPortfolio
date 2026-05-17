@@ -318,10 +318,7 @@ const projects = [
       "Built and deployed a Cloudflare Tunnel-ready dashboard service for live operational visibility.",
     ],
     tech: ["Python", "SQLite", "FastAPI", "Docker Compose", "Cloudflare Tunnel", "Windows startup automation"],
-    links: [
-      { label: "kalshi.jackgpt.org", href: "https://kalshi.jackgpt.org" },
-      { label: "GitHub demo", href: "https://github.com/jackvansickle1/kalshi-weather-resolver-demo" },
-    ],
+    links: [{ label: "kalshi.jackgpt.org", href: "https://kalshi.jackgpt.org" }],
     screenshots: [],
   },
   {
@@ -346,7 +343,7 @@ const projects = [
       "Designed the system for iterative tuning and monitoring.",
     ],
     tech: ["Python", "Kalshi API", "Trading logic", "Risk controls"],
-    links: [{ label: "GitHub demo", href: "https://github.com/jackvansickle1/kalshi-market-maker-simulator" }],
+    links: [],
     screenshots: [],
   },
 
