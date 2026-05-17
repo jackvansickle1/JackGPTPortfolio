@@ -299,26 +299,29 @@ const projects = [
   {
     id: "kalshi-temperature-bot",
     name: "Kalshi Temperature Bot",
-    subtitle: "Automated weather-market monitoring",
+    subtitle: "Live weather-market scanner and operations dashboard",
     icon: Cloud,
     accent: "blue",
-    tags: ["Python", "APIs", "Automation", "Trading signals"],
+    tags: ["Python", "Kalshi API", "Automation", "Docker", "Cloudflare Tunnel"],
     summary:
-      "A bot designed to monitor weather-based prediction markets and evaluate market opportunities.",
+      "An automated Kalshi weather-market scanner with startup supervision, daily maintenance, and a live public operations dashboard.",
     description:
-      "This project monitors weather-market contracts and compares market pricing against temperature forecasts and other data sources. The goal is to identify market inefficiencies and surface trade opportunities based on quantifiable conditions.",
+      "Kalshi Temperature Bot monitors weather-market contracts, compares market pricing against temperature forecasts, and keeps the scanner process alive throughout the day. The dashboard at kalshi.jackgpt.org exposes a public-safe operating view with scanner health, bankroll, open exposure, model weights, recent activity, and sanitized log output.",
     howItWorks: [
-      "The bot retrieves market data and weather forecast information from relevant APIs.",
-      "It applies rules or analysis to compare implied probabilities with expected weather outcomes.",
-      "The system flags actionable scenarios and can be extended with notifications or order placement.",
+      "A Python scanner retrieves Kalshi market data, weather forecasts, and METAR readings, then evaluates contract prices against model probabilities.",
+      "A Windows startup supervisor keeps scanner.py running, and each morning it stops the scanner, runs resolve.py and auto_optimize.py, then restarts scanner.py.",
+      "A Dockerized FastAPI dashboard reads the bot database, run files, optimizer output, and sanitized logs through a read-only mount for live status reporting.",
     ],
     developed: [
-      "Built data-ingestion and monitoring logic around weather and market feeds.",
-      "Tested calculations and threshold logic for identifying candidate positions.",
-      "Structured the project for future expansion into more automated execution.",
+      "Installed an all-day scanner supervisor that starts on Windows login and recovers the bot if the process exits.",
+      "Added morning maintenance automation for trade resolution, model optimization, and scanner restart.",
+      "Built and deployed a Cloudflare Tunnel-ready dashboard service for live operational visibility.",
     ],
-    tech: ["Python", "Weather APIs", "Kalshi API", "Automation"],
-    links: [{ label: "GitHub demo", href: "https://github.com/jackvansickle1/kalshi-weather-resolver-demo" }],
+    tech: ["Python", "SQLite", "FastAPI", "Docker Compose", "Cloudflare Tunnel", "Windows startup automation"],
+    links: [
+      { label: "kalshi.jackgpt.org", href: "https://kalshi.jackgpt.org" },
+      { label: "GitHub demo", href: "https://github.com/jackvansickle1/kalshi-weather-resolver-demo" },
+    ],
     screenshots: [],
   },
   {
@@ -480,6 +483,16 @@ const fallbackStatuses = [
     status: "checking",
   },
   {
+    key: "kalshi-temperature-bot",
+    name: "Kalshi Temperature Bot",
+    description: "Checking the automated Kalshi scanner dashboard.",
+    endpoint: "https://kalshi.jackgpt.org/health",
+    latencyMs: null,
+    httpStatus: "-",
+    checkedAt: null,
+    status: "checking",
+  },
+  {
     key: "minecraft",
     name: "Minecraft Server",
     description: "Checking the public Minecraft server status probe.",
@@ -582,6 +595,14 @@ const accessLinks = [
     accessLabel: "Public demo",
     accessTone: "public",
     note: "A fast interactive demo of game logic, UI polish, and animation.",
+  },
+  {
+    label: "kalshi.jackgpt.org",
+    href: "https://kalshi.jackgpt.org",
+    description: "Live Kalshi weather-market bot dashboard and scanner health.",
+    accessLabel: "Live status",
+    accessTone: "public",
+    note: "Watch scanner uptime, open exposure, optimizer weights, and recent sanitized activity.",
   },
   {
     label: "jackgpt.org",

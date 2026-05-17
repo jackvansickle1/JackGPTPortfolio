@@ -43,6 +43,12 @@ const SERVICE_TARGETS = [
     description: "Playable casino game endpoint is reachable.",
   },
   {
+    key: "kalshi-temperature-bot",
+    name: "Kalshi Temperature Bot",
+    endpoint: "https://kalshi.jackgpt.org/health",
+    description: "Automated Kalshi weather scanner dashboard health endpoint is reachable.",
+  },
+  {
     key: "minecraft",
     name: "Minecraft Server",
     endpoint: "https://market.jackgpt.org/api/minecraft/health",
