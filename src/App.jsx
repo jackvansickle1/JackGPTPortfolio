@@ -321,11 +321,11 @@ const projects = [
     links: [{ label: "kalshi.jackgpt.org", href: "https://kalshi.jackgpt.org" }],
     screenshots: [
       {
-        src: "/project-images/kalshi-temperature-bot/kalshi-climate-desk-overview.png",
+        src: "https://raw.githubusercontent.com/jackvansickle1/JackGPTPortfolio/main/public/project-images/kalshi-temperature-bot/kalshi-climate-desk-overview.png",
         caption: "Kalshi Climate Desk showing scanner health, bankroll, open exposure, estimated open P/L, realized P/L, and active positions",
       },
       {
-        src: "/project-images/kalshi-temperature-bot/kalshi-climate-desk-trades.png",
+        src: "https://raw.githubusercontent.com/jackvansickle1/JackGPTPortfolio/main/public/project-images/kalshi-temperature-bot/kalshi-climate-desk-trades.png",
         caption: "Operations dashboard with sanitized recent trades, city exposure, and public-safe pending-order disclosure",
       },
     ],
