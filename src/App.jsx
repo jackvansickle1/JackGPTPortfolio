@@ -16,11 +16,17 @@ import {
   LineChart,
   MonitorSmartphone,
   Search,
+  Send,
   Server,
   Shield,
+  Sparkles,
   TrendingUp,
   TerminalSquare,
   Cloud,
+  Compass,
+  LoaderCircle,
+  MessageCircle,
+  UserRound,
   Trophy,
   X,
 } from "lucide-react";
@@ -627,6 +633,19 @@ const visitorPath = [
   },
 ];
 
+const companionPrompts = [
+  "Where should I start if I only have five minutes?",
+  "Which project best shows full-stack engineering?",
+  "How is this ecosystem deployed?",
+  "What should a recruiter inspect first?",
+];
+
+const initialCompanionMessage = {
+  role: "assistant",
+  content:
+    "Hi, I am the JackGPT guide. Ask me where to start, how the projects work, what to inspect first, or how the ecosystem is deployed.",
+};
+
 function App() {
   const [route, setRoute] = useState(window.location.hash || "#/");
 
@@ -654,6 +673,10 @@ function App() {
 function HomePage() {
   const [liveStatuses, setLiveStatuses] = useState(fallbackStatuses);
   const [activeAccessIndex, setActiveAccessIndex] = useState(0);
+  const [companionMessages, setCompanionMessages] = useState([initialCompanionMessage]);
+  const [companionInput, setCompanionInput] = useState("");
+  const [companionLoading, setCompanionLoading] = useState(false);
+  const [companionStatus, setCompanionStatus] = useState("Ready with public project context");
   const [statusMeta, setStatusMeta] = useState({
     loading: true,
     error: "",
@@ -709,6 +732,69 @@ function HomePage() {
       clearInterval(intervalId);
     };
   }, []);
+
+  const askCompanion = async (rawQuestion = companionInput) => {
+    const question = rawQuestion.trim();
+    if (!question || companionLoading) return;
+
+    const outgoingMessages = [
+      ...companionMessages,
+      {
+        role: "user",
+        content: question,
+      },
+    ];
+
+    setCompanionMessages(outgoingMessages);
+    setCompanionInput("");
+    setCompanionLoading(true);
+    setCompanionStatus("Thinking with JackGPT ecosystem context...");
+
+    try {
+      const response = await fetch("/api/companion", {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          question,
+          messages: outgoingMessages,
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.detail || `Companion returned ${response.status}`);
+      }
+
+      const aiStatus = data.dependencies?.ollama?.status;
+      setCompanionMessages([
+        ...outgoingMessages,
+        {
+          role: "assistant",
+          content: data.answer || "I could not generate a useful answer, but the homepage project cards are the best next place to look.",
+        },
+      ]);
+      setCompanionStatus(
+        aiStatus === "online"
+          ? "Answered by AI with curated project context"
+          : "Answered with reliable public-context fallback"
+      );
+    } catch (error) {
+      setCompanionMessages([
+        ...outgoingMessages,
+        {
+          role: "assistant",
+          content:
+            "I could not reach the companion endpoint. Start with Market Desk, then Casino, then the project cards and live status section.",
+        },
+      ]);
+      setCompanionStatus(error instanceof Error ? error.message : "Companion request failed");
+    } finally {
+      setCompanionLoading(false);
+    }
+  };
 
   return (
     <div className="app-shell">
@@ -806,6 +892,116 @@ function HomePage() {
               architecture and status context but remain restricted.
             </p>
           </div>
+        </div>
+      </section>
+
+      <section id="guide" className="section companion-section">
+        <div className="section-header">
+          <div>
+            <span className="eyebrow">AI companion</span>
+            <h2>Ask the JackGPT guide</h2>
+          </div>
+          <p>
+            A project-aware assistant for recruiters and first-time visitors. It
+            knows the public JackGPT ecosystem, where to start, what each demo
+            shows, and how the infrastructure fits together.
+          </p>
+        </div>
+
+        <div className="companion-layout">
+          <article className="companion-panel">
+            <div className="companion-head">
+              <div className="companion-title">
+                <span className="companion-icon">
+                  <Sparkles size={18} />
+                </span>
+                <div>
+                  <h3>JackGPT Guide</h3>
+                  <p>{companionStatus}</p>
+                </div>
+              </div>
+              <span className={`status-pill ${companionLoading ? "checking" : "online"}`}>
+                {companionLoading ? <LoaderCircle size={14} className="spin-icon" /> : <MessageCircle size={14} />}
+                {companionLoading ? "Thinking" : "Ready"}
+              </span>
+            </div>
+
+            <div className="companion-messages" aria-live="polite">
+              {companionMessages.map((message, index) => (
+                <div className={`companion-message ${message.role}`} key={`${message.role}-${index}`}>
+                  <span className="message-avatar">
+                    {message.role === "assistant" ? <Sparkles size={15} /> : <UserRound size={15} />}
+                  </span>
+                  <div>
+                    {message.content.split("\n").map((line, lineIndex) => (
+                      <p key={`${index}-${lineIndex}`}>{line}</p>
+                    ))}
+                  </div>
+                </div>
+              ))}
+              {companionLoading ? (
+                <div className="companion-message assistant">
+                  <span className="message-avatar">
+                    <LoaderCircle size={15} className="spin-icon" />
+                  </span>
+                  <div>
+                    <p>Reading the project map and preparing a concise answer...</p>
+                  </div>
+                </div>
+              ) : null}
+            </div>
+
+            <form
+              className="companion-form"
+              onSubmit={(event) => {
+                event.preventDefault();
+                askCompanion();
+              }}
+            >
+              <textarea
+                value={companionInput}
+                onChange={(event) => setCompanionInput(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" && !event.shiftKey) {
+                    event.preventDefault();
+                    askCompanion();
+                  }
+                }}
+                placeholder="Ask about where to start, how Market Desk works, what to inspect first..."
+                maxLength={900}
+                rows={3}
+                aria-label="Ask the JackGPT guide a question"
+              />
+              <button type="submit" className="button primary companion-send" disabled={companionLoading || !companionInput.trim()}>
+                <Send size={16} />
+                Ask
+              </button>
+            </form>
+          </article>
+
+          <aside className="companion-prompts" aria-label="Suggested questions">
+            <div className="companion-prompt-head">
+              <Compass size={18} />
+              <h3>Try asking</h3>
+            </div>
+            {companionPrompts.map((prompt) => (
+              <button
+                key={prompt}
+                type="button"
+                className="prompt-chip"
+                onClick={() => askCompanion(prompt)}
+                disabled={companionLoading}
+              >
+                {prompt}
+                <ArrowRight size={15} />
+              </button>
+            ))}
+            <p>
+              The guide uses public-safe portfolio context. It can explain demos,
+              deployment choices, navigation, and what a recruiter should inspect
+              without exposing private strategy code or secrets.
+            </p>
+          </aside>
         </div>
       </section>
 

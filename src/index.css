@@ -195,6 +195,8 @@ figcaption,
 .stat-card,
 .visitor-card,
 .visitor-note,
+.companion-panel,
+.companion-prompts,
 .project-card,
 .status-card,
 .detail-card,
@@ -239,6 +241,7 @@ figcaption,
 
 .project-grid,
 .visitor-path,
+.companion-layout,
 .status-grid,
 .gallery-grid,
 .access-grid {
@@ -313,6 +316,200 @@ figcaption,
 .visitor-note p {
   margin: 0;
   color: rgba(220, 226, 238, 0.72);
+}
+
+.companion-layout {
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+  align-items: stretch;
+}
+
+.companion-panel,
+.companion-prompts {
+  border-radius: 30px;
+}
+
+.companion-panel {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.companion-head,
+.companion-title,
+.companion-prompt-head,
+.companion-message,
+.companion-form {
+  display: flex;
+  gap: 12px;
+}
+
+.companion-head {
+  align-items: center;
+  justify-content: space-between;
+}
+
+.companion-title {
+  align-items: center;
+  min-width: 0;
+}
+
+.companion-title h3,
+.companion-prompt-head h3 {
+  margin-bottom: 2px;
+  font-size: 1.2rem;
+}
+
+.companion-title p,
+.companion-prompts p {
+  margin: 0;
+  color: rgba(205, 216, 235, 0.72);
+}
+
+.companion-icon,
+.message-avatar {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #8edcff;
+  border: 1px solid rgba(112, 190, 255, 0.2);
+  background: rgba(60, 156, 255, 0.12);
+}
+
+.companion-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 15px;
+}
+
+.companion-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 430px;
+  overflow: auto;
+  padding: 4px 4px 2px;
+}
+
+.companion-message {
+  align-items: flex-start;
+  max-width: 88%;
+  padding: 14px;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.16);
+}
+
+.companion-message.user {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+  background: rgba(60, 156, 255, 0.13);
+  border-color: rgba(112, 190, 255, 0.18);
+}
+
+.message-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  margin-top: 1px;
+}
+
+.companion-message p {
+  margin: 0;
+  color: rgba(230, 237, 248, 0.88);
+}
+
+.companion-message p + p {
+  margin-top: 10px;
+}
+
+.companion-form {
+  align-items: stretch;
+  margin-top: auto;
+}
+
+.companion-form textarea {
+  width: 100%;
+  min-height: 78px;
+  resize: vertical;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.2);
+  color: rgba(244, 247, 255, 0.96);
+  padding: 14px 16px;
+  font: inherit;
+  outline: none;
+}
+
+.companion-form textarea:focus {
+  border-color: rgba(112, 190, 255, 0.35);
+  box-shadow: 0 0 0 3px rgba(60, 156, 255, 0.12);
+}
+
+.companion-form textarea::placeholder {
+  color: rgba(197, 208, 229, 0.52);
+}
+
+.companion-send {
+  align-self: stretch;
+  justify-content: center;
+  min-width: 112px;
+  border-radius: 22px;
+  cursor: pointer;
+}
+
+.companion-send:disabled,
+.prompt-chip:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.companion-prompts {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.companion-prompt-head {
+  align-items: center;
+  color: rgba(141, 215, 255, 0.94);
+  margin-bottom: 4px;
+}
+
+.prompt-chip {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  text-align: left;
+  padding: 0.86rem 0.95rem;
+  border-radius: 18px;
+  color: rgba(238, 246, 255, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(0, 0, 0, 0.16);
+  cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+
+.prompt-chip:hover {
+  transform: translateY(-1px);
+  border-color: rgba(130, 186, 255, 0.26);
+  background: rgba(255, 255, 255, 0.055);
+}
+
+.spin-icon {
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .project-grid {
@@ -531,6 +728,8 @@ figcaption,
 
 .project-card,
 .visitor-card,
+.companion-panel,
+.companion-prompts,
 .status-card,
 .detail-card,
 .gallery-card,
@@ -773,6 +972,7 @@ figcaption,
 @media (max-width: 1024px) {
   .hero,
   .section-header,
+  .companion-layout,
   .detail-grid {
     grid-template-columns: 1fr;
   }
@@ -819,6 +1019,7 @@ figcaption,
   .section-header,
   .project-grid,
   .visitor-path,
+  .companion-layout,
   .project-guide,
   .status-grid,
   .gallery-grid {
@@ -854,6 +1055,29 @@ figcaption,
 
   .visitor-card p {
     min-height: 0;
+  }
+
+  .companion-panel,
+  .companion-prompts {
+    padding: 16px;
+    border-radius: 24px;
+  }
+
+  .companion-head,
+  .companion-form {
+    flex-direction: column;
+  }
+
+  .companion-head {
+    align-items: flex-start;
+  }
+
+  .companion-message {
+    max-width: 100%;
+  }
+
+  .companion-send {
+    width: 100%;
   }
 
   .gallery-grid {
