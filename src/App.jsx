@@ -306,27 +306,28 @@ const projects = [
     summary:
       "An automated Kalshi weather-market scanner with startup supervision, daily maintenance, and a live public trading-operations dashboard.",
     description:
-      "Kalshi Temperature Bot monitors weather-market contracts and keeps the scanner process alive throughout the day. The dashboard at kalshi.jackgpt.org exposes a public-safe operating view with scanner health, active positions, estimated open P/L, realized gains/losses, recent sanitized trades, bankroll history, and city-level exposure while keeping strategy logic, order IDs, keys, logs, and model weights private.",
+      "Kalshi Temperature Bot monitors weather-market contracts and keeps the scanner process alive throughout the day. The dashboard at kalshi.jackgpt.org now exposes an aggregate-only public operating view: scanner health, heartbeat, open-position counts, deterministic exit lifecycle counts, last reconciliation, and exit subsystem status while keeping tickers, order IDs, prices, brackets, edges, keys, logs, model weights, and strategy logic private.",
     howItWorks: [
       "A private Python scanner retrieves market and weather inputs, then evaluates opportunities using non-public strategy logic.",
       "A Windows startup supervisor keeps scanner.py running, and each morning it stops the scanner, runs resolve.py and auto_optimize.py, then restarts scanner.py.",
-      "A Dockerized FastAPI dashboard reads the bot database through a read-only mount and publishes sanitized operational telemetry, including positions, P/L, trade activity, exposure, and a fast heartbeat health endpoint.",
+      "A Dockerized FastAPI dashboard reads the bot database through a read-only mount and publishes public-safe aggregate telemetry plus a fast heartbeat health endpoint.",
+      "The deterministic exit system separates open, exit_pending, exited, and settled lifecycle states so early exits are counted from confirmed fills without leaking private trade details.",
     ],
     developed: [
       "Installed an all-day scanner supervisor that starts on Windows login and recovers the bot if the process exits.",
       "Added morning maintenance automation for trade resolution, model optimization, and scanner restart.",
-      "Built and deployed a Cloudflare Tunnel-ready Kalshi Climate Desk with mark-to-market position cards, recent trade rows, bankroll curve, pending-order disclosure, and mobile-responsive JackGPT styling.",
+      "Built and deployed a Cloudflare Tunnel-ready Kalshi Climate Desk with aggregate scanner health, deterministic-exit accounting, public-safe status cards, and mobile-responsive JackGPT styling.",
     ],
     tech: ["Python", "SQLite", "FastAPI", "Docker Compose", "Cloudflare Tunnel", "Windows startup automation"],
     links: [{ label: "kalshi.jackgpt.org", href: "https://kalshi.jackgpt.org" }],
     screenshots: [
       {
         src: "https://raw.githubusercontent.com/jackvansickle1/JackGPTPortfolio/main/public/project-images/kalshi-temperature-bot/kalshi-climate-desk-overview.png",
-        caption: "Kalshi Climate Desk showing scanner health, bankroll, open exposure, estimated open P/L, realized P/L, and active positions",
+        caption: "Kalshi Climate Desk showing aggregate scanner health, heartbeat, lifecycle totals, and public-safe exit subsystem status",
       },
       {
         src: "https://raw.githubusercontent.com/jackvansickle1/JackGPTPortfolio/main/public/project-images/kalshi-temperature-bot/kalshi-climate-desk-trades.png",
-        caption: "Operations dashboard with sanitized recent trades, city exposure, and public-safe pending-order disclosure",
+        caption: "Operations dashboard focused on aggregate deterministic-exit health without exposing tickers, order IDs, prices, brackets, or private strategy details",
       },
     ],
   },
@@ -580,7 +581,7 @@ const accessLinks = [
   {
     label: "search.jackgpt.org",
     href: "https://search.jackgpt.org",
-    description: "Branded private search endpoint",
+    description: "Branded public web-search endpoint",
     accessLabel: "Public demo",
     accessTone: "public",
     note: "A good quick demo of the JackGPT-branded utility services.",
@@ -605,10 +606,10 @@ const accessLinks = [
   {
     label: "kalshi.jackgpt.org",
     href: "https://kalshi.jackgpt.org",
-    description: "Live Kalshi weather-market bot operations dashboard.",
+    description: "Aggregate Kalshi weather-bot operations dashboard.",
     accessLabel: "Live status",
     accessTone: "public",
-    note: "Watch scanner uptime, active positions, P/L, exposure, recent trades, and bankroll history without exposing private strategy details.",
+    note: "Watch scanner uptime, lifecycle counts, and exit-system health without exposing trade rows, prices, or private strategy details.",
   },
   {
     label: "jackgpt.org",
@@ -661,16 +662,16 @@ const visitorPath = [
 ];
 
 const companionPrompts = [
-  "Where should I start if I only have five minutes?",
-  "Which project best shows full-stack engineering?",
-  "How is this ecosystem deployed?",
-  "What should a recruiter inspect first?",
+  "Give me a 5-minute recruiter tour.",
+  "Which demo best proves full-stack engineering?",
+  "What should I inspect in Market Desk?",
+  "Which parts are public-safe vs private?",
 ];
 
 const initialCompanionMessage = {
   role: "assistant",
   content:
-    "Hi, I am the JackGPT guide. Ask me where to start, how the projects work, what to inspect first, or how the ecosystem is deployed.",
+    "I can give you a recruiter-ready tour of JackGPT: where to start, what each project proves, which demos are public, and what is intentionally private. Ask for a 5-minute path or a project-by-project review.",
 };
 
 function App() {
@@ -704,7 +705,7 @@ function HomePage() {
   const [companionMessages, setCompanionMessages] = useState([initialCompanionMessage]);
   const [companionInput, setCompanionInput] = useState("");
   const [companionLoading, setCompanionLoading] = useState(false);
-  const [companionStatus, setCompanionStatus] = useState("Ready with public project context");
+  const [companionStatus, setCompanionStatus] = useState("Ready with recruiter project context");
   const [statusMeta, setStatusMeta] = useState({
     loading: true,
     error: "",
@@ -790,7 +791,7 @@ function HomePage() {
     setCompanionMessages(outgoingMessages);
     setCompanionInput("");
     setCompanionLoading(true);
-    setCompanionStatus("Thinking with JackGPT ecosystem context...");
+    setCompanionStatus("Building a recruiter-focused answer...");
 
     try {
       const response = await fetch("/api/companion", {
@@ -985,7 +986,7 @@ function HomePage() {
                     <LoaderCircle size={15} className="spin-icon" />
                   </span>
                   <div>
-                    <p>Reading the project map and preparing a concise answer...</p>
+                    <p>Reading the project map and shaping a recruiter-focused answer...</p>
                   </div>
                 </div>
               ) : null}
@@ -1027,7 +1028,7 @@ function HomePage() {
                     askCompanion();
                   }
                 }}
-                placeholder="Ask about where to start, how Market Desk works, what to inspect first..."
+                placeholder="Ask for a recruiter tour, project comparison, or what to inspect first..."
                 maxLength={900}
                 rows={3}
                 aria-label="Ask the JackGPT guide a question"
@@ -1050,7 +1051,7 @@ function HomePage() {
             </span>
             <span className="launcher-copy">
               <strong>Ask JackGPT</strong>
-              <small>Project guide</small>
+              <small>Recruiter guide</small>
             </span>
           </button>
         )}
