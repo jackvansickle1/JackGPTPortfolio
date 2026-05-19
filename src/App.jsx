@@ -703,6 +703,7 @@ function HomePage() {
   const [activeAccessIndex, setActiveAccessIndex] = useState(0);
   const [isCompanionOpen, setIsCompanionOpen] = useState(false);
   const [companionMessages, setCompanionMessages] = useState([initialCompanionMessage]);
+  const [companionMessagesNode, setCompanionMessagesNode] = useState(null);
   const [companionInput, setCompanionInput] = useState("");
   const [companionLoading, setCompanionLoading] = useState(false);
   const [companionStatus, setCompanionStatus] = useState("Ready with recruiter project context");
@@ -773,6 +774,16 @@ function HomePage() {
     window.addEventListener("hashchange", openFromGuideHash);
     return () => window.removeEventListener("hashchange", openFromGuideHash);
   }, []);
+
+  useEffect(() => {
+    if (!isCompanionOpen || !companionMessagesNode) return;
+
+    const frameId = window.requestAnimationFrame(() => {
+      companionMessagesNode.scrollTop = companionMessagesNode.scrollHeight;
+    });
+
+    return () => window.cancelAnimationFrame(frameId);
+  }, [companionMessages, companionMessagesNode, companionLoading, isCompanionOpen]);
 
   const askCompanion = async (rawQuestion = companionInput) => {
     const question = rawQuestion.trim();
@@ -967,7 +978,7 @@ function HomePage() {
               </div>
             </div>
 
-            <div className="companion-messages" aria-live="polite">
+            <div className="companion-messages" aria-live="polite" ref={setCompanionMessagesNode}>
               {companionMessages.map((message, index) => (
                 <div className={`companion-message ${message.role}`} key={`${message.role}-${index}`}>
                   <span className="message-avatar">
