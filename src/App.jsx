@@ -6,7 +6,6 @@ import {
   ArrowRight,
   ArrowUpRight,
   Bot,
-  BrainCircuit,
   Cpu,
   Dices,
   ExternalLink,
@@ -14,7 +13,9 @@ import {
   Globe,
   Image as ImageIcon,
   LineChart,
+  Mail,
   MonitorSmartphone,
+  PhoneCall,
   Search,
   Send,
   Server,
@@ -35,29 +36,31 @@ import "./index.css";
 const projects = [
   {
     id: "jackgpt",
-    name: "JackGPT Platform",
-    subtitle: "Self-hosted OpenWebUI experience with web search and image generation",
+    name: "JackGPT AI Workspace",
+    subtitle: "Self-hosted AI assistant with local models, web search, and image generation",
     icon: Bot,
     accent: "cyan",
-    tags: ["OpenWebUI", "LLM orchestration", "Web search", "Image generation"],
+    tags: ["OpenWebUI", "Ollama", "Local LLMs", "Web search", "Image generation", "Docker"],
     summary:
-      "A private AI workspace that combines conversational assistance, web search, and image generation behind a clean web interface.",
+      "A branded, self-hosted AI workspace that brings local model serving, web search, and image generation into one recruiter-visible product surface.",
     description:
-      "JackGPT is a self-hosted AI platform built on OpenWebUI and exposed through a Cloudflare Tunnel. It provides conversational responses, web-enabled answers, and image generation through a single consistent interface at app.jackgpt.org. The system is designed to be reliable, easy to access remotely, and flexible enough to grow with additional models and tools.",
+      "JackGPT AI Workspace is the public-facing assistant at app.jackgpt.org. It combines OpenWebUI, Ollama-backed local inference, branded JackGPT 3.1 identity, web search, image generation, persistent conversations, and Cloudflare routing into a usable AI product rather than a generic model playground.",
     howItWorks: [
-      "OpenWebUI provides the browser-based chat interface and routes requests to the underlying model services.",
-      "The system can perform web searches when live information is needed and can generate images for visual requests.",
-      "Cloudflare Tunnel publishes the application securely without exposing local ports directly to the internet.",
+      "OpenWebUI provides the browser-based chat interface, account flow, conversation history, and model routing.",
+      "Ollama serves the local JackGPT 3.1 model, while the workspace can call the branded search service for live context and the image-generation service for visual requests.",
+      "Docker Compose and Cloudflare Tunnel keep the service remotely reachable without exposing local infrastructure directly.",
     ],
     developed: [
-      "Configured a self-hosted deployment and exposed it through Cloudflare.",
-      "Integrated model routing and image-generation capabilities into a single interface.",
-      "Focused on usability, stable access, and a clean user experience for day-to-day use.",
+      "Stabilized a self-hosted OpenWebUI/Ollama deployment and made it accessible through app.jackgpt.org.",
+      "Rebranded the interface around JackGPT, set JackGPT 3.1 as the default assistant, and gave it current ecosystem context for recruiter walkthroughs.",
+      "Integrated web search and image-generation workflows so the assistant demonstrates tool use, not just plain chat.",
+      "Hardened the stack with Docker health checks, Cloudflare routing, and a public-safe boundary around backend implementation details.",
     ],
-    tech: ["OpenWebUI", "Cloudflare Tunnel", "Self-hosted inference", "Custom routing"],
+    tech: ["OpenWebUI", "Ollama", "Docker Compose", "Cloudflare Tunnel", "Self-hosted inference", "Tool use"],
     links: [
       { label: "app.jackgpt.org", href: "https://app.jackgpt.org" },
       { label: "GitHub: stack template", href: "https://github.com/jackvansickle1/jackgpt-selfhosted-stack-template" },
+      { label: "GitHub: brand kit", href: "https://github.com/jackvansickle1/jackgpt-openwebui-brand-kit" },
     ],
     screenshots: [
       {
@@ -71,69 +74,33 @@ const projects = [
     ],
   },
   {
-    id: "openwebui",
-    name: "OpenWebUI + Ollama",
-    subtitle: "Local model serving and chat interface",
-    icon: BrainCircuit,
-    accent: "emerald",
-    tags: ["OpenWebUI", "Ollama", "Local LLMs"],
-    summary:
-      "A local AI environment for serving language models through a modern web interface.",
-    description:
-      "This project combines OpenWebUI with Ollama to provide a local environment for running and testing language models. It allows models to be served on local hardware while users interact through a browser interface with persistent conversations and prompt history.",
-    howItWorks: [
-      "Ollama runs local language models on the host machine.",
-      "OpenWebUI provides a user-friendly interface for conversations, prompt history, and model selection.",
-      "The service can be used privately on a local network or exposed securely through Cloudflare if needed.",
-    ],
-    developed: [
-      "Installed and configured OpenWebUI and Ollama for local inference.",
-      "Validated service availability and integration with upstream tools.",
-      "Used the environment as the foundation for the broader JackGPT ecosystem.",
-    ],
-    tech: ["OpenWebUI", "Ollama", "Cloudflare Tunnel", "Local inference"],
-    links: [
-      { label: "app.jackgpt.org", href: "https://app.jackgpt.org" },
-      { label: "GitHub: brand kit", href: "https://github.com/jackvansickle1/jackgpt-openwebui-brand-kit" },
-    ],
-    screenshots: [
-      {
-        src: "/project-images/openwebui/openwebui-model-home.png",
-        caption: "Local model workspace with JackGPT 3.1 selected as the default assistant",
-      },
-      {
-        src: "/project-images/openwebui/openwebui-chat-answer.png",
-        caption: "OpenWebUI/Ollama stack serving a live JackGPT response through the branded interface",
-      },
-    ],
-  },
-  {
     id: "automatic1111",
-    name: "AUTOMATIC1111",
-    subtitle: "Self-hosted Stable Diffusion image generation service",
+    name: "JackGPT Image Gen",
+    subtitle: "GPU-backed prompt-to-image service",
     icon: ImageIcon,
     accent: "violet",
-    tags: ["Stable Diffusion", "Docker", "GPU", "Cloudflare Tunnel"],
+    tags: ["Stable Diffusion", "Docker", "NVIDIA GPU", "Cloudflare Tunnel", "Branding"],
     summary:
-      "A containerized AUTOMATIC1111 deployment exposed securely at images.jackgpt.org for browser-based image generation.",
+      "A branded, Dockerized image-generation service exposed at images.jackgpt.org with GPU acceleration and a safe-for-work model.",
     description:
-      "This project packages AUTOMATIC1111 in Docker with GPU access and publishes it through Cloudflare Tunnel. It provides a stable, remotely accessible image-generation service that can be started automatically with Docker and used through a browser without manual PowerShell commands.",
+      "JackGPT Image Gen packages a Stable Diffusion web interface in Docker with NVIDIA GPU access and publishes it through Cloudflare Tunnel. It is presented as a JackGPT product surface instead of a raw upstream tool, and it also supports image-generation workflows from the AI workspace.",
     howItWorks: [
-      "A Docker container runs AUTOMATIC1111 with GPU acceleration on local hardware.",
+      "A Docker container runs the image-generation backend with GPU acceleration on local hardware.",
       "Cloudflare Tunnel exposes the service at images.jackgpt.org without directly opening local ports to the public internet.",
-      "The service supports prompt-based image generation and can be managed alongside the rest of the JackGPT infrastructure.",
+      "The service supports prompt-based generation with JackGPT theming, safe-for-work model defaults, and health checks alongside the rest of the stack.",
     ],
     developed: [
-      "Created a Docker-based deployment for AUTOMATIC1111 and configured GPU support.",
+      "Created a Docker-based image-generation deployment and configured GPU support.",
       "Set up Cloudflare Tunnel and hostname routing for external access.",
-      "Verified container startup, public reachability, and model loading during testing.",
+      "Rebranded the interface and assets so recruiters see JackGPT Image Gen rather than raw upstream signage.",
+      "Verified container startup, public reachability, model loading, and integration from app.jackgpt.org.",
     ],
-    tech: ["Docker", "NVIDIA GPU", "AUTOMATIC1111", "Cloudflare Tunnel"],
+    tech: ["Docker", "NVIDIA GPU", "Stable Diffusion", "Cloudflare Tunnel", "Custom theme"],
     links: [{ label: "images.jackgpt.org", href: "https://images.jackgpt.org" }],
     screenshots: [
       {
         src: "/project-images/automatic1111/jackgpt-images-dashboard.png",
-        caption: "JackGPT Images prompt studio running from the live containerized image-generation service",
+        caption: "JackGPT Image Gen prompt studio running from the live containerized image-generation service",
       },
       {
         src: "/project-images/automatic1111/jackgpt-images-result-board.png",
@@ -143,15 +110,15 @@ const projects = [
   },
   {
     id: "meshcentral",
-    name: "MeshCentral",
+    name: "JackGPT Mesh",
     subtitle: "Remote device management and support",
     icon: MonitorSmartphone,
     accent: "amber",
     tags: ["Remote management", "Cloudflare Tunnel", "Docker"],
     summary:
-      "A self-hosted remote management system that enables secure device enrollment, monitoring, and remote sessions.",
+      "A branded, self-hosted remote-management system that demonstrates secure infrastructure operations, device enrollment, and restricted admin access.",
     description:
-      "MeshCentral is deployed in Docker and exposed through Cloudflare Tunnel at mesh.jackgpt.org. It allows remote device enrollment, browser-based management, and remote desktop functionality while keeping infrastructure under direct control.",
+      "JackGPT Mesh is deployed in Docker and exposed through Cloudflare Tunnel at mesh.jackgpt.org. It allows remote device enrollment, browser-based management, and remote desktop functionality while keeping account creation and device access restricted to the administrator.",
     howItWorks: [
       "MeshCentral runs in a Docker container and maintains device records, groups, and management policies.",
       "Agents installed on enrolled devices connect to the server over secure WebSocket connections.",
@@ -182,7 +149,7 @@ const projects = [
   {
     id: "jackgpt-search",
     name: "JackGPT Search",
-    subtitle: "Private search endpoint for the JackGPT ecosystem",
+    subtitle: "Branded web-search endpoint for the JackGPT ecosystem",
     icon: Search,
     accent: "cyan",
     tags: ["Private search", "Docker", "Cloudflare Tunnel", "Custom theme"],
@@ -257,22 +224,23 @@ const projects = [
   {
     id: "casino",
     name: "JackGPT Casino",
-    subtitle: "Playable browser casino with craps tables and animated horse racing",
+    subtitle: "Secondary interactive browser-game demo",
     icon: Trophy,
     accent: "amber",
     tags: ["React", "Docker", "Game UI", "Animation", "Cloudflare Tunnel", "Portfolio"],
     summary:
-      "A polished public casino demo with standard craps, bubble craps, crapless craps, animated horse racing, bankroll accounting, and responsive game controls.",
+      "A polished secondary game demo with standard craps, bubble craps, crapless craps, blackjack, animated horse racing, a shared persisted bankroll, sound, and responsive game controls.",
     description:
-      "JackGPT Casino is a Dockerized browser game at casino.jackgpt.org. It combines casino-style craps layouts with a live animated horse racing track, all styled to match the JackGPT command-center visual system.",
+      "JackGPT Casino is a Dockerized browser game at casino.jackgpt.org. It combines casino-style craps layouts, blackjack, and a live animated horse racing track with shared bankroll state, all styled to match the JackGPT command-center visual system. It is intentionally positioned as a lighter interactive demo behind the more substantial AI, finance, infrastructure, and automation projects.",
     howItWorks: [
-      "The React frontend runs game state instantly in the browser, including chip placement, point state, dice rolls, payout resolution, horse movement, odds, and race history.",
+      "The React frontend runs game state instantly in the browser, including chip placement, point state, dice rolls, blackjack hand flow, payout resolution, horse movement, odds, shared bankroll, and history.",
       "A small FastAPI backend serves the compiled app and exposes a public health endpoint for status monitoring.",
       "Cloudflare Tunnel routes casino.jackgpt.org to the local Docker container without exposing the host directly.",
     ],
     developed: [
       "Implemented standard, bubble, and crapless craps with table-specific visual treatments and rule differences.",
-      "Built an animated horse racing game with selectable runners, odds, wager sizing, live lane movement, and finish-line resolution.",
+      "Built blackjack with deal, hit, stand, double, natural 3:2 payouts, and dealer stand-on-soft-17 behavior.",
+      "Built an animated horse racing game with selectable runners, odds, wager sizing, live lane movement, repeatable race reset, and finish-line resolution.",
       "Integrated the service into the JackGPT Docker stack, tunnel routing, homepage cards, screenshots, and live status checks.",
     ],
     tech: ["React", "Vite", "FastAPI", "Docker Compose", "Cloudflare Tunnel"],
@@ -298,15 +266,15 @@ const projects = [
   },
   {
     id: "kalshi-temperature-bot",
-    name: "Kalshi Temperature Bot",
+    name: "Kalshi Climate Desk",
     subtitle: "Live weather-market scanner and operations dashboard",
     icon: Cloud,
     accent: "blue",
     tags: ["Python", "Kalshi API", "Automation", "Operations Dashboard", "Docker", "Cloudflare Tunnel"],
     summary:
-      "An automated Kalshi weather-market scanner with startup supervision, daily maintenance, and a live public trading-operations dashboard.",
+      "An automated Kalshi weather-market scanner with startup supervision, daily maintenance, and a live public-safe operations dashboard.",
     description:
-      "Kalshi Temperature Bot monitors weather-market contracts and keeps the scanner process alive throughout the day. The dashboard at kalshi.jackgpt.org now exposes an aggregate-only public operating view: scanner health, heartbeat, open-position counts, deterministic exit lifecycle counts, last reconciliation, and exit subsystem status while keeping tickers, order IDs, prices, brackets, edges, keys, logs, model weights, and strategy logic private.",
+      "Kalshi Climate Desk monitors and presents the operational side of a private weather-market automation system. The public dashboard at kalshi.jackgpt.org now feels like a full operations desk again: scanner health, heartbeat, bankroll trend, sanitized active exposure, city exposure, settled performance, timeline events, and deterministic exit lifecycle health as a supporting subsystem. Tickers, order IDs, prices, brackets, edges, keys, logs, model weights, and strategy logic stay private.",
     howItWorks: [
       "A private Python scanner retrieves market and weather inputs, then evaluates opportunities using non-public strategy logic.",
       "A Windows startup supervisor keeps scanner.py running, and each morning it stops the scanner, runs resolve.py and auto_optimize.py, then restarts scanner.py.",
@@ -316,18 +284,18 @@ const projects = [
     developed: [
       "Installed an all-day scanner supervisor that starts on Windows login and recovers the bot if the process exits.",
       "Added morning maintenance automation for trade resolution, model optimization, and scanner restart.",
-      "Built and deployed a Cloudflare Tunnel-ready Kalshi Climate Desk with aggregate scanner health, deterministic-exit accounting, public-safe status cards, and mobile-responsive JackGPT styling.",
+      "Built and deployed a Cloudflare Tunnel-ready Kalshi Climate Desk with scanner health, bankroll/performance views, sanitized exposure summaries, deterministic-exit accounting, public-safe status cards, and mobile-responsive JackGPT styling.",
     ],
     tech: ["Python", "SQLite", "FastAPI", "Docker Compose", "Cloudflare Tunnel", "Windows startup automation"],
     links: [{ label: "kalshi.jackgpt.org", href: "https://kalshi.jackgpt.org" }],
     screenshots: [
       {
         src: "https://raw.githubusercontent.com/jackvansickle1/JackGPTPortfolio/main/public/project-images/kalshi-temperature-bot/kalshi-climate-desk-overview.png",
-        caption: "Kalshi Climate Desk showing aggregate scanner health, heartbeat, lifecycle totals, and public-safe exit subsystem status",
+        caption: "Kalshi Climate Desk showing scanner health, bankroll curve, active exposure, performance, and public-safe operations telemetry",
       },
       {
         src: "https://raw.githubusercontent.com/jackvansickle1/JackGPTPortfolio/main/public/project-images/kalshi-temperature-bot/kalshi-climate-desk-trades.png",
-        caption: "Operations dashboard focused on aggregate deterministic-exit health without exposing tickers, order IDs, prices, brackets, or private strategy details",
+        caption: "Operations dashboard with sanitized active positions, city exposure, and deterministic-exit health without exposing tickers, order IDs, prices, brackets, or private strategy details",
       },
     ],
   },
@@ -417,23 +385,33 @@ const projects = [
   },
 ];
 
+const homepageProjectOrder = [
+  "market-desk",
+  "jackgpt",
+  "automatic1111",
+  "jackgpt-search",
+  "kalshi-temperature-bot",
+  "meshcentral",
+  "windows-use",
+  "kalshi-btc-bot",
+  "ninjatrader-bot",
+  "casino",
+];
+
+const homepageProjects = [...projects].sort((left, right) => {
+  const leftIndex = homepageProjectOrder.indexOf(left.id);
+  const rightIndex = homepageProjectOrder.indexOf(right.id);
+  return (leftIndex === -1 ? 999 : leftIndex) - (rightIndex === -1 ? 999 : rightIndex);
+});
+
 
 const fallbackStatuses = [
   {
     key: "openwebui",
-    name: "OpenWebUI + Ollama",
-    description: "Checking the public chat interface and model routing.",
+    name: "JackGPT AI Workspace",
+    description: "Checking the public AI workspace and model routing.",
     endpoint: "https://app.jackgpt.org/api/version",
-    latencyMs: null,
-    httpStatus: "-",
-    checkedAt: null,
-    status: "checking",
-  },
-  {
-    key: "automatic1111",
-    name: "AUTOMATIC1111",
-    description: "Checking the public image-generation interface.",
-    endpoint: "https://images.jackgpt.org/sdapi/v1/memory",
+    publicUrl: "https://app.jackgpt.org",
     latencyMs: null,
     httpStatus: "-",
     checkedAt: null,
@@ -441,9 +419,10 @@ const fallbackStatuses = [
   },
   {
     key: "images",
-    name: "images.jackgpt.org",
-    description: "Checking the public image-generation endpoint.",
+    name: "JackGPT Image Gen",
+    description: "Checking the public GPU-backed image-generation endpoint.",
     endpoint: "https://images.jackgpt.org/sdapi/v1/sd-models",
+    publicUrl: "https://images.jackgpt.org",
     latencyMs: null,
     httpStatus: "-",
     checkedAt: null,
@@ -451,9 +430,10 @@ const fallbackStatuses = [
   },
   {
     key: "meshcentral",
-    name: "mesh.jackgpt.org",
+    name: "JackGPT Mesh",
     description: "Checking the remote-management portal.",
     endpoint: "https://mesh.jackgpt.org",
+    publicUrl: "https://mesh.jackgpt.org",
     latencyMs: null,
     httpStatus: "-",
     checkedAt: null,
@@ -461,9 +441,10 @@ const fallbackStatuses = [
   },
   {
     key: "jackgpt-search",
-    name: "search.jackgpt.org",
+    name: "JackGPT Search",
     description: "Checking the branded JackGPT Search endpoint.",
     endpoint: "https://search.jackgpt.org",
+    publicUrl: "https://search.jackgpt.org",
     latencyMs: null,
     httpStatus: "-",
     checkedAt: null,
@@ -471,9 +452,10 @@ const fallbackStatuses = [
   },
   {
     key: "market-desk",
-    name: "Market Desk",
+    name: "JackGPT Market Desk",
     description: "Checking the AI-powered equity research dashboard.",
     endpoint: "https://market.jackgpt.org/health",
+    publicUrl: "https://market.jackgpt.org",
     latencyMs: null,
     httpStatus: "-",
     checkedAt: null,
@@ -484,6 +466,7 @@ const fallbackStatuses = [
     name: "JackGPT Casino",
     description: "Checking the playable casino game endpoint.",
     endpoint: "https://casino.jackgpt.org/health",
+    publicUrl: "https://casino.jackgpt.org",
     latencyMs: null,
     httpStatus: "-",
     checkedAt: null,
@@ -491,9 +474,10 @@ const fallbackStatuses = [
   },
   {
     key: "kalshi-temperature-bot",
-    name: "Kalshi Temperature Bot",
+    name: "Kalshi Climate Desk",
     description: "Checking the Kalshi Climate Desk scanner heartbeat.",
     endpoint: "https://kalshi.jackgpt.org/health",
+    publicUrl: "https://kalshi.jackgpt.org",
     latencyMs: null,
     httpStatus: "-",
     checkedAt: null,
@@ -504,6 +488,7 @@ const fallbackStatuses = [
     name: "Minecraft Server",
     description: "Checking the public Minecraft server status probe.",
     endpoint: "https://market.jackgpt.org/api/minecraft/health",
+    publicUrl: "",
     showEndpoint: false,
     latencyMs: null,
     httpStatus: "-",
@@ -512,9 +497,10 @@ const fallbackStatuses = [
   },
   {
     key: "website",
-    name: "JackGPT Platform",
+    name: "JackGPT Homepage",
     description: "Checking the portfolio homepage.",
     endpoint: "https://jackgpt.org",
+    publicUrl: "https://jackgpt.org",
     latencyMs: null,
     httpStatus: "-",
     checkedAt: null,
@@ -555,31 +541,31 @@ function formatEndpointHost(value) {
 const accessLinks = [
 
   {
-    label: "app.jackgpt.org",
+    label: "JackGPT AI Workspace",
     href: "https://app.jackgpt.org",
-    description: "Primary AI workspace and chat interface",
+    description: "Self-hosted JackGPT 3.1 workspace with local models, web search, and image generation",
     accessLabel: "Sign up to try",
     accessTone: "signup",
     note: "Create an account from the sign-in page to explore the public AI workspace.",
   },
   {
-    label: "images.jackgpt.org",
+    label: "JackGPT Image Gen",
     href: "https://images.jackgpt.org",
-    description: "Public image generation endpoint",
+    description: "GPU-backed prompt-to-image generation service",
     accessLabel: "Public demo",
     accessTone: "public",
     note: "Try prompt-to-image generation from the live GPU-backed image service.",
   },
   {
-    label: "mesh.jackgpt.org",
+    label: "JackGPT Mesh",
     href: "https://mesh.jackgpt.org",
-    description: "Remote management portal",
+    description: "Private remote-management portal and infrastructure operations surface",
     accessLabel: "Private admin",
     accessTone: "private",
     note: "Shown for infrastructure context and uptime; device access is restricted.",
   },
   {
-    label: "search.jackgpt.org",
+    label: "JackGPT Search",
     href: "https://search.jackgpt.org",
     description: "Branded public web-search endpoint",
     accessLabel: "Public demo",
@@ -587,7 +573,7 @@ const accessLinks = [
     note: "A good quick demo of the JackGPT-branded utility services.",
   },
   {
-    label: "market.jackgpt.org",
+    label: "JackGPT Market Desk",
     href: "https://market.jackgpt.org",
     description:
       "AI-powered equity research dashboard with live market snapshots and generated bull/bear analysis.",
@@ -596,23 +582,23 @@ const accessLinks = [
     note: "Search a ticker like NVDA, MSFT, or AAPL to see the full product demo.",
   },
   {
-    label: "casino.jackgpt.org",
+    label: "JackGPT Casino",
     href: "https://casino.jackgpt.org",
-    description: "Playable JackGPT casino with craps tables and animated horse racing.",
+    description: "Secondary interactive demo with craps, blackjack, racing, sound, and shared bankroll state.",
     accessLabel: "Public demo",
     accessTone: "public",
-    note: "A fast interactive demo of game logic, UI polish, and animation.",
+    note: "A secondary interactive demo of game logic, UI polish, and animation.",
   },
   {
-    label: "kalshi.jackgpt.org",
+    label: "Kalshi Climate Desk",
     href: "https://kalshi.jackgpt.org",
-    description: "Aggregate Kalshi weather-bot operations dashboard.",
+    description: "Public-safe operations dashboard for a live weather-market automation system.",
     accessLabel: "Live status",
     accessTone: "public",
-    note: "Watch scanner uptime, lifecycle counts, and exit-system health without exposing trade rows, prices, or private strategy details.",
+    note: "Watch scanner uptime, bankroll trend, sanitized exposure, performance, and exit-system health without exposing trade rows, prices, or private strategy details.",
   },
   {
-    label: "jackgpt.org",
+    label: "JackGPT Homepage",
     href: "https://jackgpt.org",
     description: "Public portfolio homepage",
     accessLabel: "You are here",
@@ -624,12 +610,12 @@ const accessLinks = [
 const visitorPath = [
   {
     eyebrow: "1",
-    title: "Try a live demo",
+    title: "Start with the strongest demos",
     body:
-      "Start with Market Desk, Casino, Search, or Images. These are the fastest ways to see the stack working without extra context.",
+      "Begin with Market Desk, then JackGPT AI Workspace, Image Gen, Search, and Kalshi Climate Desk. Casino is there too, but it is the lighter interactive demo.",
     href: "#live-services",
     cta: "View live demos",
-    icon: Globe,
+    icon: LineChart,
   },
   {
     eyebrow: "2",
@@ -651,9 +637,9 @@ const visitorPath = [
   },
   {
     eyebrow: "4",
-    title: "Review public code",
+    title: "Review code and contact Jack",
     body:
-      "GitHub contains recruiter-safe repos, demos, and templates while private credentials and valuable strategy code stay out of public view.",
+      "GitHub contains recruiter-safe repos while private credentials and valuable strategy code stay out of public view. Contact options are available from the hero.",
     href: "https://github.com/jackvansickle1",
     cta: "Open GitHub",
     icon: FolderGit,
@@ -665,7 +651,7 @@ const companionPrompts = [
   "Give me a 5-minute recruiter tour.",
   "Which demo best proves full-stack engineering?",
   "What should I inspect in Market Desk?",
-  "Which parts are public-safe vs private?",
+  "How should I evaluate the AI workspace?",
 ];
 
 const initialCompanionMessage = {
@@ -702,6 +688,7 @@ function HomePage() {
   const [liveStatuses, setLiveStatuses] = useState(fallbackStatuses);
   const [activeAccessIndex, setActiveAccessIndex] = useState(0);
   const [isCompanionOpen, setIsCompanionOpen] = useState(false);
+  const [isContactOpen, setIsContactOpen] = useState(false);
   const [companionMessages, setCompanionMessages] = useState([initialCompanionMessage]);
   const [companionMessagesNode, setCompanionMessagesNode] = useState(null);
   const [companionInput, setCompanionInput] = useState("");
@@ -776,6 +763,11 @@ function HomePage() {
   }, []);
 
   useEffect(() => {
+    document.body.classList.toggle("modal-scroll-lock", isCompanionOpen || isContactOpen);
+    return () => document.body.classList.remove("modal-scroll-lock");
+  }, [isCompanionOpen, isContactOpen]);
+
+  useEffect(() => {
     if (!isCompanionOpen || !companionMessagesNode) return;
 
     const frameId = window.requestAnimationFrame(() => {
@@ -841,7 +833,7 @@ function HomePage() {
         {
           role: "assistant",
           content:
-            "I could not reach the companion endpoint. Start with Market Desk, then Casino, then the project cards and live status section.",
+            "I could not reach the companion endpoint. Start with Market Desk, then JackGPT AI Workspace, Image Gen, Search, Kalshi Climate Desk, the project cards, and live status.",
         },
       ]);
       setCompanionStatus(error instanceof Error ? error.message : "Companion request failed");
@@ -854,17 +846,24 @@ function HomePage() {
     <div className="app-shell">
       <header className="hero section">
         <div className="hero-copy">
-          <span className="eyebrow">JackGPT</span>
+          <div className="brand-lockup" aria-label="JackGPT">
+            <span className="brand-mark">JG</span>
+            <span>
+              <strong>JackGPT</strong>
+              <small>AI systems, automation, and infrastructure</small>
+            </span>
+          </div>
+          <span className="eyebrow">Jack VanSickle Portfolio</span>
           <h1 className="hero-title">
             <span>AI, automation, and</span>
             <span>self-hosted</span>
             <span>infrastructure projects</span>
           </h1>
           <p className="hero-text">
-            A portfolio of practical projects spanning AI interfaces, image generation,
-            remote management, trading automation, and local infrastructure exposed
-            securely through Cloudflare. Project cards open into detailed case studies
-            with implementation notes, screenshots, and live links.
+            A live portfolio of self-hosted AI products, finance intelligence tooling,
+            GPU image generation, automation dashboards, and Docker/Cloudflare
+            infrastructure. Project cards open into detailed case studies with
+            implementation notes, screenshots, live links, and public-safe code.
           </p>
           <div className="hero-actions">
             <a href="#start" className="button primary">
@@ -876,6 +875,10 @@ function HomePage() {
             <a href="#status" className="button secondary">
               Live status
             </a>
+            <button type="button" className="button secondary" onClick={() => setIsContactOpen(true)}>
+              <Mail size={16} />
+              Contact me
+            </button>
             <a
               href="https://github.com/jackvansickle1"
               className="button secondary"
@@ -948,6 +951,60 @@ function HomePage() {
           </div>
         </div>
       </section>
+
+      {isContactOpen ? (
+        <div className="contact-overlay" role="presentation" onClick={() => setIsContactOpen(false)}>
+          <article
+            className="contact-card"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Contact Jack VanSickle"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="contact-head">
+              <div>
+                <span className="eyebrow">Contact</span>
+                <h2>Reach Jack VanSickle</h2>
+              </div>
+              <button
+                type="button"
+                className="companion-close"
+                onClick={() => setIsContactOpen(false)}
+                aria-label="Close contact information"
+              >
+                <X size={17} />
+              </button>
+            </div>
+            <p>
+              Best reached by text message, phone call, or voicemail. Email is also
+              open for school, recruiting, and project follow-up.
+            </p>
+            <div className="contact-actions">
+              <a href="mailto:jackvansickle@mst.edu" className="contact-link">
+                <Mail size={17} />
+                <span>
+                  <strong>School email</strong>
+                  jackvansickle@mst.edu
+                </span>
+              </a>
+              <a href="mailto:jvan8076@gmail.com" className="contact-link">
+                <Mail size={17} />
+                <span>
+                  <strong>Personal email</strong>
+                  jvan8076@gmail.com
+                </span>
+              </a>
+              <a href="tel:+18164166618" className="contact-link">
+                <PhoneCall size={17} />
+                <span>
+                  <strong>Phone</strong>
+                  816-416-6618
+                </span>
+              </a>
+            </div>
+          </article>
+        </div>
+      ) : null}
 
       <div id="guide" className={`companion-widget ${isCompanionOpen ? "open" : ""}`}>
         {isCompanionOpen ? (
@@ -1170,9 +1227,9 @@ function HomePage() {
             <span className="guide-kicker">Recruiter guide</span>
             <strong>Every project card opens into a deeper walkthrough.</strong>
             <p>
-              Start with Market Desk or JackGPT Casino if you want the quickest
-              product demo, then use the screenshots and architecture notes to inspect
-              the rest of the ecosystem.
+              Start with Market Desk, JackGPT AI Workspace, JackGPT Image Gen, and
+              Kalshi Climate Desk for the strongest engineering story, then use the
+              screenshots and architecture notes to inspect the rest of the ecosystem.
             </p>
           </div>
           <div className="guide-steps">
@@ -1183,7 +1240,7 @@ function HomePage() {
         </div>
 
         <div className="project-grid">
-          {projects.map((project, index) => {
+          {homepageProjects.map((project, index) => {
             const Icon = project.icon;
             return (
               <Motion.a
@@ -1258,9 +1315,9 @@ function HomePage() {
         </div>
         <h3>{status.name}</h3>
         <p className="status-description">{status.description}</p>
-        {status.endpoint && status.showEndpoint !== false ? (
-          <a className="status-endpoint" href={status.endpoint} target="_blank" rel="noreferrer">
-            {formatEndpointHost(status.endpoint)}
+        {status.publicUrl && status.showEndpoint !== false ? (
+          <a className="status-endpoint" href={status.publicUrl} target="_blank" rel="noreferrer">
+            {formatEndpointHost(status.publicUrl)}
             <ArrowUpRight size={14} />
           </a>
         ) : null}

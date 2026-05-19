@@ -33,22 +33,22 @@ function fallbackAnswer(question) {
     return [
       "Best recruiter path:",
       "1. Open Market Desk first. It is the strongest full product demo: React UI, FastAPI backend, public market data, financial statements, signals, news, AI analysis, stock-aware chat, and health checks.",
-      "2. Open JackGPT Casino next. It proves interactive UI work: multiple craps variants, horse racing, animation, sound, bankroll state, and responsive game surfaces.",
-      "3. Use Search and Images as quick utility demos, then open project cards for screenshots and architecture notes.",
-      "4. Check live status and GitHub last. Status proves operations discipline; GitHub shows recruiter-safe code without secrets or valuable private strategy logic.",
+      "2. Open JackGPT AI Workspace next. It proves self-hosted LLM operations, branded product polish, web search, image generation, and Docker/Cloudflare infrastructure.",
+      "3. Use Image Gen, Search, and Kalshi Climate Desk to show GPU services, utility tooling, and automation operations. Casino is a secondary interactive UI demo.",
+      "4. Check project cards, live status, and GitHub last. Status proves operations discipline; GitHub shows recruiter-safe code without secrets or valuable private strategy logic.",
     ].join("\n");
   }
 
   if (hasAny(text, ["best project", "full-stack", "full stack", "strongest", "impressive", "prove", "skill"])) {
     return [
       "The strongest full-stack proof is Market Desk: it has a polished product UI, backend aggregation, health endpoints, external data fallbacks, AI-assisted analysis, and deployment through Docker/Cloudflare.",
-      "For frontend/product feel, use JackGPT Casino. For infrastructure, use the live status section, Search, Images, Mesh, Minecraft, and the Cloudflare/Docker pattern. For automation discipline, use Kalshi Climate Desk at a public-safe level.",
+      "For AI platform and infrastructure depth, use JackGPT AI Workspace, Image Gen, Search, Mesh, Minecraft, and the Cloudflare/Docker pattern. For automation discipline, use Kalshi Climate Desk at a public-safe level. Casino is useful, but it is the lighter interactive demo.",
     ].join("\n\n");
   }
 
   if (hasAny(text, ["public-safe", "public safe", "private", "secret", "safe to show", "valuable"])) {
     return [
-      "Public-safe surfaces: Market Desk, Casino, Search, Images, the homepage case studies, live status, and selected GitHub repos.",
+      "Public-safe surfaces: Market Desk, JackGPT AI Workspace signup flow, Image Gen, Search, Kalshi Climate Desk aggregates, the homepage case studies, live status, selected GitHub repos, and Casino as a secondary demo.",
       "Restricted or intentionally redacted areas: secrets, credentials, tunnel tokens, private host paths, admin device controls, order IDs, profitable trading formulas, model weights, exact Kalshi trade details, and source screenshots that reveal valuable strategy code.",
       "Kalshi Climate Desk is deliberately aggregate-only on the public web: health, lifecycle counts, and exit subsystem status without exposing live trade rows.",
     ].join("\n\n");
@@ -71,15 +71,15 @@ function fallbackAnswer(question) {
 
   if (hasAny(text, ["app", "chat", "jackgpt 3.1", "account", "sign", "openwebui", "workspace"])) {
     return [
-      "app.jackgpt.org is the account-based JackGPT AI workspace. Visitors can sign up from the sign-in page.",
-      "What to inspect: JackGPT 3.1 as the branded default assistant, web search, image generation, custom OpenWebUI theming, and the fact that it is tied into the broader self-hosted ecosystem instead of being a generic chat page.",
+      "app.jackgpt.org is the account-based JackGPT AI Workspace. Visitors can sign up from the sign-in page.",
+      "What to inspect: JackGPT 3.1 as the branded default assistant, web search, image generation, custom OpenWebUI theming, Docker/Ollama operations, and the fact that it is tied into the broader self-hosted ecosystem instead of being a generic chat page.",
     ].join("\n\n");
   }
 
   if (hasAny(text, ["casino", "craps", "crapless", "bubble", "horse", "racing", "game"])) {
     return [
-      "JackGPT Casino at casino.jackgpt.org is the best interactive UI demo.",
-      "What to inspect: standard craps, crapless craps, bubble craps, animated horse racing, chips, sound, bankroll logic, race/dice state, table-specific layouts, and mobile responsiveness. It shows product polish and state-heavy frontend work better than a static portfolio page can.",
+      "JackGPT Casino at casino.jackgpt.org is a secondary interactive UI demo.",
+      "What to inspect: standard craps, crapless craps, bubble craps, blackjack, animated horse racing, shared bankroll, chips, sound, race/dice/card state, table-specific layouts, and mobile responsiveness. It is polished, but Market Desk and JackGPT AI Workspace are stronger recruiter starting points.",
     ].join("\n\n");
   }
 
@@ -92,13 +92,13 @@ function fallbackAnswer(question) {
   }
 
   if (hasAny(text, ["image", "images", "generate", "picture", "stable", "diffusion"])) {
-    return "JackGPT Images at images.jackgpt.org is the GPU-backed image-generation demo. It is Dockerized, branded into the JackGPT theme, uses a safe-for-work model, and also supports image generation from the app.jackgpt.org workspace.";
+    return "JackGPT Image Gen at images.jackgpt.org is the GPU-backed image-generation demo. It is Dockerized, branded into the JackGPT theme, uses a safe-for-work model, and also supports image generation from the app.jackgpt.org workspace.";
   }
 
   if (hasAny(text, ["kalshi", "climate", "temperature", "trade", "trading", "position", "orders", "exit"])) {
     return [
       "Kalshi Climate Desk at kalshi.jackgpt.org is a public-safe operations dashboard for the temperature bot.",
-      "After the deterministic exit rollout, the public site should show aggregate operational health only: scanner state, heartbeat, open position count, pending/confirmed/partial/failed exit counts, lifecycle totals, and exit subsystem status.",
+      "What to inspect: scanner state, heartbeat, bankroll curve, sanitized active exposure, city exposure, settled performance, operational timeline, and deterministic-exit health as a supporting subsystem.",
       "It intentionally does not expose tickers, order IDs, prices, brackets, edges, model weights, logs, or private strategy logic.",
     ].join("\n\n");
   }
@@ -121,8 +121,8 @@ function fallbackAnswer(question) {
   return [
     "Here is the useful way to evaluate JackGPT:",
     "1. Market Desk: best full-stack AI/finance product demo.",
-    "2. Casino: best interactive UI and state-management demo.",
-    "3. Search and Images: fast self-hosted utility demos.",
+    "2. JackGPT AI Workspace: self-hosted LLM operations, web search, image generation, and branded AI product polish.",
+    "3. Image Gen and Search: fast self-hosted utility demos.",
     "4. Kalshi Climate Desk: public-safe operations and automation monitoring.",
     "5. Project cards: deeper case studies and screenshots.",
     "6. Status and GitHub: uptime plus recruiter-safe code.",
@@ -139,7 +139,7 @@ function fallbackPayload(question, reason = "backend unavailable") {
       "Give me a 5-minute recruiter tour.",
       "Which demo best proves full-stack engineering?",
       "What should I inspect in Market Desk?",
-      "Which parts are public-safe vs private?",
+      "How should I evaluate the AI workspace?",
     ],
     dependencies: {
       backend: {
