@@ -15,8 +15,9 @@ const SERVICE_TARGETS = [
   {
     key: "images",
     name: "images.jackgpt.org",
-    endpoint: "https://images.jackgpt.org/sdapi/v1/sd-models",
-    description: "Public image-generation endpoint is reachable.",
+    endpoint: "https://images.jackgpt.org",
+    method: "GET",
+    description: "Public JackGPT Images interface is reachable.",
   },
   {
     key: "meshcentral",
@@ -28,6 +29,7 @@ const SERVICE_TARGETS = [
     key: "jackgpt-search",
     name: "search.jackgpt.org",
     endpoint: "https://search.jackgpt.org",
+    method: "GET",
     description: "Branded JackGPT Search endpoint is reachable.",
   },
   {
@@ -75,44 +77,35 @@ function buildTimeoutSignal(ms) {
 
 async function checkTarget(target) {
   const startedAt = Date.now();
-  const { signal, clear } = buildTimeoutSignal(4500);
+  const { signal, clear } = buildTimeoutSignal(6500);
 
   try {
-    let response;
-
-    if (target.readJsonStatus) {
-      response = await fetch(target.endpoint, {
-        method: "GET",
+    const fetchTarget = (method) =>
+      fetch(target.endpoint, {
+        method,
         redirect: "follow",
         signal,
         cf: { cacheTtl: 20, cacheEverything: true },
         headers: {
-          accept: "application/json",
+          accept: target.readJsonStatus ? "application/json" : "text/html,application/json;q=0.9,*/*;q=0.8",
           "user-agent": "jackgpt-status-probe",
         },
       });
-    } else {
+
+    let response;
+    const preferredMethod = target.readJsonStatus ? "GET" : target.method || "HEAD";
+
+    if (preferredMethod === "HEAD") {
       try {
-        response = await fetch(target.endpoint, {
-          method: "HEAD",
-          redirect: "follow",
-          signal,
-          cf: { cacheTtl: 20, cacheEverything: true },
-          headers: {
-            "user-agent": "jackgpt-status-probe",
-          },
-        });
-      } catch {
-        response = await fetch(target.endpoint, {
-          method: "GET",
-          redirect: "follow",
-          signal,
-          cf: { cacheTtl: 20, cacheEverything: true },
-          headers: {
-            "user-agent": "jackgpt-status-probe",
-          },
-        });
+        response = await fetchTarget("HEAD");
+        if (!response.ok && [405, 403, 502, 503, 504].includes(response.status)) {
+          response = await fetchTarget("GET");
+        }
+      } catch (error) {
+        response = await fetchTarget("GET");
       }
+    } else {
+      response = await fetchTarget(preferredMethod);
     }
 
     const latencyMs = Date.now() - startedAt;
