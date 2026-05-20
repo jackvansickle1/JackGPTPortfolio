@@ -102,14 +102,15 @@ a {
   place-items: center;
   width: 48px;
   height: 48px;
-  border-radius: 16px;
-  color: #06101d;
-  font-weight: 900;
-  letter-spacing: 0;
-  background: linear-gradient(135deg, #a7f1ff 0%, #78b4ff 48%, #65f0c5 100%);
+  border-radius: 14px;
+  color: #bff9ff;
+  border: 1px solid rgba(127, 214, 255, 0.24);
+  background:
+    linear-gradient(135deg, rgba(105, 239, 199, 0.18), rgba(79, 141, 255, 0.22)),
+    rgba(7, 17, 32, 0.82);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.6),
-    0 0 30px rgba(91, 205, 255, 0.26);
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 0 30px rgba(91, 205, 255, 0.2);
 }
 
 .brand-lockup strong,
@@ -1338,9 +1339,12 @@ figcaption,
   .hero-title,
   .hero-text,
   .hero-actions,
-  .hero-stats,
-  .button {
-    max-width: 360px;
+  .hero-stats {
+    max-width: 100%;
+  }
+
+  .hero-actions {
+    width: 100%;
   }
 
   .hero-text {
@@ -1417,6 +1421,7 @@ figcaption,
 
   .button {
     width: 100%;
+    max-width: none;
     justify-content: center;
   }
 

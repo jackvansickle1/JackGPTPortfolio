@@ -847,7 +847,9 @@ function HomePage() {
       <header className="hero section">
         <div className="hero-copy">
           <div className="brand-lockup" aria-label="JackGPT">
-            <span className="brand-mark">JG</span>
+            <span className="brand-mark" aria-hidden="true">
+              <TerminalSquare size={24} strokeWidth={2.2} />
+            </span>
             <span>
               <strong>JackGPT</strong>
               <small>AI systems, automation, and infrastructure</small>
