@@ -34,7 +34,7 @@ function fallbackAnswer(question) {
       "Best recruiter path:",
       "1. Open Market Desk first. It is the strongest full product demo: React UI, FastAPI backend, public market data, financial statements, signals, news, AI analysis, stock-aware chat, and health checks.",
       "2. Open JackGPT AI Workspace next. It proves self-hosted LLM operations, branded product polish, web search, image generation, and Docker/Cloudflare infrastructure.",
-      "3. Use Image Gen, Search, and Kalshi Climate Desk to show GPU services, utility tooling, and automation operations. Casino is a secondary interactive UI demo.",
+      "3. Use Image Gen, Search, and Kalshi Climate Desk to show GPU services, utility tooling, and automation operations. Moomoo and Salad are status/ops monitors. Casino is secondary.",
       "4. Check project cards, live status, and GitHub last. Status proves operations discipline; GitHub shows recruiter-safe code without secrets or valuable private strategy logic.",
     ].join("\n");
   }
@@ -42,15 +42,15 @@ function fallbackAnswer(question) {
   if (hasAny(text, ["best project", "full-stack", "full stack", "strongest", "impressive", "prove", "skill"])) {
     return [
       "The strongest full-stack proof is Market Desk: it has a polished product UI, backend aggregation, health endpoints, external data fallbacks, AI-assisted analysis, and deployment through Docker/Cloudflare.",
-      "For AI platform and infrastructure depth, use JackGPT AI Workspace, Image Gen, Search, Mesh, Minecraft, and the Cloudflare/Docker pattern. For automation discipline, use Kalshi Climate Desk at a public-safe level. Casino is useful, but it is the lighter interactive demo.",
+      "For AI platform and infrastructure depth, use JackGPT AI Workspace, Image Gen, Search, Mesh, Minecraft, and the Cloudflare/Docker pattern. For automation discipline, use Kalshi Climate Desk plus the Moomoo/Salad status monitors at a public-safe level. Casino is useful, but lighter.",
     ].join("\n\n");
   }
 
   if (hasAny(text, ["public-safe", "public safe", "private", "secret", "safe to show", "valuable"])) {
     return [
       "Public-safe surfaces: Market Desk, JackGPT AI Workspace signup flow, Image Gen, Search, Kalshi Climate Desk aggregates, the homepage case studies, live status, selected GitHub repos, and Casino as a secondary demo.",
-      "Restricted or intentionally redacted areas: secrets, credentials, tunnel tokens, private host paths, admin device controls, order IDs, profitable trading formulas, model weights, exact Kalshi trade details, and source screenshots that reveal valuable strategy code.",
-      "Kalshi Climate Desk is deliberately aggregate-only on the public web: health, lifecycle counts, and exit subsystem status without exposing live trade rows.",
+      "Restricted or intentionally redacted areas: secrets, credentials, tunnel tokens, private host paths, admin device controls, order IDs, profitable trading formulas, model weights, exact Kalshi/Moomoo trade details, and source screenshots that reveal valuable strategy code.",
+      "Kalshi, Moomoo, and Salad are public-safe operational surfaces: they show health/aggregate status, not account data, order rows, local paths, logs, or private strategy internals.",
     ].join("\n\n");
   }
 
@@ -103,6 +103,20 @@ function fallbackAnswer(question) {
     ].join("\n\n");
   }
 
+  if (hasAny(text, ["moomoo", "moo moo", "paper trader", "paper trading", "opend"])) {
+    return [
+      "Moomoo Trading Bot Status is represented in the homepage live-status section and project cards as a public-safe paper-trading automation monitor.",
+      "What to inspect: paper runner health, OpenD gateway reachability, scheduler state, and heartbeat freshness. It intentionally does not expose account IDs, positions, orders, tickers, signals, or strategy internals.",
+    ].join("\n\n");
+  }
+
+  if (hasAny(text, ["salad", "compute node", "bowl", "workload"])) {
+    return [
+      "Salad Compute Node is represented as a host-compute operations monitor, not a flagship public app.",
+      "What to inspect: service health, workload process availability, and host-level monitoring integration. It shows that JackGPT tracks Docker services and Windows-hosted compute services in one ecosystem.",
+    ].join("\n\n");
+  }
+
   if (hasAny(text, ["minecraft", "mc.jackgpt", "paper", "server"])) {
     return "The Minecraft project is a Dockerized Paper server exposed through mc.jackgpt.org and represented honestly in live status. It is a service-health and infrastructure example rather than a web-app card with a public website link.";
   }
@@ -124,8 +138,8 @@ function fallbackAnswer(question) {
     "2. JackGPT AI Workspace: self-hosted LLM operations, web search, image generation, and branded AI product polish.",
     "3. Image Gen and Search: fast self-hosted utility demos.",
     "4. Kalshi Climate Desk: public-safe operations and automation monitoring.",
-    "5. Project cards: deeper case studies and screenshots.",
-    "6. Status and GitHub: uptime plus recruiter-safe code.",
+    "5. Moomoo/Salad status: host-level automation and compute monitoring.",
+    "6. Project cards, status, and GitHub: deeper case studies, uptime, and recruiter-safe code.",
   ].join("\n");
 }
 

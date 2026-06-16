@@ -54,6 +54,24 @@ const SERVICE_TARGETS = [
     readJsonStatus: true,
   },
   {
+    key: "moomoo-paper-trader",
+    name: "Moomoo Trading Bot",
+    endpoint: "https://market.jackgpt.org/api/host-services/moomoo/health",
+    publicUrl: "",
+    showEndpoint: false,
+    description: "Moomoo paper-trading runner, OpenD gateway, and scheduler are reachable.",
+    readJsonStatus: true,
+  },
+  {
+    key: "salad-compute-node",
+    name: "Salad Compute Node",
+    endpoint: "https://market.jackgpt.org/api/host-services/salad/health",
+    publicUrl: "",
+    showEndpoint: false,
+    description: "Salad host compute service and workload process are reachable.",
+    readJsonStatus: true,
+  },
+  {
     key: "minecraft",
     name: "Minecraft Server",
     endpoint: "https://market.jackgpt.org/api/minecraft/health",
@@ -130,6 +148,8 @@ async function checkTarget(target) {
         }
         if (data.scanner) {
           description = `Kalshi Climate Desk reports scanner ${data.scanner}; health endpoint is reachable.`;
+        } else if (typeof data.message === "string" && data.message.trim()) {
+          description = data.message.trim();
         }
       } catch {
         status = response.ok ? status : "offline";
