@@ -34,7 +34,7 @@ function fallbackAnswer(question) {
       "Best recruiter path:",
       "1. Open Market Desk first. It is the strongest full product demo: React UI, FastAPI backend, public market data, financial statements, signals, news, AI analysis, stock-aware chat, and health checks.",
       "2. Open JackGPT AI Workspace next. It proves self-hosted LLM operations, branded product polish, web search, image generation, and Docker/Cloudflare infrastructure.",
-      "3. Use Image Gen, Search, and Kalshi Climate Desk to show GPU services, utility tooling, and automation operations. Moomoo and Salad are status/ops monitors. Casino is secondary.",
+      "3. Use Image Gen, Search, and Kalshi Climate Desk to show GPU services, utility tooling, and automation operations. Moomoo at moomoo.jackgpt.org and Salad at salad.jackgpt.org are status/ops monitors. Casino is secondary.",
       "4. Check project cards, live status, and GitHub last. Status proves operations discipline; GitHub shows recruiter-safe code without secrets or valuable private strategy logic.",
     ].join("\n");
   }
@@ -42,7 +42,7 @@ function fallbackAnswer(question) {
   if (hasAny(text, ["best project", "full-stack", "full stack", "strongest", "impressive", "prove", "skill"])) {
     return [
       "The strongest full-stack proof is Market Desk: it has a polished product UI, backend aggregation, health endpoints, external data fallbacks, AI-assisted analysis, and deployment through Docker/Cloudflare.",
-      "For AI platform and infrastructure depth, use JackGPT AI Workspace, Image Gen, Search, Mesh, Minecraft, and the Cloudflare/Docker pattern. For automation discipline, use Kalshi Climate Desk plus the Moomoo/Salad status monitors at a public-safe level. Casino is useful, but lighter.",
+      "For AI platform and infrastructure depth, use JackGPT AI Workspace, Image Gen, Search, Mesh, Minecraft, and the Cloudflare/Docker pattern. For automation discipline, use Kalshi Climate Desk plus the Moomoo and Salad subdomain status monitors at a public-safe level. Casino is useful, but lighter.",
     ].join("\n\n");
   }
 
@@ -105,14 +105,14 @@ function fallbackAnswer(question) {
 
   if (hasAny(text, ["moomoo", "moo moo", "paper trader", "paper trading", "opend"])) {
     return [
-      "Moomoo Trading Bot Status is represented in the homepage live-status section and project cards as a public-safe paper-trading automation monitor.",
+      "Moomoo Trading Bot Status is available at moomoo.jackgpt.org and represented in the homepage live-status section and project cards as a public-safe paper-trading automation monitor.",
       "What to inspect: paper runner health, OpenD gateway reachability, scheduler state, and heartbeat freshness. It intentionally does not expose account IDs, positions, orders, tickers, signals, or strategy internals.",
     ].join("\n\n");
   }
 
   if (hasAny(text, ["salad", "compute node", "bowl", "workload"])) {
     return [
-      "Salad Compute Node is represented as a host-compute operations monitor, not a flagship public app.",
+      "Salad Compute Node is available at salad.jackgpt.org and represented as a host-compute operations monitor, not a flagship public app.",
       "What to inspect: service health, workload process availability, and host-level monitoring integration. It shows that JackGPT tracks Docker services and Windows-hosted compute services in one ecosystem.",
     ].join("\n\n");
   }
