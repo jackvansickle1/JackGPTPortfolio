@@ -1197,6 +1197,9 @@ figcaption,
 
 .metric-label {
   margin-bottom: 8px;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  overflow-wrap: anywhere;
 }
 
 .metric-value {
