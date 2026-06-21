@@ -25,7 +25,7 @@ const SERVICE_TARGETS = [
   {
     key: "jackgpt-search",
     name: "JackGPT Search",
-    endpoint: "https://search.jackgpt.org/search?q=openai&format=json",
+    endpoint: "https://search.jackgpt.org/search?q=!wib%20openai&format=json",
     publicUrl: "https://search.jackgpt.org",
     method: "GET",
     minResults: 1,
@@ -51,6 +51,22 @@ const SERVICE_TARGETS = [
     endpoint: "https://kalshi.jackgpt.org/health",
     publicUrl: "https://kalshi.jackgpt.org",
     description: "Kalshi Climate Desk scanner heartbeat is reachable.",
+    readJsonStatus: true,
+  },
+  {
+    key: "pearl-desk",
+    name: "JackGPT Pearl Desk",
+    endpoint: "https://pearl.jackgpt.org/health",
+    publicUrl: "https://pearl.jackgpt.org",
+    description: "PRL mining telemetry and GPU idle-guard status are reachable.",
+    readJsonStatus: true,
+  },
+  {
+    key: "file-drop",
+    name: "JackGPT File Drop",
+    endpoint: "https://file.jackgpt.org/health",
+    publicUrl: "https://file.jackgpt.org/upload",
+    description: "Expiring password-protected upload service is reachable.",
     readJsonStatus: true,
   },
   {

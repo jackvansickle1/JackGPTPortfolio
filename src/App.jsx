@@ -265,6 +265,56 @@ const projects = [
     ],
   },
   {
+    id: "pearl-desk",
+    name: "JackGPT Pearl Desk",
+    subtitle: "PRL mining telemetry with GPU-idle coordination",
+    icon: Cpu,
+    accent: "cyan",
+    tags: ["Mining telemetry", "GPU scheduling", "FastAPI", "Docker", "Monitoring", "Charts"],
+    summary:
+      "A public mining dashboard that tracks PRL wallet performance, hashrate timelines, revenue estimates, USD conversion, and the JackGPT GPU idle guard.",
+    description:
+      "JackGPT Pearl Desk is the public dashboard at pearl.jackgpt.org for PRL mining telemetry. It tracks two wallet groups, worker health, active and rolling hashrate, pending and on-chain balances, hourly revenue estimates, USD conversion, and the GPU idle guard that pauses mining when heavier JackGPT AI or image-generation workloads need the GPU.",
+    howItWorks: [
+      "A FastAPI backend queries public pool, explorer, and price endpoints, then caches the results for fast dashboard refreshes.",
+      "The UI renders wallet cards, aggregate totals, hoverable hashrate timelines, hourly revenue estimates, and source-health badges.",
+      "A private host-agent exposes only sanitized GPU-idle state so the public dashboard can show when mining is paused for JackGPT workloads without exposing host internals.",
+    ],
+    developed: [
+      "Built a Dockerized PRL dashboard with fast refresh behavior, chart hover inspection, wallet-balance reporting, and USD conversion.",
+      "Added active hashrate and rolling hashrate side by side so visitors can distinguish live performance from longer-window pool averages.",
+      "Integrated the Pearl miner with the JackGPT GPU idle guard so mining yields to image generation and other GPU-intensive demos, then resumes after an idle cooldown.",
+    ],
+    tech: ["FastAPI", "Vanilla JS", "Docker Compose", "Public pool APIs", "GPU idle guard", "Cloudflare Tunnel"],
+    links: [{ label: "pearl.jackgpt.org", href: "https://pearl.jackgpt.org" }],
+    screenshots: [],
+  },
+  {
+    id: "file-drop",
+    name: "JackGPT File Drop",
+    subtitle: "Password-protected expiring image and file links",
+    icon: Shield,
+    accent: "violet",
+    tags: ["Secure upload", "Metadata stripping", "FastAPI", "Docker", "Ephemeral links"],
+    summary:
+      "A password-protected upload service that creates expiring, view-limited links and strips metadata from images before serving them.",
+    description:
+      "JackGPT File Drop is a small public utility at file.jackgpt.org/upload for creating receiver-password-protected image/file links that expire by time and view count. It is designed for end-to-end practical safety: uploads require authorization, download links are unguessable, image metadata is stripped, and expired or exhausted files are deleted from storage.",
+    howItWorks: [
+      "The upload form requires an authorization password, then lets the uploader set a receiver password, view limit, and expiration window.",
+      "The backend sanitizes filenames, stores files under random IDs, strips image metadata, and serves content only after the receiver password is provided.",
+      "A cleanup path deletes files when their TTL expires or their view count is exhausted, and the public interface exposes no directory listing or admin surface.",
+    ],
+    developed: [
+      "Built a Dockerized FastAPI file-hosting service with read-only public access and explicit upload authorization.",
+      "Added metadata stripping for uploaded images and destructive cleanup after configured view or time limits.",
+      "Integrated the service into Cloudflare Tunnel, Ops monitoring, and the homepage status layer without exposing secrets or local storage paths.",
+    ],
+    tech: ["FastAPI", "Docker Compose", "Pillow", "Access controls", "Cloudflare Tunnel"],
+    links: [{ label: "file.jackgpt.org/upload", href: "https://file.jackgpt.org/upload" }],
+    screenshots: [],
+  },
+  {
     id: "kalshi-temperature-bot",
     name: "Kalshi Climate Desk",
     subtitle: "Live weather-market scanner and operations dashboard",
@@ -307,9 +357,9 @@ const projects = [
     accent: "emerald",
     tags: ["Python", "Moomoo OpenD", "Paper trading", "Risk controls", "Windows automation", "Monitoring"],
     summary:
-      "A public-safe status view for a private Moomoo paper-trading bot, showing automation health without exposing orders, account data, or strategy internals.",
+      "A public-safe status view for a private Moomoo paper-trading bot, showing automation health, sanitized paper positions, and P/L without exposing accounts, orders, signals, or strategy internals.",
     description:
-      "Moomoo Trading Bot Status tracks the operational health of a paper-first Moomoo portfolio trader. The public JackGPT status layer reports whether the paper runner, Moomoo OpenD gateway, and Windows scheduler are online while keeping account IDs, positions, order details, signals, and private strategy logic out of the public UI.",
+      "Moomoo Trading Bot Status tracks the operational health of a paper-first Moomoo portfolio trader. The public JackGPT status layer reports whether the paper runner, Moomoo OpenD gateway, and Windows scheduler are online, plus sanitized paper portfolio/P&L summaries, while keeping account IDs, order details, signals, and private strategy logic out of the public UI.",
     howItWorks: [
       "A Windows scheduled task launches a tray supervisor for the paper-trading runner at login.",
       "The runner connects to local Moomoo OpenD in paper mode and applies risk gates before any paper order submission.",
@@ -318,7 +368,7 @@ const projects = [
     developed: [
       "Built a paper-first Moomoo automation project with explicit risk controls and a local simulator fallback.",
       "Installed Windows startup supervision so the runner and OpenD gateway can stay available across sessions.",
-      "Integrated a sanitized health bridge into JackGPT Ops, the public homepage status section, and a dedicated moomoo.jackgpt.org dashboard without leaking trade rows or account details.",
+      "Integrated a sanitized health bridge into JackGPT Ops, the public homepage status section, and a dedicated moomoo.jackgpt.org dashboard without leaking account identifiers, raw order rows, signals, or strategy details.",
     ],
     tech: ["Python", "Moomoo OpenD", "Scheduled Tasks", "Host-agent bridge", "Paper trading", "Risk controls"],
     links: [{ label: "moomoo.jackgpt.org", href: "https://moomoo.jackgpt.org" }],
@@ -408,6 +458,8 @@ const homepageProjectOrder = [
   "automatic1111",
   "jackgpt-search",
   "kalshi-temperature-bot",
+  "pearl-desk",
+  "file-drop",
   "moomoo-paper-trader",
   "meshcentral",
   "salad-compute-node",
@@ -496,6 +548,28 @@ const fallbackStatuses = [
     description: "Checking the Kalshi Climate Desk scanner heartbeat.",
     endpoint: "https://kalshi.jackgpt.org/health",
     publicUrl: "https://kalshi.jackgpt.org",
+    latencyMs: null,
+    httpStatus: "-",
+    checkedAt: null,
+    status: "checking",
+  },
+  {
+    key: "pearl-desk",
+    name: "JackGPT Pearl Desk",
+    description: "Checking PRL mining telemetry, wallet balance, and GPU idle-guard status.",
+    endpoint: "https://pearl.jackgpt.org/health",
+    publicUrl: "https://pearl.jackgpt.org",
+    latencyMs: null,
+    httpStatus: "-",
+    checkedAt: null,
+    status: "checking",
+  },
+  {
+    key: "file-drop",
+    name: "JackGPT File Drop",
+    description: "Checking the expiring password-protected upload service.",
+    endpoint: "https://file.jackgpt.org/health",
+    publicUrl: "https://file.jackgpt.org/upload",
     latencyMs: null,
     httpStatus: "-",
     checkedAt: null,
@@ -638,6 +712,22 @@ const accessLinks = [
     note: "Watch scanner uptime, bankroll trend, sanitized exposure, performance, and exit-system health without exposing trade rows, prices, or private strategy details.",
   },
   {
+    label: "JackGPT Pearl Desk",
+    href: "https://pearl.jackgpt.org",
+    description: "PRL mining telemetry with wallet balances, hashrate timelines, revenue estimates, and GPU idle-guard status.",
+    accessLabel: "Public demo",
+    accessTone: "public",
+    note: "Shows mining performance and how JackGPT pauses mining when AI or image-generation workloads need the GPU.",
+  },
+  {
+    label: "JackGPT File Drop",
+    href: "https://file.jackgpt.org/upload",
+    description: "Password-protected expiring image and file links with metadata stripping.",
+    accessLabel: "Utility demo",
+    accessTone: "public",
+    note: "Demonstrates secure upload flow, receiver passwords, view limits, TTL cleanup, and practical privacy safeguards.",
+  },
+  {
     label: "Moomoo Trading Bot",
     href: "https://moomoo.jackgpt.org",
     description: "Public-safe paper-trading automation status dashboard.",
@@ -668,7 +758,7 @@ const visitorPath = [
     eyebrow: "1",
     title: "Start with the strongest demos",
     body:
-      "Begin with Market Desk, then JackGPT AI Workspace, Image Gen, Search, and Kalshi Climate Desk. Casino is there too, but it is the lighter interactive demo.",
+      "Begin with Market Desk, then JackGPT AI Workspace, Image Gen, Search, Kalshi Climate Desk, and Pearl Desk. Casino is there too, but it is the lighter interactive demo.",
     href: "#live-services",
     cta: "View live demos",
     icon: LineChart,
@@ -707,7 +797,7 @@ const companionPrompts = [
   "Give me a 5-minute recruiter tour.",
   "Which demo best proves full-stack engineering?",
   "What should I inspect in Market Desk?",
-  "How should I evaluate the AI workspace?",
+  "What is new in the JackGPT ecosystem?",
 ];
 
 const initialCompanionMessage = {
@@ -1286,8 +1376,9 @@ function HomePage() {
             <strong>Every project card opens into a deeper walkthrough.</strong>
             <p>
               Start with Market Desk, JackGPT AI Workspace, JackGPT Image Gen, and
-              Kalshi Climate Desk for the strongest engineering story, then use the
-              screenshots and architecture notes to inspect the rest of the ecosystem.
+              Kalshi Climate Desk for the strongest engineering story. Pearl Desk,
+              File Drop, Moomoo, Salad, Mesh, and the status layer show the operating
+              discipline around the product surfaces.
             </p>
           </div>
           <div className="guide-steps">
