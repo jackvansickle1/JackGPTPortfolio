@@ -29,7 +29,7 @@ function hasAny(text, words) {
 function fallbackAnswer(question) {
   const text = question.toLowerCase();
 
-  if (hasAny(text, ["5 minute", "five minute", "quick", "start", "first", "recommend", "where", "recruiter", "inspect"])) {
+  if (hasAny(text, ["5 minute", "five minute", "quick", "start", "first", "recommend", "where", "recruiter"])) {
     return [
       "Best recruiter path:",
       "1. Open Market Desk first. It is the strongest full product demo: React UI, FastAPI backend, public market data, financial statements, signals, news, AI analysis, stock-aware chat, and health checks.",
@@ -94,6 +94,17 @@ function fallbackAnswer(question) {
 
   if (hasAny(text, ["image", "images", "generate", "picture", "stable", "diffusion"])) {
     return "JackGPT Image Gen at images.jackgpt.org is the GPU-backed image-generation demo. It is Dockerized, branded into the JackGPT theme, uses a safe-for-work model, and also supports image generation from the app.jackgpt.org workspace.";
+  }
+
+  if (
+    hasAny(text, ["pearl", "prl", "miner", "mining", "hashrate", "gpu idle", "idle guard"]) &&
+    hasAny(text, ["file drop", "file hosting", "upload", "metadata", "expiring", "password protected", "view limit"])
+  ) {
+    return [
+      "Pearl Desk: inspect worker health, active versus rolling hashrate, hoverable timelines, pending/on-chain balances, USD conversion, hourly revenue estimates, source-health badges, and GPU idle-guard pause/resume state.",
+      "File Drop: inspect uploader authorization, receiver passwords, unguessable links, configurable view limits, TTL expiration, image metadata stripping, deletion after exhausted views or expiration, and the absence of a public listing/admin surface.",
+      "The shared engineering story is practical reliability: telemetry, safe defaults, explicit boundaries, and cleanup behavior instead of one-off demos.",
+    ].join("\n\n");
   }
 
   if (hasAny(text, ["pearl", "prl", "miner", "mining", "hashrate", "wallet", "gpu idle", "idle guard"])) {
