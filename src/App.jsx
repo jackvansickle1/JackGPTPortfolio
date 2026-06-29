@@ -565,17 +565,6 @@ const fallbackStatuses = [
     status: "checking",
   },
   {
-    key: "file-drop",
-    name: "JackGPT File Drop",
-    description: "Checking the expiring password-protected upload service.",
-    endpoint: "https://file.jackgpt.org/health",
-    publicUrl: "https://file.jackgpt.org/upload",
-    latencyMs: null,
-    httpStatus: "-",
-    checkedAt: null,
-    status: "checking",
-  },
-  {
     key: "moomoo-paper-trader",
     name: "Moomoo Trading Bot",
     description: "Checking the public-safe paper-trading automation dashboard.",

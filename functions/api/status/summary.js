@@ -62,14 +62,6 @@ const SERVICE_TARGETS = [
     readJsonStatus: true,
   },
   {
-    key: "file-drop",
-    name: "JackGPT File Drop",
-    endpoint: "https://file.jackgpt.org/health",
-    publicUrl: "https://file.jackgpt.org/upload",
-    description: "Expiring password-protected upload service is reachable.",
-    readJsonStatus: true,
-  },
-  {
     key: "moomoo-paper-trader",
     name: "Moomoo Trading Bot",
     endpoint: "https://moomoo.jackgpt.org/health",
