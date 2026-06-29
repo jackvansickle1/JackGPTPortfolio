@@ -290,6 +290,52 @@ const projects = [
     screenshots: [],
   },
   {
+    id: "ops-control-room",
+    name: "JackGPT Ops Control Room",
+    subtitle: "Private demo-readiness monitor with alerts and safe auto-repair",
+    icon: Activity,
+    accent: "blue",
+    tags: ["Monitoring", "Auto-repair", "Docker", "Cloudflare Access", "Alerts", "Browser QA"],
+    summary:
+      "A private operations dashboard that monitors the JackGPT ecosystem, runs browser-render checks, sends alerts, and repairs predictable service failures before a recruiter demo goes sideways.",
+    description:
+      "JackGPT Ops Control Room is the private reliability layer behind the public portfolio. It watches public URLs, internal health endpoints, Docker containers, Cloudflare tunnels, host-side bot agents, search/image/AI dependencies, and browser-render screenshots. It is intentionally gated behind Cloudflare Access and shown publicly only as a case study, because the live control surface can restart services and coordinate host-side repair actions.",
+    howItWorks: [
+      "A Dockerized FastAPI dashboard polls public endpoints, internal container health, Docker state, selected host-agent signals, and browser-render checks on a recurring schedule.",
+      "A private host-agent exposes narrowly scoped repair actions for predictable failures, such as restarting Search, OpenWebUI/Ollama, image generation, Market Desk, tunnels, Kalshi scanner, Moomoo, Salad, Pearl, and other allowlisted services.",
+      "Ops sends compact ntfy alerts for repeated failures, degraded dependencies, blank visual checks, and recoveries while keeping alert payloads free of secrets, logs, paths, screenshots, and strategy data.",
+      "Cloudflare Access keeps ops.jackgpt.org private, while this homepage case study and GitHub note explain the architecture without exposing credentials or live administrative controls.",
+    ],
+    developed: [
+      "Built a private control room that gives one-click checks, quick fixes, container status, host-agent health, browser-render screenshots, and demo readiness scoring.",
+      "Added automatic repair policy with cooldowns, thresholds, allowlisted targets, and public-safe remediation logs so failures can be fixed without creating restart loops.",
+      "Integrated Search-specific repair logic after repeated upstream-engine degradation, including stable SearXNG defaults and validation that prevents the old broken config from returning.",
+      "Separated public status from private operations: recruiters can see live public health on jackgpt.org, while Ops retains the deeper restart, tunnel, and host-control tooling behind Access.",
+    ],
+    tech: ["FastAPI", "Docker Compose", "Cloudflare Access", "Docker SDK", "Playwright", "ntfy", "Host-agent bridge"],
+    links: [
+      { label: "ops.jackgpt.org (private)", href: "https://ops.jackgpt.org" },
+      {
+        label: "GitHub: architecture note",
+        href: "https://github.com/jackvansickle1/JackGPTPortfolio/blob/main/public/code-notes/jackgpt-ops-control-room.md",
+      },
+    ],
+    screenshots: [
+      {
+        src: "/project-images/ops-control-room/ops-readiness-overview.png",
+        caption: "Private Ops dashboard showing demo readiness, monitored dependency scope, and Cloudflare Access boundary",
+      },
+      {
+        src: "/project-images/ops-control-room/ops-repair-matrix.png",
+        caption: "Allowlisted quick-fix matrix with cooldown-aware repair actions for predictable service failures",
+      },
+      {
+        src: "/project-images/ops-control-room/ops-service-health.png",
+        caption: "Core service and Docker container health view used before recruiter demos",
+      },
+    ],
+  },
+  {
     id: "file-drop",
     name: "JackGPT File Drop",
     subtitle: "Password-protected expiring image and file links",
@@ -459,6 +505,7 @@ const homepageProjectOrder = [
   "jackgpt-search",
   "kalshi-temperature-bot",
   "pearl-desk",
+  "ops-control-room",
   "file-drop",
   "moomoo-paper-trader",
   "meshcentral",
@@ -668,6 +715,14 @@ const accessLinks = [
     note: "Shown for infrastructure context and uptime; device access is restricted.",
   },
   {
+    label: "JackGPT Ops Control Room",
+    href: "https://ops.jackgpt.org",
+    description: "Private demo-readiness monitor with alerts, browser checks, and allowlisted repairs",
+    accessLabel: "Private ops",
+    accessTone: "private",
+    note: "Access is gated by Cloudflare Access; the public case study explains the architecture without exposing controls.",
+  },
+  {
     label: "JackGPT Search",
     href: "https://search.jackgpt.org",
     description: "Branded public web-search endpoint",
@@ -747,7 +802,7 @@ const visitorPath = [
     eyebrow: "1",
     title: "Start with the strongest demos",
     body:
-      "Begin with Market Desk, then JackGPT AI Workspace, Image Gen, Search, Kalshi Climate Desk, and Pearl Desk. Casino is there too, but it is the lighter interactive demo.",
+      "Begin with Market Desk, then JackGPT AI Workspace, Image Gen, Search, Kalshi Climate Desk, Pearl Desk, and the private Ops case study. Casino is there too, but it is the lighter interactive demo.",
     href: "#live-services",
     cta: "View live demos",
     icon: LineChart,
@@ -1031,7 +1086,7 @@ function HomePage() {
         </div>
         <div className="hero-stats">
           <StatCard label="Projects" value={String(projects.length)} />
-          <StatCard label="Public services" value={String(accessLinks.length)} />
+          <StatCard label="Live endpoints" value={String(accessLinks.length)} />
           <StatCard label="Core stack" value="React, Docker, Cloudflare" />
           <StatCard label="Focus" value="FinTech, AI, and automation" />
         </div>
@@ -1365,9 +1420,9 @@ function HomePage() {
             <strong>Every project card opens into a deeper walkthrough.</strong>
             <p>
               Start with Market Desk, JackGPT AI Workspace, JackGPT Image Gen, and
-              Kalshi Climate Desk for the strongest engineering story. Pearl Desk,
-              File Drop, Moomoo, Salad, Mesh, and the status layer show the operating
-              discipline around the product surfaces.
+              Kalshi Climate Desk for the strongest engineering story. Ops Control Room,
+              Pearl Desk, File Drop, Moomoo, Salad, Mesh, and the status layer show the
+              operating discipline around the product surfaces.
             </p>
           </div>
           <div className="guide-steps">
