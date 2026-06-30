@@ -11,6 +11,8 @@ The live control room is private at `ops.jackgpt.org` behind Cloudflare Access. 
 - Docker container state and healthcheck results.
 - Browser-render checks for blank pages, broken UI, framework overlays, and console errors.
 - Ollama/model-host availability, image-generation backend health, Search result health, Cloudflare tunnel health, and selected host-agent signals.
+- Demo-prep warmups for the recruiter path: homepage, AI Workspace, Ollama, Search, Image Gen, Market Desk, Kalshi, Pearl, and Casino.
+- Dependency rollups for public routes, internal services, host agents, tunnels, alert channels, and GPU-idle guard state.
 
 ## How It Works
 
@@ -21,12 +23,38 @@ flowchart LR
   Docker["Docker socket / container health"] --> Ops
   Browser["Browser render checks"] --> Ops
   Host["Private host-agent"] --> Ops
+  Runbook["Demo warmup runbook"] --> Ops
+  Incidents["Incident memory"] --> Ops
   Ops --> Alerts["ntfy alerts"]
   Ops --> Repairs["Allowlisted repair actions"]
+  Ops --> Map["Dependency map"]
   Repairs --> Services["Restart / repair selected services"]
 ```
 
-The monitor runs inside Docker as a FastAPI service. It keeps a readiness score, current service table, browser screenshot history, alert history, and repair history. A separate private host-agent exposes narrowly scoped repair actions for things that live outside Docker, such as Windows-hosted bot processes or compute services.
+The monitor runs inside Docker as a FastAPI service. It keeps a readiness score, current service table, browser screenshot history, alert history, repair history, demo-prep history, dependency map, and incident memory. A separate private host-agent exposes narrowly scoped repair actions for things that live outside Docker, such as Windows-hosted bot processes or compute services.
+
+## Demo Runbook
+
+Ops includes a read-only `Prepare demo` path. It warms the public and internal routes that are most likely to be used in a recruiter walkthrough, refreshes browser-render sentinels, and returns a short recommended repair queue when a dependency is degraded.
+
+The warmup path intentionally avoids hidden broad restarts. It checks and primes the services, then leaves repair decisions to the explicit allowlisted repair system. This keeps the control room useful before a demo without making surprising state changes.
+
+## Dependency Map
+
+The dependency map groups service health by operational layer:
+
+- Cloudflare tunnels and public routing.
+- Homepage, AI Workspace, Search, Image Gen, Market Desk, Kalshi, Pearl, and support demos.
+- Ollama/model host, SearXNG/Valkey, image backend, and GPU-idle guard.
+- Private host-agent bridge and alert channels.
+
+This makes a failed demo easier to reason about: a public route failure, a container failure, an AI dependency failure, and a host-agent failure are different problems with different recovery paths.
+
+## Incident Memory
+
+Ops keeps a public-safe list of known failure classes and their recovery protocols. Current examples include Search degradation from unreliable upstream engines, image-generation slowness from GPU contention, Docker Desktop/WSL abrupt termination, Market Desk public-data fallback issues, Kalshi scanner heartbeat problems, and Ollama model slowness.
+
+The goal is not just to restart services. The goal is to stop rediscovering the same root causes under demo pressure.
 
 ## Repair Model
 
@@ -65,6 +93,10 @@ Public-safe:
 ## Screenshots
 
 ![Ops readiness overview](../project-images/ops-control-room/ops-readiness-overview.png)
+
+![Ops demo runbook](../project-images/ops-control-room/ops-demo-runbook.png)
+
+![Ops dependency map](../project-images/ops-control-room/ops-dependency-map.png)
 
 ![Ops repair matrix](../project-images/ops-control-room/ops-repair-matrix.png)
 

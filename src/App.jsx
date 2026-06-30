@@ -292,23 +292,26 @@ const projects = [
   {
     id: "ops-control-room",
     name: "JackGPT Ops Control Room",
-    subtitle: "Private demo-readiness monitor with alerts and safe auto-repair",
+    subtitle: "Private demo-readiness, incident memory, alerts, and safe repair controls",
     icon: Activity,
     accent: "blue",
-    tags: ["Monitoring", "Auto-repair", "Docker", "Cloudflare Access", "Alerts", "Browser QA"],
+    tags: ["Monitoring", "Runbooks", "Auto-repair", "Docker", "Cloudflare Access", "Browser QA"],
     summary:
-      "A private operations dashboard that monitors the JackGPT ecosystem, runs browser-render checks, sends alerts, and repairs predictable service failures before a recruiter demo goes sideways.",
+      "A private operations dashboard that monitors the JackGPT ecosystem, warms demo paths, maps dependencies, remembers recurring incidents, sends alerts, and repairs predictable service failures before a recruiter demo goes sideways.",
     description:
-      "JackGPT Ops Control Room is the private reliability layer behind the public portfolio. It watches public URLs, internal health endpoints, Docker containers, Cloudflare tunnels, host-side bot agents, search/image/AI dependencies, and browser-render screenshots. It is intentionally gated behind Cloudflare Access and shown publicly only as a case study, because the live control surface can restart services and coordinate host-side repair actions.",
+      "JackGPT Ops Control Room is the private reliability layer behind the public portfolio. It watches public URLs, internal health endpoints, Docker containers, Cloudflare tunnels, host-side bot agents, search/image/AI dependencies, and browser-render screenshots. It also runs a demo-prep warmup, maintains a service dependency map, and keeps incident memory for recurring failure classes. The live surface is gated behind Cloudflare Access and shown publicly only as a case study, because it can restart services and coordinate host-side repair actions.",
     howItWorks: [
       "A Dockerized FastAPI dashboard polls public endpoints, internal container health, Docker state, selected host-agent signals, and browser-render checks on a recurring schedule.",
+      "A private demo runbook warms critical routes, refreshes visual sentinels, checks Search/Ollama/Image Gen/Market/Kalshi/Pearl/Casino readiness, and returns suggested repairs before a live walkthrough.",
+      "A dependency map rolls up service health across Cloudflare tunnels, OpenWebUI, Ollama, Search, Image Gen, Market Desk, Kalshi, Pearl, host agents, and alert channels.",
       "A private host-agent exposes narrowly scoped repair actions for predictable failures, such as restarting Search, OpenWebUI/Ollama, image generation, Market Desk, tunnels, Kalshi scanner, Moomoo, Salad, Pearl, and other allowlisted services.",
       "Ops sends compact ntfy alerts for repeated failures, degraded dependencies, blank visual checks, and recoveries while keeping alert payloads free of secrets, logs, paths, screenshots, and strategy data.",
       "Cloudflare Access keeps ops.jackgpt.org private, while this homepage case study and GitHub note explain the architecture without exposing credentials or live administrative controls.",
     ],
     developed: [
-      "Built a private control room that gives one-click checks, quick fixes, container status, host-agent health, browser-render screenshots, and demo readiness scoring.",
+      "Built a private control room that gives one-click checks, demo warmups, quick fixes, container status, host-agent health, browser-render screenshots, and demo readiness scoring.",
       "Added automatic repair policy with cooldowns, thresholds, allowlisted targets, and public-safe remediation logs so failures can be fixed without creating restart loops.",
+      "Added incident memory for recurring failures like Search degradation, image-generation GPU contention, WSL/Docker interruptions, Market data fallback, Kalshi heartbeat issues, and Ollama model slowness.",
       "Integrated Search-specific repair logic after repeated upstream-engine degradation, including stable SearXNG defaults and validation that prevents the old broken config from returning.",
       "Separated public status from private operations: recruiters can see live public health on jackgpt.org, while Ops retains the deeper restart, tunnel, and host-control tooling behind Access.",
     ],
@@ -323,7 +326,15 @@ const projects = [
     screenshots: [
       {
         src: "/project-images/ops-control-room/ops-readiness-overview.png",
-        caption: "Private Ops dashboard showing demo readiness, monitored dependency scope, and Cloudflare Access boundary",
+        caption: "Private Ops dashboard showing demo readiness, the guarded Access boundary, and the controls used before recruiter walkthroughs",
+      },
+      {
+        src: "/project-images/ops-control-room/ops-demo-runbook.png",
+        caption: "Demo runbook and warmup checklist for touching critical AI, search, finance, image, and operations paths before a live demo",
+      },
+      {
+        src: "/project-images/ops-control-room/ops-dependency-map.png",
+        caption: "Dependency map and incident memory that connect symptoms to likely failing layers and known recovery protocols",
       },
       {
         src: "/project-images/ops-control-room/ops-repair-matrix.png",
