@@ -37,22 +37,22 @@ function fallbackAnswer(question) {
       "3. Open JackGPT AI Workspace next. It proves self-hosted LLM operations, branded product polish, web search, image generation, and Docker/Cloudflare infrastructure.",
       "4. Use Image Gen, Search, Kalshi Climate Desk, Pearl Desk, and the Ops case study to show GPU services, utility tooling, automation operations, telemetry, and reliability work.",
       "5. Check status.jackgpt.org, project cards, the architecture map, blog posts, and GitHub. Those prove operations discipline and recruiter-safe code.",
-      "6. File Drop, Moomoo, Salad, Mesh, Minecraft, and Casino are supporting examples. Casino is intentionally not the flagship path.",
+      "6. Moomoo, Salad, Mesh, Minecraft, and Casino are supporting examples. Casino is intentionally not the flagship path.",
     ].join("\n");
   }
 
   if (hasAny(text, ["best project", "full-stack", "full stack", "strongest", "impressive", "prove", "skill"])) {
     return [
       "The strongest full-stack proof is Market Desk: it has a polished product UI, backend aggregation, health endpoints, external data fallbacks, AI-assisted analysis, and deployment through Docker/Cloudflare.",
-      "For AI platform and infrastructure depth, use JackGPT AI Workspace, Image Gen, Search, Mesh, Pearl Desk, File Drop, and the Cloudflare/Docker pattern. For automation discipline, use Kalshi Climate Desk plus the Moomoo and Salad subdomain status monitors at a public-safe level. Casino is useful, but lighter.",
+      "For AI platform and infrastructure depth, use JackGPT AI Workspace, Image Gen, Search, Mesh, Pearl Desk, and the Cloudflare/Docker pattern. For automation discipline, use Kalshi Climate Desk plus the Moomoo and Salad subdomain status monitors at a public-safe level. Casino is useful, but lighter.",
     ].join("\n\n");
   }
 
   if (hasAny(text, ["public-safe", "public safe", "private", "secret", "safe to show", "valuable"])) {
     return [
-      "Public-safe surfaces: Market Desk, JackGPT AI Workspace signup flow, Image Gen, Search, Kalshi Climate Desk aggregates, Pearl Desk telemetry, File Drop upload flow, Moomoo/Salad status monitors, homepage case studies, live status, selected GitHub repos, and Casino as a secondary demo.",
-      "Restricted or intentionally redacted areas: secrets, credentials, tunnel tokens, private host paths, admin device controls, upload authorization secrets, order IDs, profitable trading formulas, model weights, exact Kalshi/Moomoo trade details, and source screenshots that reveal valuable strategy code.",
-      "Kalshi, Moomoo, Salad, Pearl, and File Drop expose only public-safe operational or utility data; they do not expose private logs, local paths, account secrets, or strategy internals.",
+      "Public-safe surfaces: Market Desk, JackGPT AI Workspace signup flow, Image Gen, Search, Kalshi Climate Desk aggregates, Pearl Desk telemetry, Moomoo/Salad status monitors, homepage case studies, live status, selected GitHub repos, and Casino as a secondary demo.",
+      "Restricted or intentionally redacted areas: secrets, credentials, tunnel tokens, private host paths, admin device controls, order IDs, profitable trading formulas, model weights, exact Kalshi/Moomoo trade details, and source screenshots that reveal valuable strategy code.",
+      "Kalshi, Moomoo, Salad, and Pearl expose only public-safe operational data; they do not expose private logs, local paths, account secrets, or strategy internals.",
     ].join("\n\n");
   }
 
@@ -125,30 +125,11 @@ function fallbackAnswer(question) {
     return "JackGPT Image Gen at images.jackgpt.org is the GPU-backed image-generation demo. It is Dockerized, branded into the JackGPT theme, uses a safe-for-work model, and also supports image generation from the app.jackgpt.org workspace.";
   }
 
-  if (
-    hasAny(text, ["pearl", "prl", "miner", "mining", "hashrate", "gpu idle", "idle guard"]) &&
-    hasAny(text, ["file drop", "file hosting", "upload", "metadata", "expiring", "password protected", "view limit"])
-  ) {
-    return [
-      "Pearl Desk: inspect worker health, active versus rolling hashrate, hoverable timelines, pending/on-chain balances, USD conversion, hourly revenue estimates, source-health badges, and GPU idle-guard pause/resume state.",
-      "File Drop: inspect uploader authorization, receiver passwords, unguessable links, configurable view limits, TTL expiration, image metadata stripping, deletion after exhausted views or expiration, and the absence of a public listing/admin surface.",
-      "The shared engineering story is practical reliability: telemetry, safe defaults, explicit boundaries, and cleanup behavior instead of one-off demos.",
-    ].join("\n\n");
-  }
-
   if (hasAny(text, ["pearl", "prl", "miner", "mining", "hashrate", "wallet", "gpu idle", "idle guard"])) {
     return [
       "JackGPT Pearl Desk at pearl.jackgpt.org tracks PRL mining telemetry.",
       "What to inspect: per-wallet worker state, active and rolling hashrate, hoverable hashrate timelines, pending and on-chain balances, USD conversion, hourly revenue estimates, source-health badges, and the GPU idle guard.",
       "The engineering point is coordination: mining pauses when JackGPT needs the GPU for image generation or other heavy AI workloads, then resumes after the idle cooldown.",
-    ].join("\n\n");
-  }
-
-  if (hasAny(text, ["file drop", "file hosting", "upload", "metadata", "expiring", "password protected", "view limit"])) {
-    return [
-      "JackGPT File Drop at file.jackgpt.org/upload is a password-protected expiring file/image utility.",
-      "What to inspect: uploader authorization, receiver password protection, unguessable links, configurable view limits, TTL expiration, image metadata stripping, and deletion after expiration or exhausted views.",
-      "Do not ask for or expose the upload authorization password. It is intentionally not public context.",
     ].join("\n\n");
   }
 
@@ -196,7 +177,7 @@ function fallbackAnswer(question) {
     "2. JackGPT AI Workspace: self-hosted LLM operations, web search, image generation, and branded AI product polish.",
     "3. Image Gen and Search: fast self-hosted utility demos.",
     "4. Kalshi Climate Desk and Pearl Desk: public-safe operations, automation monitoring, GPU scheduling, and mining telemetry.",
-    "5. File Drop, Moomoo, and Salad: secure utility design and host-level monitoring.",
+    "5. Moomoo and Salad: host-level monitoring and public-safe automation status.",
     "6. Project cards, status, and GitHub: deeper case studies, uptime, and recruiter-safe code.",
     "7. Guided demo mode, architecture map, and blog posts: the self-serve explanation layer for recruiters.",
   ].join("\n");

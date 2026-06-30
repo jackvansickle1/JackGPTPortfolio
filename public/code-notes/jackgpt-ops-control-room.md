@@ -71,7 +71,7 @@ Examples of predictable repairs:
 - Search: enforce stable SearXNG defaults and restart/validate the service.
 - AI Workspace: restart OpenWebUI and Ollama.
 - Image Gen: restart the lightweight frontend, backend, and tunnel.
-- Market Desk, Casino, Pearl Desk, Temp, and File Drop: restart the relevant container.
+- Market Desk, Casino, Pearl Desk, Temp, Moomoo, and Salad: restart or validate the relevant container or host-agent bridge.
 - Tunnels: restart Cloudflare tunnel containers when public routing fails.
 
 ## Security Boundaries

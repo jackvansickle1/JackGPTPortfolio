@@ -1,9 +1,8 @@
-Extract these files into your Vite app folder:
-C:\Users\jvan8\Downloads\homepage\homepage-react
+JackGPT Portfolio Site
 
-Then run:
-cd C:\Users\jvan8\Downloads\homepage\homepage-react
+Development:
+npm install
 npm run dev
 
-If Vite complains about missing packages, run:
-npm install
+Production check:
+npm run build

@@ -347,31 +347,6 @@ const projects = [
     ],
   },
   {
-    id: "file-drop",
-    name: "JackGPT File Drop",
-    subtitle: "Password-protected expiring image and file links",
-    icon: Shield,
-    accent: "violet",
-    tags: ["Secure upload", "Metadata stripping", "FastAPI", "Docker", "Ephemeral links"],
-    summary:
-      "A password-protected upload service that creates expiring, view-limited links and strips metadata from images before serving them.",
-    description:
-      "JackGPT File Drop is a small public utility at file.jackgpt.org/upload for creating receiver-password-protected image/file links that expire by time and view count. It is designed for end-to-end practical safety: uploads require authorization, download links are unguessable, image metadata is stripped, and expired or exhausted files are deleted from storage.",
-    howItWorks: [
-      "The upload form requires an authorization password, then lets the uploader set a receiver password, view limit, and expiration window.",
-      "The backend sanitizes filenames, stores files under random IDs, strips image metadata, and serves content only after the receiver password is provided.",
-      "A cleanup path deletes files when their TTL expires or their view count is exhausted, and the public interface exposes no directory listing or admin surface.",
-    ],
-    developed: [
-      "Built a Dockerized FastAPI file-hosting service with read-only public access and explicit upload authorization.",
-      "Added metadata stripping for uploaded images and destructive cleanup after configured view or time limits.",
-      "Integrated the service into Cloudflare Tunnel, Ops monitoring, and the homepage status layer without exposing secrets or local storage paths.",
-    ],
-    tech: ["FastAPI", "Docker Compose", "Pillow", "Access controls", "Cloudflare Tunnel"],
-    links: [{ label: "file.jackgpt.org/upload", href: "https://file.jackgpt.org/upload" }],
-    screenshots: [],
-  },
-  {
     id: "kalshi-temperature-bot",
     name: "Kalshi Climate Desk",
     subtitle: "Live weather-market scanner and operations dashboard",
@@ -517,7 +492,6 @@ const homepageProjectOrder = [
   "kalshi-temperature-bot",
   "pearl-desk",
   "ops-control-room",
-  "file-drop",
   "moomoo-paper-trader",
   "meshcentral",
   "salad-compute-node",
@@ -794,14 +768,6 @@ const accessLinks = [
     note: "Shows mining performance and how JackGPT pauses mining when AI or image-generation workloads need the GPU.",
   },
   {
-    label: "JackGPT File Drop",
-    href: "https://file.jackgpt.org/upload",
-    description: "Password-protected expiring image and file links with metadata stripping.",
-    accessLabel: "Utility demo",
-    accessTone: "public",
-    note: "Demonstrates secure upload flow, receiver passwords, view limits, TTL cleanup, and practical privacy safeguards.",
-  },
-  {
     label: "Moomoo Trading Bot",
     href: "https://moomoo.jackgpt.org",
     description: "Public-safe paper-trading automation status dashboard.",
@@ -923,7 +889,7 @@ const architectureLayers = [
     title: "Visitor-facing layer",
     icon: Globe,
     body:
-      "jackgpt.org, Market Desk, AI Workspace, Image Gen, Search, Kalshi, Pearl, Moomoo, Salad, Casino, and utility services are grouped by product value instead of raw hostnames.",
+      "jackgpt.org, Market Desk, AI Workspace, Image Gen, Search, Kalshi, Pearl, Moomoo, Salad, and Casino are grouped by product value instead of raw hostnames.",
     points: ["Recruiter navigation", "Case studies and screenshots", "Human-friendly service names", "Public-safe explanations"],
   },
   {
@@ -1073,21 +1039,21 @@ const blogPosts = [
     date: "2026-06-30",
     readTime: "4 min read",
     summary:
-      "How Kalshi, Moomoo, Salad, Pearl, and File Drop expose useful operational information without leaking valuable strategy or credentials.",
+      "How Kalshi, Moomoo, Salad, and Pearl expose useful operational information without leaking valuable strategy or credentials.",
     tags: ["Security", "Automation", "Monitoring"],
     sections: [
       {
         heading: "The public/private split",
         body: [
           "Some projects are impressive precisely because they are sensitive. A trading dashboard can show health, bankroll curve, sanitized exposure, outcomes, and lifecycle status without exposing order IDs, prices, brackets, edges, or model weights.",
-          "The same principle applies to Moomoo, Salad, Pearl, and File Drop: show operational quality, not secrets.",
+          "The same principle applies to Moomoo, Salad, and Pearl: show operational quality, not secrets.",
         ],
       },
       {
         heading: "Examples",
         body: [
           "Kalshi Climate Desk shows aggregate bot health and performance. Moomoo shows paper-trading status and sanitized P/L. Salad shows compute-node status. Pearl shows mining telemetry and GPU idle coordination.",
-          "File Drop demonstrates secure utility design: authorization, receiver passwords, unguessable links, metadata stripping, TTL/view-limit deletion, and no public listing surface.",
+          "The shared design principle is to show meaningful operational behavior while keeping credentials, account identifiers, private logs, and strategy internals out of public views.",
         ],
       },
       {
@@ -1819,7 +1785,7 @@ function HomePage() {
             <p>
               Start with Market Desk, JackGPT AI Workspace, JackGPT Image Gen, and
               Kalshi Climate Desk for the strongest engineering story. Ops Control Room,
-              Pearl Desk, File Drop, Moomoo, Salad, Mesh, and the status layer show the
+              Pearl Desk, Moomoo, Salad, Mesh, and the status layer show the
               operating discipline around the product surfaces.
             </p>
           </div>
