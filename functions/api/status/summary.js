@@ -92,6 +92,14 @@ const SERVICE_TARGETS = [
     publicUrl: "https://jackgpt.org",
     description: "Portfolio homepage is reachable.",
   },
+  {
+    key: "external-watchdog",
+    name: "JackGPT Public Status",
+    endpoint: "https://status.jackgpt.org/health",
+    publicUrl: "https://status.jackgpt.org",
+    description: "Cloudflare-hosted external watchdog is reachable.",
+    readJsonStatus: true,
+  },
 ];
 
 function buildTimeoutSignal(ms) {

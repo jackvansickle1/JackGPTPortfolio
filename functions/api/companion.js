@@ -32,11 +32,12 @@ function fallbackAnswer(question) {
   if (hasAny(text, ["5 minute", "five minute", "quick", "start", "first", "recommend", "where", "recruiter"])) {
     return [
       "Best recruiter path:",
-      "1. Open Market Desk first. It is the strongest full product demo: React UI, FastAPI backend, public market data, financial statements, signals, news, AI analysis, stock-aware chat, and health checks.",
-      "2. Open JackGPT AI Workspace next. It proves self-hosted LLM operations, branded product polish, web search, image generation, and Docker/Cloudflare infrastructure.",
-      "3. Use Image Gen, Search, Kalshi Climate Desk, and Pearl Desk to show GPU services, utility tooling, automation operations, mining telemetry, and workload-aware scheduling.",
-      "4. Use File Drop, Moomoo, and Salad as supporting examples of secure utility design and host-level monitoring. Casino is secondary.",
-      "5. Check project cards, live status, and GitHub last. Status proves operations discipline; GitHub shows recruiter-safe code without secrets or valuable private strategy logic.",
+      "1. Use Guided Demo Mode if you want the clean scripted tour. It orders the strongest proof points for a cold recruiter visit.",
+      "2. Open Market Desk first. It is the strongest full product demo: React UI, FastAPI backend, public market data, financial statements, signals, news, AI analysis, stock-aware chat, and health checks.",
+      "3. Open JackGPT AI Workspace next. It proves self-hosted LLM operations, branded product polish, web search, image generation, and Docker/Cloudflare infrastructure.",
+      "4. Use Image Gen, Search, Kalshi Climate Desk, Pearl Desk, and the Ops case study to show GPU services, utility tooling, automation operations, telemetry, and reliability work.",
+      "5. Check status.jackgpt.org, project cards, the architecture map, blog posts, and GitHub. Those prove operations discipline and recruiter-safe code.",
+      "6. File Drop, Moomoo, Salad, Mesh, Minecraft, and Casino are supporting examples. Casino is intentionally not the flagship path.",
     ].join("\n");
   }
 
@@ -59,6 +60,34 @@ function fallbackAnswer(question) {
     return [
       "Use the GitHub link on the homepage or visit https://github.com/jackvansickle1.",
       "Good recruiter read: compare the public repo structure with the live services. The repos are intentionally public-safe: useful demos, deployment templates, and implementation examples are visible, while secrets, credentials, order IDs, tunnel tokens, and valuable private trading strategy code stay private.",
+    ].join("\n\n");
+  }
+
+  if (hasAny(text, ["guided demo", "demo mode", "tour mode", "scripted tour"])) {
+    return [
+      "Guided Demo Mode is the best self-serve path on jackgpt.org. It gives a recruiter the order I would narrate live: Market Desk, AI Workspace, Image Gen/Search, Kalshi/Pearl/Ops, then GitHub/contact.",
+      "It also includes demo clip cards with the short story to tell while opening each flow.",
+    ].join("\n\n");
+  }
+
+  if (hasAny(text, ["architecture", "map", "diagram", "stack", "system design"])) {
+    return [
+      "The Architecture Map explains JackGPT as four layers: visitor-facing product surfaces, Docker/FastAPI/OpenWebUI applications, AI/data dependencies, and operations monitoring.",
+      "The important point: public pages show product behavior, uptime, sanitized metrics, screenshots, and architecture while private controls, credentials, account IDs, order rows, local paths, and strategy logic stay hidden.",
+    ].join("\n\n");
+  }
+
+  if (hasAny(text, ["blog", "post", "writeup", "engineering note", "article"])) {
+    return [
+      "The blog on jackgpt.org has public-safe engineering notes about operating JackGPT like a product, building a self-hosted AI workspace, Market Desk's data/AI design, public-safe automation dashboards, and the Cloudflare external watchdog.",
+      "The posts are meant to make the engineering choices legible to a recruiter without leaking private strategy or credentials.",
+    ].join("\n\n");
+  }
+
+  if (hasAny(text, ["status.jackgpt", "public status", "external watchdog", "cloudflare watchdog", "outside monitor"])) {
+    return [
+      "status.jackgpt.org is the public Cloudflare-hosted external watchdog. It runs outside the home PC, checks public reachability and synthetic user journeys, and reports a sanitized status page.",
+      "Private Ops remains behind Cloudflare Access and handles internal checks and repair actions. The public status page is the outside witness; Ops is the private control room.",
     ].join("\n\n");
   }
 
@@ -156,8 +185,8 @@ function fallbackAnswer(question) {
   if (hasAny(text, ["docker", "cloudflare", "deploy", "infrastructure", "architecture", "how", "built"])) {
     return [
       "Architecture pattern: most services run in Docker or Docker Compose, publish a small health endpoint, and are routed through Cloudflare Tunnel on clean subdomains.",
-      "Ops is private at ops.jackgpt.org behind Cloudflare Access. It monitors service health, browser-render checks, Docker container state, alerts, and predictable repair actions, but it is intentionally not linked as a public demo.",
-      "The homepage is the command center: it lists public endpoints, project case studies, screenshots, live status, and GitHub. The design story is not just individual apps; it is an operated ecosystem with monitoring, theming, restart policies, auto-repair hooks, and public-safe boundaries.",
+      "Ops is private at ops.jackgpt.org behind Cloudflare Access. status.jackgpt.org is the public Cloudflare Worker watchdog that checks reachability and synthetic journeys from outside the host.",
+      "The homepage is the command center: it lists public endpoints, guided demo mode, project case studies, screenshots, architecture map, blog posts, live status, and GitHub. The design story is an operated ecosystem with monitoring, theming, restart policies, auto-repair hooks, external checks, and public-safe boundaries.",
     ].join("\n\n");
   }
 
@@ -169,6 +198,7 @@ function fallbackAnswer(question) {
     "4. Kalshi Climate Desk and Pearl Desk: public-safe operations, automation monitoring, GPU scheduling, and mining telemetry.",
     "5. File Drop, Moomoo, and Salad: secure utility design and host-level monitoring.",
     "6. Project cards, status, and GitHub: deeper case studies, uptime, and recruiter-safe code.",
+    "7. Guided demo mode, architecture map, and blog posts: the self-serve explanation layer for recruiters.",
   ].join("\n");
 }
 
@@ -180,6 +210,8 @@ function fallbackPayload(question, reason = "backend unavailable") {
     answer: fallbackAnswer(question),
     suggestions: [
       "Give me a 5-minute recruiter tour.",
+      "Walk me through the guided demo mode.",
+      "Explain the architecture map.",
       "Which demo best proves full-stack engineering?",
       "What should I inspect in Market Desk?",
       "What is new in the JackGPT ecosystem?",

@@ -240,12 +240,18 @@ figcaption,
 .stat-card,
 .visitor-card,
 .visitor-note,
+.demo-sequence-card,
+.architecture-card,
+.blog-card,
+.demo-timeline-card,
+.clip-card,
 .companion-panel,
 .companion-prompts,
 .project-card,
 .status-card,
 .detail-card,
 .gallery-card,
+.blog-post-body,
 .empty-state {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.025));
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -361,6 +367,163 @@ figcaption,
 .visitor-note p {
   margin: 0;
   color: rgba(220, 226, 238, 0.72);
+}
+
+.spotlight-section {
+  position: relative;
+}
+
+.demo-sequence-grid,
+.architecture-grid,
+.clip-grid,
+.blog-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.demo-sequence-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.demo-sequence-card,
+.architecture-card,
+.blog-card,
+.demo-timeline-card,
+.clip-card {
+  border-radius: 28px;
+  padding: 20px;
+  min-width: 0;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.demo-sequence-card:hover,
+.architecture-card:hover,
+.blog-card:hover,
+.demo-timeline-card:hover,
+.clip-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(130, 186, 255, 0.26);
+  box-shadow: 0 26px 60px rgba(0, 0, 0, 0.3);
+}
+
+.demo-sequence-card svg {
+  color: #8edcff;
+  margin: 14px 0 10px;
+}
+
+.demo-sequence-card h3,
+.blog-card h3,
+.clip-card h3 {
+  font-size: 1.15rem;
+}
+
+.demo-sequence-card p,
+.architecture-card p,
+.blog-card p,
+.demo-timeline-card p,
+.clip-card p,
+.blog-post-body p {
+  color: rgba(220, 226, 238, 0.76);
+}
+
+.section-action-row {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.architecture-map {
+  display: grid;
+  gap: 18px;
+}
+
+.architecture-flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid rgba(112, 190, 255, 0.16);
+  border-radius: 24px;
+  background:
+    linear-gradient(135deg, rgba(60, 156, 255, 0.13), rgba(40, 255, 207, 0.055)),
+    rgba(255, 255, 255, 0.025);
+}
+
+.architecture-flow span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0.42rem 0.72rem;
+  border-radius: 999px;
+  color: rgba(238, 246, 255, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background: rgba(0, 0, 0, 0.18);
+  font-weight: 720;
+}
+
+.architecture-flow svg {
+  color: rgba(141, 215, 255, 0.94);
+  flex: 0 0 auto;
+}
+
+.architecture-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.architecture-map:not(.compact) .architecture-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.architecture-card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.architecture-card-head .icon-wrap {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+.architecture-card h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.architecture-card ul {
+  margin: 14px 0 0;
+  padding-left: 1.1rem;
+  color: rgba(222, 233, 248, 0.78);
+}
+
+.architecture-card li + li {
+  margin-top: 7px;
+}
+
+.blog-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.blog-grid.full {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.blog-card {
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+}
+
+.blog-card .tag-row {
+  margin-top: auto;
+}
+
+.blog-card .view-link {
+  margin-top: 18px;
 }
 
 .contact-overlay {
@@ -1214,6 +1377,88 @@ figcaption,
   margin-bottom: 18px;
 }
 
+.route-page .detail-nav {
+  justify-content: flex-start;
+  margin-bottom: 18px;
+}
+
+.demo-hero h1,
+.route-page .detail-hero h1 {
+  max-width: 980px;
+}
+
+.demo-timeline {
+  display: grid;
+  gap: 16px;
+}
+
+.demo-timeline-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.demo-timeline-card .step-badge {
+  margin-top: 4px;
+}
+
+.demo-timeline-card .detail-card-header {
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.demo-timeline-card .detail-card-header h2 {
+  font-size: 1.15rem;
+}
+
+.clip-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.clip-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.clip-card img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.clip-card div {
+  padding: 18px;
+}
+
+.blog-post-page {
+  max-width: 980px;
+}
+
+.blog-post-body {
+  padding: 30px;
+  border-radius: 30px;
+}
+
+.blog-post-body section + section {
+  margin-top: 28px;
+}
+
+.blog-post-body h2 {
+  margin-bottom: 12px;
+}
+
+.blog-post-body p {
+  font-size: 1.02rem;
+  line-height: 1.72;
+  margin-bottom: 14px;
+}
+
+.blog-post-body p:last-child {
+  margin-bottom: 0;
+}
+
 .detail-heading {
   justify-content: flex-start;
   align-items: center;
@@ -1298,6 +1543,15 @@ figcaption,
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .demo-sequence-grid,
+  .architecture-grid,
+  .architecture-map:not(.compact) .architecture-grid,
+  .clip-grid,
+  .blog-grid,
+  .blog-grid.full {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .project-guide {
     grid-template-columns: 1fr;
   }
@@ -1334,6 +1588,10 @@ figcaption,
   .visitor-path,
   .companion-layout,
   .project-guide,
+  .demo-sequence-grid,
+  .architecture-grid,
+  .clip-grid,
+  .blog-grid,
   .status-grid,
   .gallery-grid {
     min-width: 0;
@@ -1358,6 +1616,35 @@ figcaption,
   .visitor-path,
   .metrics-grid {
     grid-template-columns: 1fr;
+  }
+
+  .demo-sequence-grid,
+  .architecture-grid,
+  .architecture-map:not(.compact) .architecture-grid,
+  .clip-grid,
+  .blog-grid,
+  .blog-grid.full,
+  .demo-timeline-card {
+    grid-template-columns: 1fr;
+  }
+
+  .architecture-flow {
+    align-items: stretch;
+  }
+
+  .architecture-flow span {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .architecture-flow svg {
+    transform: rotate(90deg);
+    margin: 0 auto;
+  }
+
+  .blog-post-body {
+    padding: 22px;
+    border-radius: 24px;
   }
 
   .hero-stats {

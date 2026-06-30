@@ -667,6 +667,17 @@ const fallbackStatuses = [
     checkedAt: null,
     status: "checking",
   },
+  {
+    key: "external-watchdog",
+    name: "JackGPT Public Status",
+    description: "Checking the Cloudflare-hosted external watchdog.",
+    endpoint: "https://status.jackgpt.org/health",
+    publicUrl: "https://status.jackgpt.org",
+    latencyMs: null,
+    httpStatus: "-",
+    checkedAt: null,
+    status: "checking",
+  },
 ];
 
 function mergeStatuses(incoming) {
@@ -732,6 +743,14 @@ const accessLinks = [
     accessLabel: "Private ops",
     accessTone: "private",
     note: "Access is gated by Cloudflare Access; the public case study explains the architecture without exposing controls.",
+  },
+  {
+    label: "JackGPT Public Status",
+    href: "https://status.jackgpt.org",
+    description: "Cloudflare-hosted external watchdog for public reachability and synthetic demo journeys.",
+    accessLabel: "Public status",
+    accessTone: "public",
+    note: "Runs outside the home PC, so it can still report public outages if the local Docker host or tunnel is unhealthy.",
   },
   {
     label: "JackGPT Search",
@@ -811,12 +830,12 @@ const accessLinks = [
 const visitorPath = [
   {
     eyebrow: "1",
-    title: "Start with the strongest demos",
+    title: "Launch guided demo mode",
     body:
-      "Begin with Market Desk, then JackGPT AI Workspace, Image Gen, Search, Kalshi Climate Desk, Pearl Desk, and the private Ops case study. Casino is there too, but it is the lighter interactive demo.",
-    href: "#live-services",
-    cta: "View live demos",
-    icon: LineChart,
+      "Use the self-serve recruiter path when Jack is not narrating: Market Desk, AI Workspace, Image Gen/Search, Kalshi/Pearl/Ops, status, code, and contact.",
+    href: "#/demo",
+    cta: "Open demo mode",
+    icon: Compass,
   },
   {
     eyebrow: "2",
@@ -831,10 +850,11 @@ const visitorPath = [
     eyebrow: "3",
     title: "Check what is online",
     body:
-      "The status section shows live reachability and response times so visitors know whether a demo is healthy right now.",
-    href: "#status",
-    cta: "See status",
+      "The homepage shows same-origin status, while status.jackgpt.org checks public reachability and synthetic journeys from Cloudflare.",
+    href: "https://status.jackgpt.org",
+    cta: "Open public status",
     icon: Activity,
+    external: true,
   },
   {
     eyebrow: "4",
@@ -850,15 +870,271 @@ const visitorPath = [
 
 const companionPrompts = [
   "Give me a 5-minute recruiter tour.",
+  "Walk me through the guided demo mode.",
+  "Explain the architecture map.",
   "Which demo best proves full-stack engineering?",
   "What should I inspect in Market Desk?",
   "What is new in the JackGPT ecosystem?",
 ];
 
+const demoSequence = [
+  {
+    step: "01",
+    title: "Open the guided demo path",
+    body:
+      "Use the demo mode as the polished recruiter script: Market Desk first, AI Workspace second, then Image Gen/Search, Kalshi/Pearl/Ops, code, and contact.",
+    href: "#/demo",
+    cta: "Launch demo mode",
+    icon: Compass,
+  },
+  {
+    step: "02",
+    title: "Prove product depth with Market Desk",
+    body:
+      "Search NVDA, WD, CVS, or MSFT to show data ingestion, financial statement handling, charting, source health, news, and stock-aware chat.",
+    href: "https://market.jackgpt.org",
+    cta: "Open Market Desk",
+    icon: LineChart,
+    external: true,
+  },
+  {
+    step: "03",
+    title: "Show self-hosted AI operations",
+    body:
+      "JackGPT AI Workspace, Image Gen, and Search demonstrate local LLMs, tool use, GPU workloads, theming, and Cloudflare-routed service design.",
+    href: "https://app.jackgpt.org",
+    cta: "Open AI Workspace",
+    icon: Bot,
+    external: true,
+  },
+  {
+    step: "04",
+    title: "Close with reliability and code",
+    body:
+      "Use the public status page, Ops case study, screenshots, GitHub, and contact card to make the engineering discipline visible without exposing private controls.",
+    href: "#/blog/cloudflare-watchdog-keeps-jackgpt-honest",
+    cta: "Read ops note",
+    icon: Shield,
+  },
+];
+
+const architectureLayers = [
+  {
+    title: "Visitor-facing layer",
+    icon: Globe,
+    body:
+      "jackgpt.org, Market Desk, AI Workspace, Image Gen, Search, Kalshi, Pearl, Moomoo, Salad, Casino, and utility services are grouped by product value instead of raw hostnames.",
+    points: ["Recruiter navigation", "Case studies and screenshots", "Human-friendly service names", "Public-safe explanations"],
+  },
+  {
+    title: "Application layer",
+    icon: Server,
+    body:
+      "React/Vite frontends and FastAPI or upstream-backed services expose small health endpoints, graceful degraded states, and clear public boundaries.",
+    points: ["React/Vite product UIs", "FastAPI service APIs", "OpenWebUI/Ollama", "Docker Compose health checks"],
+  },
+  {
+    title: "AI and data layer",
+    icon: Cpu,
+    body:
+      "Ollama, JackGPT Search, public market/SEC data, image generation, PRL telemetry, and host-agent bridges feed the demos while staying configurable and observable.",
+    points: ["Local LLM inference", "Search context", "Market/news data", "GPU workload coordination"],
+  },
+  {
+    title: "Operations layer",
+    icon: Activity,
+    body:
+      "Private Ops plus the Cloudflare external watchdog watch demos from inside and outside the machine, alert on repeated failures, and document predictable repair paths.",
+    points: ["ops.jackgpt.org private", "status.jackgpt.org public", "ntfy alerts", "Allowlisted repairs"],
+  },
+];
+
+const demoClips = [
+  {
+    title: "Market Desk in 90 seconds",
+    body:
+      "Load a ticker, scan the snapshot, explain the chart/financial statements/signals, then ask the stock chat a business question.",
+    href: "https://market.jackgpt.org",
+    image: "/project-images/market-desk/market-desk-terminal.png",
+  },
+  {
+    title: "Ops Control Room story",
+    body:
+      "Explain how the ecosystem is monitored, how demo readiness is measured, and why private repair controls stay behind Cloudflare Access.",
+    href: "#/project/ops-control-room",
+    image: "/project-images/ops-control-room/ops-demo-runbook.png",
+  },
+  {
+    title: "AI Workspace tool demo",
+    body:
+      "Sign up, ask JackGPT 3.1 for web-grounded context, then try an image-generation prompt to show local AI plus tools.",
+    href: "https://app.jackgpt.org",
+    image: "/project-images/jackgpt/jackgpt-chat-home.png",
+  },
+];
+
+const blogPosts = [
+  {
+    slug: "operating-jackgpt-like-a-product",
+    title: "Operating JackGPT Like a Product, Not a Portfolio Page",
+    date: "2026-06-30",
+    readTime: "4 min read",
+    summary:
+      "Why I turned jackgpt.org into a live command center with demo paths, public status, screenshots, AI guidance, and recruiter-safe boundaries.",
+    tags: ["Portfolio", "Product design", "Operations"],
+    sections: [
+      {
+        heading: "The problem",
+        body: [
+          "A portfolio that only lists projects makes the viewer do too much work. Recruiters should not need a guided call to understand what is impressive, what is live, and what is intentionally private.",
+          "JackGPT now treats the homepage as a product surface: human service names, public endpoint cards, project drilldowns, screenshots, live status, contact links, GitHub, and an AI guide that knows the ecosystem.",
+        ],
+      },
+      {
+        heading: "The product decision",
+        body: [
+          "The first path prioritizes the strongest proof: Market Desk, JackGPT AI Workspace, Image Gen/Search, Kalshi Climate Desk, Pearl Desk, Ops, GitHub, and then secondary demos like Casino.",
+          "That order matters. It sells full-stack engineering, local AI infrastructure, GPU work, automation reliability, and public-safe deployment before showing lighter experiments.",
+        ],
+      },
+      {
+        heading: "What it proves",
+        body: [
+          "The project is not just individual apps. It is a small operated ecosystem: Dockerized services, Cloudflare routing, health endpoints, degraded states, alerting, visual QA, and public/private data boundaries.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "self-hosted-ai-workspace-demo-ready",
+    title: "Making a Self-Hosted AI Workspace Demo-Ready",
+    date: "2026-06-30",
+    readTime: "5 min read",
+    summary:
+      "The engineering behind app.jackgpt.org: OpenWebUI, Ollama, branded onboarding, search, image generation, model context, and operational guardrails.",
+    tags: ["AI", "Ollama", "OpenWebUI", "Docker"],
+    sections: [
+      {
+        heading: "From local model to product",
+        body: [
+          "The difference between a local LLM and a product is everything around it: sign-up flow, theming, tool use, service dependencies, helpful starter prompts, model identity, and uptime monitoring.",
+          "JackGPT 3.1 is configured as the default assistant with current ecosystem context, but it is instructed not to force portfolio context into unrelated conversations.",
+        ],
+      },
+      {
+        heading: "Tools and boundaries",
+        body: [
+          "The workspace can use JackGPT Search for web grounding and JackGPT Image Gen for visual generation. It does not volunteer the search backend implementation unless specifically asked.",
+          "The same context includes public-safety rules: no secrets, private paths, tunnel tokens, account data, order IDs, or valuable trading strategy details.",
+        ],
+      },
+      {
+        heading: "Demo readiness",
+        body: [
+          "Ops and the external watchdog check the AI workspace from different angles. The goal is not to pretend nothing fails; it is to make failures visible, recoverable, and less likely during a live demo.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "market-desk-public-data-ai",
+    title: "Market Desk: Useful AI Around Messy Public Data",
+    date: "2026-06-30",
+    readTime: "5 min read",
+    summary:
+      "How Market Desk combines ticker search, public market data, financial statements, news, signals, and stock-aware chat without pretending to be investment advice.",
+    tags: ["Finance", "AI", "FastAPI", "React"],
+    sections: [
+      {
+        heading: "Why it exists",
+        body: [
+          "Market Desk is the flagship full-stack product demo because it has real product shape: a terminal UI, backend data aggregation, dependency health, charting, financial statements, news, signals, and contextual chat.",
+          "The demo is intentionally framed as research and portfolio work, not financial advice.",
+        ],
+      },
+      {
+        heading: "Data reality",
+        body: [
+          "Free public market data is inconsistent. Rather than hide that, Market Desk shows source health, uses fallbacks, and answers from loaded data before leaning on AI prose.",
+          "The stock chat was adjusted to answer business-description questions directly first, using ticker context, company profile data, filings/news context when available, and clear uncertainty.",
+        ],
+      },
+      {
+        heading: "Recruiter signal",
+        body: [
+          "This project shows React/Vite frontend work, FastAPI backend design, rate/request guards, graceful degradation, local AI integration, and the discipline to avoid fake analyst consensus.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "public-safe-ops-for-automation",
+    title: "Public-Safe Ops for Trading and Compute Automation",
+    date: "2026-06-30",
+    readTime: "4 min read",
+    summary:
+      "How Kalshi, Moomoo, Salad, Pearl, and File Drop expose useful operational information without leaking valuable strategy or credentials.",
+    tags: ["Security", "Automation", "Monitoring"],
+    sections: [
+      {
+        heading: "The public/private split",
+        body: [
+          "Some projects are impressive precisely because they are sensitive. A trading dashboard can show health, bankroll curve, sanitized exposure, outcomes, and lifecycle status without exposing order IDs, prices, brackets, edges, or model weights.",
+          "The same principle applies to Moomoo, Salad, Pearl, and File Drop: show operational quality, not secrets.",
+        ],
+      },
+      {
+        heading: "Examples",
+        body: [
+          "Kalshi Climate Desk shows aggregate bot health and performance. Moomoo shows paper-trading status and sanitized P/L. Salad shows compute-node status. Pearl shows mining telemetry and GPU idle coordination.",
+          "File Drop demonstrates secure utility design: authorization, receiver passwords, unguessable links, metadata stripping, TTL/view-limit deletion, and no public listing surface.",
+        ],
+      },
+      {
+        heading: "The lesson",
+        body: [
+          "Recruiter-visible work can be transparent without being reckless. The goal is to prove engineering taste: useful telemetry, redaction, health checks, and safe defaults.",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "cloudflare-watchdog-keeps-jackgpt-honest",
+    title: "A Cloudflare Watchdog That Keeps JackGPT Honest",
+    date: "2026-06-30",
+    readTime: "4 min read",
+    summary:
+      "Why status.jackgpt.org runs outside the home PC, what it checks, and how it complements the private Ops Control Room.",
+    tags: ["Cloudflare", "Workers", "Reliability"],
+    sections: [
+      {
+        heading: "Why outside monitoring matters",
+        body: [
+          "If the home machine, WSL, Docker, or a Cloudflare tunnel breaks, an internal monitor can be blind. The external watchdog runs on Cloudflare Workers so it can still report public reachability from outside the host.",
+          "It stores state in Workers KV, runs on a cron trigger, and sends concise ntfy alerts only after repeated failures or recovery events.",
+        ],
+      },
+      {
+        heading: "What it checks",
+        body: [
+          "The watchdog checks core public services and synthetic user journeys: homepage status, AI workspace version, image generation, search results, Market Desk ticker/news flows, Kalshi public summary, Pearl wallet telemetry, utilities, and Minecraft probe health.",
+          "The public status page is sanitized. Admin manual runs and alert tests remain protected by a bearer token.",
+        ],
+      },
+      {
+        heading: "How it fits Ops",
+        body: [
+          "Private Ops is the repair/control room. The Cloudflare watchdog is the outside witness. Together they make demo failures more detectable, less mysterious, and easier to fix before a recruiter sees them.",
+        ],
+      },
+    ],
+  },
+];
+
 const initialCompanionMessage = {
   role: "assistant",
   content:
-    "I can give you a recruiter-ready tour of JackGPT: where to start, what each project proves, which demos are public, and what is intentionally private. Ask for a 5-minute path or a project-by-project review.",
+    "I can give you a recruiter-ready tour of JackGPT: guided demo mode, where to start, what each project proves, which demos are public, and what is intentionally private. Ask for a 5-minute path, architecture map, or project-by-project review.",
 };
 
 function App() {
@@ -875,7 +1151,29 @@ function App() {
     return match ? match[1] : null;
   }, [route]);
 
+  const blogSlug = useMemo(() => {
+    const match = route.match(/^#\/blog\/(.+)$/);
+    return match ? match[1] : null;
+  }, [route]);
+
   const selectedProject = projects.find((project) => project.id === detailId);
+  const selectedPost = blogPosts.find((post) => post.slug === blogSlug);
+
+  if (route === "#/demo") {
+    return <DemoModePage />;
+  }
+
+  if (route === "#/architecture") {
+    return <ArchitecturePage />;
+  }
+
+  if (route === "#/blog") {
+    return <BlogIndexPage />;
+  }
+
+  if (selectedPost) {
+    return <BlogPostPage post={selectedPost} />;
+  }
 
   if (selectedProject) {
     return <ProjectDetail project={selectedProject} />;
@@ -1069,15 +1367,22 @@ function HomePage() {
             implementation notes, screenshots, live links, and public-safe code.
           </p>
           <div className="hero-actions">
+            <a href="#/demo" className="button primary">
+              Guided demo <ArrowRight size={16} />
+            </a>
             <a href="#start" className="button primary">
               Start here <ArrowRight size={16} />
             </a>
             <a href="#projects" className="button secondary">
               View projects <ArrowRight size={16} />
             </a>
-            <a href="#status" className="button secondary">
-              Live status
+            <a href="https://status.jackgpt.org" className="button secondary" target="_blank" rel="noreferrer">
+              Public status <ArrowUpRight size={14} />
             </a>
+            <a href="#/architecture" className="button secondary">
+              Architecture
+            </a>
+            <a href="#/blog" className="button secondary">Blog</a>
             <button type="button" className="button secondary" onClick={() => setIsContactOpen(true)}>
               <Mail size={16} />
               Contact me
@@ -1152,6 +1457,88 @@ function HomePage() {
               architecture and status context but remain restricted.
             </p>
           </div>
+        </div>
+      </section>
+
+      <section id="demo-mode" className="section spotlight-section">
+        <div className="section-header">
+          <div>
+            <span className="eyebrow">Recruiter demo mode</span>
+            <h2>A guided path when Jack is not there to narrate</h2>
+          </div>
+          <p>
+            The demo mode turns the ecosystem into a short walkthrough with the
+            strongest product, AI, operations, code, and contact beats already ordered.
+          </p>
+        </div>
+        <div className="demo-sequence-grid">
+          {demoSequence.map((item) => {
+            const Icon = item.icon;
+            return (
+              <a
+                key={item.title}
+                href={item.href}
+                target={item.external ? "_blank" : undefined}
+                rel={item.external ? "noreferrer" : undefined}
+                className="demo-sequence-card"
+              >
+                <span className="step-badge">{item.step}</span>
+                <Icon size={20} />
+                <h3>{item.title}</h3>
+                <p>{item.body}</p>
+                <span className="view-link">
+                  {item.cta}
+                  {item.external ? <ArrowUpRight size={15} /> : <ArrowRight size={15} />}
+                </span>
+              </a>
+            );
+          })}
+        </div>
+      </section>
+
+      <section id="architecture" className="section">
+        <div className="section-header">
+          <div>
+            <span className="eyebrow">Architecture map</span>
+            <h2>How the ecosystem fits together</h2>
+          </div>
+          <p>
+            The public map explains the stack at a useful level: product surfaces,
+            application services, AI/data dependencies, and operations monitoring
+            without leaking secrets or private strategy internals.
+          </p>
+        </div>
+        <ArchitectureMap compact />
+      </section>
+
+      <section id="blog" className="section">
+        <div className="section-header">
+          <div>
+            <span className="eyebrow">Engineering notes</span>
+            <h2>Blog</h2>
+          </div>
+          <p>
+            Short writeups that make the engineering decisions easier to evaluate:
+            reliability, public-safe automation, AI tooling, and data-driven demos.
+          </p>
+        </div>
+        <div className="blog-grid">
+          {blogPosts.slice(0, 3).map((post) => (
+            <a href={`#/blog/${post.slug}`} className="blog-card" key={post.slug}>
+              <span className="eyebrow">{post.date} / {post.readTime}</span>
+              <h3>{post.title}</h3>
+              <p>{post.summary}</p>
+              <div className="tag-row">
+                {post.tags.map((tag) => <span className="tag" key={tag}>{tag}</span>)}
+              </div>
+              <span className="view-link">Read post <ArrowRight size={15} /></span>
+            </a>
+          ))}
+        </div>
+        <div className="section-action-row">
+          <a href="#/blog" className="button secondary">
+            View all posts <ArrowRight size={16} />
+          </a>
         </div>
       </section>
 
@@ -1545,6 +1932,267 @@ function HomePage() {
   </p>
 </section>
 
+    </div>
+  );
+}
+
+function PageNav({ label = "Back to portfolio", href = "#/" }) {
+  return (
+    <div className="detail-nav">
+      <a href={href} className="button secondary small">
+        <ArrowLeft size={16} /> {label}
+      </a>
+    </div>
+  );
+}
+
+function ArchitectureMap({ compact = false }) {
+  return (
+    <div className={`architecture-map ${compact ? "compact" : ""}`}>
+      <div className="architecture-flow">
+        <span>Visitors</span>
+        <ArrowRight size={16} />
+        <span>Cloudflare</span>
+        <ArrowRight size={16} />
+        <span>Docker services</span>
+        <ArrowRight size={16} />
+        <span>AI, data, and host agents</span>
+        <ArrowRight size={16} />
+        <span>Ops and status</span>
+      </div>
+      <div className="architecture-grid">
+        {architectureLayers.map((layer) => {
+          const Icon = layer.icon;
+          return (
+            <article className="architecture-card" key={layer.title}>
+              <div className="architecture-card-head">
+                <span className="icon-wrap cyan"><Icon size={19} /></span>
+                <h3>{layer.title}</h3>
+              </div>
+              <p>{layer.body}</p>
+              <ul>
+                {layer.points.map((point) => <li key={point}>{point}</li>)}
+              </ul>
+            </article>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function DemoModePage() {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  return (
+    <div className="app-shell route-page">
+      <PageNav />
+      <section className="detail-hero section demo-hero">
+        <span className="eyebrow">Guided recruiter demo</span>
+        <h1>Demo JackGPT in the order that sells the strongest engineering story.</h1>
+        <p className="detail-description">
+          This path is designed for someone arriving cold: start with the flagship
+          product, show self-hosted AI, prove operations discipline, then close
+          with code, status, and contact.
+        </p>
+        <div className="detail-links">
+          <a href="https://market.jackgpt.org" target="_blank" rel="noreferrer" className="button primary small">
+            Start with Market Desk <ExternalLink size={16} />
+          </a>
+          <a href="https://status.jackgpt.org" target="_blank" rel="noreferrer" className="button secondary small">
+            Check public status <ExternalLink size={16} />
+          </a>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="demo-timeline">
+          {demoSequence.map((item) => {
+            const Icon = item.icon;
+            return (
+              <a
+                key={item.title}
+                href={item.href}
+                target={item.external ? "_blank" : undefined}
+                rel={item.external ? "noreferrer" : undefined}
+                className="demo-timeline-card"
+              >
+                <span className="step-badge">{item.step}</span>
+                <div>
+                  <div className="detail-card-header">
+                    <Icon size={18} />
+                    <h2>{item.title}</h2>
+                  </div>
+                  <p>{item.body}</p>
+                  <span className="view-link">
+                    {item.cta}
+                    {item.external ? <ArrowUpRight size={15} /> : <ArrowRight size={15} />}
+                  </span>
+                </div>
+              </a>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="section-header">
+          <div>
+            <span className="eyebrow">Demo clips</span>
+            <h2>Short stories to tell while clicking</h2>
+          </div>
+          <p>
+            These are recruiter-facing clip cards: each one points to a visible
+            flow and gives the 30-90 second story to narrate.
+          </p>
+        </div>
+        <div className="clip-grid">
+          {demoClips.map((clip) => (
+            <a href={clip.href} className="clip-card" key={clip.title}>
+              <img src={clip.image} alt="" loading="lazy" />
+              <div>
+                <h3>{clip.title}</h3>
+                <p>{clip.body}</p>
+                <span className="view-link">Open flow <ArrowRight size={15} /></span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function ArchitecturePage() {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  return (
+    <div className="app-shell route-page">
+      <PageNav />
+      <section className="detail-hero section">
+        <span className="eyebrow">Public architecture map</span>
+        <h1>JackGPT is an operated ecosystem, not a pile of unrelated demos.</h1>
+        <p className="detail-description">
+          The map explains how visitors, Cloudflare routing, Dockerized services,
+          AI/data dependencies, private Ops, and the Cloudflare external watchdog
+          work together while keeping sensitive controls and strategy private.
+        </p>
+      </section>
+      <section className="section">
+        <ArchitectureMap />
+      </section>
+      <section className="section detail-grid">
+        <article className="detail-card">
+          <div className="detail-card-header">
+            <Shield size={18} />
+            <h2>Public-safe boundary</h2>
+          </div>
+          <p className="project-summary">
+            Public pages show what a recruiter should evaluate: product behavior,
+            uptime, sanitized metrics, architecture, and screenshots. Private
+            screens keep credentials, account identifiers, strategy logic, local
+            paths, order rows, tokens, and admin controls out of view.
+          </p>
+        </article>
+        <article className="detail-card">
+          <div className="detail-card-header">
+            <Activity size={18} />
+            <h2>Reliability loop</h2>
+          </div>
+          <p className="project-summary">
+            Private Ops watches containers, browser renders, host services, and
+            repair playbooks. status.jackgpt.org watches public reachability from
+            Cloudflare so the ecosystem has both an inside view and an outside witness.
+          </p>
+        </article>
+        <article className="detail-card">
+          <div className="detail-card-header">
+            <FolderGit size={18} />
+            <h2>Recruiter proof</h2>
+          </div>
+          <p className="project-summary">
+            The strongest code and architecture are exposed through case studies,
+            screenshots, public-safe GitHub repos, blog posts, and live URLs. The
+            valuable private trading logic stays private by design.
+          </p>
+        </article>
+      </section>
+    </div>
+  );
+}
+
+function BlogIndexPage() {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  return (
+    <div className="app-shell route-page">
+      <PageNav />
+      <section className="detail-hero section">
+        <span className="eyebrow">Engineering blog</span>
+        <h1>Notes on building and operating JackGPT.</h1>
+        <p className="detail-description">
+          Short public-safe writeups for recruiters and technical reviewers:
+          product decisions, AI infrastructure, data fallbacks, operations, and
+          reliability.
+        </p>
+      </section>
+      <section className="section">
+        <div className="blog-grid full">
+          {blogPosts.map((post) => (
+            <a href={`#/blog/${post.slug}`} className="blog-card" key={post.slug}>
+              <span className="eyebrow">{post.date} / {post.readTime}</span>
+              <h3>{post.title}</h3>
+              <p>{post.summary}</p>
+              <div className="tag-row">
+                {post.tags.map((tag) => <span className="tag" key={tag}>{tag}</span>)}
+              </div>
+              <span className="view-link">Read post <ArrowRight size={15} /></span>
+            </a>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function BlogPostPage({ post }) {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [post.slug]);
+
+  return (
+    <div className="app-shell route-page blog-post-page">
+      <PageNav label="Back to blog" href="#/blog" />
+      <section className="detail-hero section">
+        <span className="eyebrow">{post.date} / {post.readTime}</span>
+        <h1>{post.title}</h1>
+        <p className="detail-description">{post.summary}</p>
+        <div className="tag-row">
+          {post.tags.map((tag) => <span className="tag" key={tag}>{tag}</span>)}
+        </div>
+      </section>
+      <article className="blog-post-body">
+        {post.sections.map((section) => (
+          <section key={section.heading}>
+            <h2>{section.heading}</h2>
+            {section.body.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+          </section>
+        ))}
+      </article>
+      <div className="section-action-row">
+        <a href="#/blog" className="button secondary">
+          More posts <ArrowRight size={16} />
+        </a>
+        <a href="#/demo" className="button primary">
+          Guided demo <ArrowRight size={16} />
+        </a>
+      </div>
     </div>
   );
 }
