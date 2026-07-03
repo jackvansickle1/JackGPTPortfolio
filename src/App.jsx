@@ -287,7 +287,16 @@ const projects = [
     ],
     tech: ["FastAPI", "Vanilla JS", "Docker Compose", "Public pool APIs", "GPU idle guard", "Cloudflare Tunnel"],
     links: [{ label: "pearl.jackgpt.org", href: "https://pearl.jackgpt.org" }],
-    screenshots: [],
+    screenshots: [
+      {
+        src: "/project-images/pearl-desk/pearl-desk-overview.png",
+        caption: "Pearl Desk overview with live PRL price, pending payout, active hashrate, projected PRL/day, and GPU idle-guard status",
+      },
+      {
+        src: "/project-images/pearl-desk/pearl-desk-hashrate-timeline.png",
+        caption: "Hashrate timeline and one-hour revenue panels for the tracked mining wallets, with wallet labels redacted in the portfolio screenshot",
+      },
+    ],
   },
   {
     id: "ops-control-room",
@@ -404,7 +413,16 @@ const projects = [
     ],
     tech: ["Python", "Moomoo OpenD", "Scheduled Tasks", "Host-agent bridge", "Paper trading", "Risk controls"],
     links: [{ label: "moomoo.jackgpt.org", href: "https://moomoo.jackgpt.org" }],
-    screenshots: [],
+    screenshots: [
+      {
+        src: "/project-images/moomoo-paper-trader/moomoo-paper-trader-dashboard.png",
+        caption: "Moomoo paper-trading status dashboard with runner health, gateway latency, paper equity, open positions, and P/L summary",
+      },
+      {
+        src: "/project-images/moomoo-paper-trader/moomoo-paper-trader-positions.png",
+        caption: "Sanitized paper portfolio table showing current paper holdings, market value, and unrealized P/L without account identifiers or order IDs",
+      },
+    ],
   },
   {
     id: "salad-compute-node",
@@ -429,7 +447,12 @@ const projects = [
     ],
     tech: ["Windows service monitoring", "Host-agent bridge", "Ops", "GPU/compute workloads"],
     links: [{ label: "salad.jackgpt.org", href: "https://salad.jackgpt.org" }],
-    screenshots: [],
+    screenshots: [
+      {
+        src: "/project-images/salad-compute-node/salad-compute-node-dashboard.png",
+        caption: "Salad compute workload view with job readiness, active workload state, GPU telemetry, shares, and service-health timeline",
+      },
+    ],
   },
   {
     id: "kalshi-btc-bot",
@@ -453,8 +476,13 @@ const projects = [
       "Designed the system for iterative tuning and monitoring.",
     ],
     tech: ["Python", "Kalshi API", "Trading logic", "Risk controls"],
-    links: [],
-    screenshots: [],
+    links: [{ label: "GitHub demo", href: "https://github.com/jackvansickle1/kalshi-market-maker-simulator" }],
+    screenshots: [
+      {
+        src: "/project-images/ops-control-room/kalshi-market-maker-repo.png",
+        caption: "Recruiter-safe public simulator repo showing market-making structure, tests, and explicit boundaries around private alpha and execution logic",
+      },
+    ],
   },
 
   {
@@ -480,7 +508,12 @@ const projects = [
     ],
     tech: ["NinjaTrader", "C# / NinjaScript", "Futures", "Risk controls"],
     links: [{ label: "GitHub demo", href: "https://github.com/jackvansickle1/ninjatrader-risk-controls-demo" }],
-    screenshots: [],
+    screenshots: [
+      {
+        src: "/project-images/ops-control-room/ninjatrader-risk-controls-repo.png",
+        caption: "Public-safe NinjaTrader risk-controls demo repo showing the extracted risk-management layer without entry signals or private strategy logic",
+      },
+    ],
   },
 ];
 
