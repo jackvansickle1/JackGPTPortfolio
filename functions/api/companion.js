@@ -16,8 +16,11 @@ function timeoutSignal(ms) {
 }
 
 function cleanText(value) {
-  return String(value || "")
-    .replace(/[\u0000-\u001f\u007f]/g, " ")
+  return Array.from(String(value || ""), (character) => {
+    const code = character.charCodeAt(0);
+    return code <= 31 || code === 127 ? " " : character;
+  })
+    .join("")
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -151,7 +154,7 @@ function fallbackAnswer(question) {
   if (hasAny(text, ["salad", "compute node", "bowl", "workload"])) {
     return [
       "Salad Compute Node is available at salad.jackgpt.org and represented as a host-compute operations monitor, not a flagship public app.",
-      "What to inspect: service health, workload process availability, and host-level monitoring integration. It shows that JackGPT tracks Docker services and Windows-hosted compute services in one ecosystem.",
+      "The workload is currently intentionally paused by the owner. The monitor treats that as healthy idle rather than a false outage, while retaining public-safe historical telemetry and host-level monitoring context.",
     ].join("\n\n");
   }
 

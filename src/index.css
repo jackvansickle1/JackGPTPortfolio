@@ -39,6 +39,13 @@ body {
 
 body.modal-scroll-lock {
   overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
+body.modal-scroll-lock .companion-widget,
+body.modal-scroll-lock .contact-overlay {
+  touch-action: auto;
 }
 
 body::before {
@@ -696,12 +703,13 @@ figcaption,
   flex-direction: column;
   gap: 16px;
   min-width: 0;
+  min-height: 0;
 }
 
 .companion-widget .companion-panel {
-  width: min(430px, calc(100vw - 32px));
-  max-height: min(720px, calc(100vh - 48px));
-  max-height: min(720px, calc(100dvh - 48px));
+  width: min(440px, calc(100vw - 32px));
+  max-height: min(680px, calc(100vh - 32px));
+  max-height: min(680px, calc(100dvh - 32px));
   border-radius: 26px;
   overflow: hidden;
   overscroll-behavior: contain;
@@ -727,6 +735,7 @@ figcaption,
 .companion-head {
   align-items: center;
   justify-content: space-between;
+  flex: 0 0 auto;
 }
 
 .companion-actions {
@@ -791,6 +800,8 @@ figcaption,
   display: flex;
   flex-direction: column;
   gap: 12px;
+  flex: 1 1 auto;
+  min-height: 0;
   max-height: 430px;
   overflow: auto;
   padding: 4px 4px 2px;
@@ -818,8 +829,8 @@ figcaption,
 }
 
 .companion-widget .companion-messages {
-  max-height: min(330px, calc(100vh - 390px));
-  min-height: 170px;
+  max-height: none;
+  min-height: 180px;
 }
 
 .companion-message {
@@ -909,6 +920,7 @@ figcaption,
   display: flex;
   flex-direction: column;
   gap: 12px;
+  flex: 0 0 auto;
 }
 
 .companion-widget .companion-prompts.compact {
@@ -964,15 +976,21 @@ figcaption,
 }
 
 .companion-widget .prompt-chip {
-  width: auto;
-  flex: 1 1 46%;
+  width: 100%;
+  flex: initial;
   min-width: 0;
   justify-content: center;
   text-align: center;
-  padding: 0.62rem 0.7rem;
+  padding: 0.56rem 0.68rem;
   border-radius: 999px;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   line-height: 1.25;
+}
+
+.companion-widget .prompt-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
 }
 
 .spin-icon {
@@ -1111,6 +1129,10 @@ figcaption,
   align-items: center;
   justify-content: center;
   gap: 10px;
+}
+
+.carousel-count {
+  display: none;
 }
 
 .carousel-dot {
@@ -1607,6 +1629,9 @@ figcaption,
 
   .hero-actions {
     width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
   }
 
   .hero-text {
@@ -1677,6 +1702,7 @@ figcaption,
     max-height: calc(100vh - 30px);
     max-height: calc(100dvh - 30px);
     border-radius: 22px;
+    gap: 12px;
   }
 
   .companion-head,
@@ -1698,6 +1724,24 @@ figcaption,
     display: none;
   }
 
+  .companion-widget .companion-messages {
+    min-height: 210px;
+  }
+
+  .companion-widget .companion-prompts.compact {
+    gap: 8px;
+  }
+
+  .companion-widget .prompt-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: visible;
+  }
+
+  .companion-widget .prompt-chip:nth-child(n + 5) {
+    display: none;
+  }
+
   .companion-message {
     max-width: 100%;
   }
@@ -1714,6 +1758,13 @@ figcaption,
     width: 100%;
     max-width: none;
     justify-content: center;
+    min-height: 48px;
+  }
+
+  .hero-actions .button {
+    padding: 0.78rem 0.82rem;
+    font-size: 0.95rem;
+    line-height: 1.15;
   }
 
   .companion-launcher {
@@ -1748,6 +1799,30 @@ figcaption,
     gap: 14px;
     margin-top: 16px;
   }
+
+  .access-carousel-controls .carousel-button {
+    flex: 0 0 44px;
+    width: 44px;
+    min-width: 44px;
+  }
+
+  .access-carousel-controls .carousel-dots {
+    display: none;
+  }
+
+  .carousel-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 86px;
+    min-height: 38px;
+    padding: 0.45rem 0.8rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.045);
+    color: rgba(224, 237, 255, 0.88);
+    font-weight: 750;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1755,17 +1830,46 @@ figcaption,
     display: none;
   }
 
-  .companion-launcher {
-    min-height: 64px;
-    padding: 8px;
+  .companion-widget:not(.open) {
+    left: auto;
+    right: max(12px, env(safe-area-inset-right));
+    bottom: max(12px, env(safe-area-inset-bottom));
+  }
+
+  .companion-widget:not(.open) .companion-launcher {
+    min-height: 54px;
+    width: 54px;
+    height: 54px;
+    padding: 7px;
+    margin-left: auto;
+    box-shadow:
+      0 16px 44px rgba(0, 0, 0, 0.42),
+      0 0 28px rgba(72, 188, 255, 0.22);
+  }
+
+  .companion-widget:not(.open) .launcher-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .companion-widget:not(.open) .launcher-icon::after {
+    top: 3px;
+    right: 3px;
+    width: 9px;
+    height: 9px;
+    border-width: 2px;
+  }
+
+  #start .section-header p {
+    padding-right: 82px;
   }
 
   .companion-widget .companion-messages {
-    max-height: min(330px, calc(100vh - 360px));
+    min-height: 190px;
   }
 
   .companion-widget .prompt-chip {
-    flex-basis: 100%;
+    min-height: 42px;
   }
 }
 

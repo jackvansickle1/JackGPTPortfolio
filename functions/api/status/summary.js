@@ -137,7 +137,7 @@ async function checkTarget(target) {
         if (!response.ok && [405, 403, 502, 503, 504].includes(response.status)) {
           response = await fetchTarget("GET");
         }
-      } catch (error) {
+      } catch {
         response = await fetchTarget("GET");
       }
     } else {

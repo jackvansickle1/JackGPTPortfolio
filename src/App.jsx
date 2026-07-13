@@ -434,15 +434,15 @@ const projects = [
     summary:
       "A public-safe status monitor for the local Salad compute node, showing workload service health as part of the broader JackGPT operations layer.",
     description:
-      "Salad Compute Node tracks whether the host-side Salad Bowl service, workload process, and desktop controller are available. It demonstrates that the JackGPT ecosystem monitors not just web apps and Docker containers, but also host-level compute services that affect demo readiness and machine utilization.",
+      "Salad Compute Node tracks the host-side compute service, workload process, and desktop controller while distinguishing faults from owner-requested downtime. The workload is currently intentionally paused, so JackGPT reports a healthy idle state instead of manufacturing an outage.",
     howItWorks: [
       "The private host-agent checks the Salad Bowl Windows service and related workload/controller processes.",
-      "salad.jackgpt.org exposes a sanitized health dashboard that reports only generic component status and timestamps.",
+      "salad.jackgpt.org exposes a sanitized health dashboard that reports generic component status, intentional-pause state, and timestamps.",
       "The homepage consumes that endpoint in the same live monitoring section as the rest of the JackGPT ecosystem.",
     ],
     developed: [
       "Added host-service checks for Salad without exposing local paths, logs, account state, or workload internals.",
-      "Integrated Salad into the JackGPT Ops monitor, public live-status layer, and a dedicated salad.jackgpt.org dashboard.",
+      "Integrated Salad into JackGPT Ops, public live status, and salad.jackgpt.org with explicit healthy-idle semantics so auto-repair does not fight an intentional shutdown.",
       "Kept it positioned as infrastructure visibility rather than a flagship recruiter project.",
     ],
     tech: ["Windows service monitoring", "Host-agent bridge", "Ops", "GPU/compute workloads"],
@@ -477,12 +477,7 @@ const projects = [
     ],
     tech: ["Python", "Kalshi API", "Trading logic", "Risk controls"],
     links: [{ label: "GitHub demo", href: "https://github.com/jackvansickle1/kalshi-market-maker-simulator" }],
-    screenshots: [
-      {
-        src: "/project-images/ops-control-room/kalshi-market-maker-repo.png",
-        caption: "Recruiter-safe public simulator repo showing market-making structure, tests, and explicit boundaries around private alpha and execution logic",
-      },
-    ],
+    screenshots: [],
   },
 
   {
@@ -508,12 +503,7 @@ const projects = [
     ],
     tech: ["NinjaTrader", "C# / NinjaScript", "Futures", "Risk controls"],
     links: [{ label: "GitHub demo", href: "https://github.com/jackvansickle1/ninjatrader-risk-controls-demo" }],
-    screenshots: [
-      {
-        src: "/project-images/ops-control-room/ninjatrader-risk-controls-repo.png",
-        caption: "Public-safe NinjaTrader risk-controls demo repo showing the extracted risk-management layer without entry signals or private strategy logic",
-      },
-    ],
+    screenshots: [],
   },
 ];
 
@@ -1782,6 +1772,9 @@ function HomePage() {
                 />
               ))}
             </div>
+            <span className="carousel-count" aria-live="polite">
+              {activeAccessIndex + 1} / {accessLinks.length}
+            </span>
 
             <button
               type="button"
