@@ -124,8 +124,8 @@ function fallbackAnswer(question) {
     return "JackGPT Search at search.jackgpt.org is the branded public web-search endpoint. Recruiters can use it directly, and JackGPT services can use it as search context. Backend engine details stay quiet unless someone specifically asks for implementation internals.";
   }
 
-  if (hasAny(text, ["image", "images", "generate", "picture", "stable", "diffusion"])) {
-    return "JackGPT Image Gen at images.jackgpt.org is the GPU-backed image-generation demo. It is Dockerized, branded into the JackGPT theme, uses a safe-for-work model, and also supports image generation from the app.jackgpt.org workspace.";
+  if (hasAny(text, ["image", "images", "video", "animate", "motion", "generate", "picture", "stable", "diffusion"])) {
+    return "JackGPT Image Gen at images.jackgpt.org is the local GPU creative demo for text-to-image, text-to-video, and image-to-video generation. It uses a branded FastAPI surface over private Dockerized inference backends, metadata-strips uploaded source images, bounds public video jobs in a single-GPU queue, and coordinates video renders with Ollama, still-image work, Ops recovery, and idle-only mining. The AI Workspace also uses its still-image API.";
   }
 
   if (hasAny(text, ["pearl", "prl", "miner", "mining", "hashrate", "wallet", "gpu idle", "idle guard"])) {
