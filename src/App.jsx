@@ -1584,6 +1584,18 @@ function HomePage() {
                   Request a paid cleanup quote
                 </span>
               </a>
+              <a
+                href="https://github.com/jackvansickle1/spreadsheet-rescue"
+                className="contact-link"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <FolderGit size={17} />
+                <span>
+                  <strong>View the Spreadsheet Rescue work sample</strong>
+                  Public tool, reports, PDF, and verified release
+                </span>
+              </a>
               <a href="mailto:jackvansickle@mst.edu" className="contact-link">
                 <Mail size={17} />
                 <span>
