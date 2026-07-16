@@ -1387,7 +1387,7 @@ function HomePage() {
             <a href="#/blog" className="button secondary">Blog</a>
             <button type="button" className="button secondary" onClick={() => setIsContactOpen(true)}>
               <Mail size={16} />
-              Contact me
+              Contact / hire me
             </button>
             <a
               href="https://github.com/jackvansickle1"
@@ -1568,10 +1568,22 @@ function HomePage() {
               </button>
             </div>
             <p>
-              Best reached by text message, phone call, or voicemail. Email is also
-              open for school, recruiting, and project follow-up.
+              Available for paid CSV cleanup, including Excel worksheets exported
+              to CSV, plus recruiting and project follow-up. For Spreadsheet Rescue,
+              start with the scope below and do not attach confidential data before
+              we agree on handling.
             </p>
             <div className="contact-actions">
+              <a
+                href="mailto:jvan8076@gmail.com?subject=Spreadsheet%20Rescue%20inquiry&body=File%20type%20%28Excel%2FCSV%29%3A%0AApproximate%20rows%3A%0ACleanup%20needed%3A%0ADeadline%3A%0A%0APlease%20do%20not%20attach%20confidential%20files%20to%20this%20first%20email."
+                className="contact-link"
+              >
+                <Mail size={17} />
+                <span>
+                  <strong>Hire me for Spreadsheet Rescue</strong>
+                  Request a paid cleanup quote
+                </span>
+              </a>
               <a href="mailto:jackvansickle@mst.edu" className="contact-link">
                 <Mail size={17} />
                 <span>
