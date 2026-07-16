@@ -477,7 +477,13 @@ const projects = [
     ],
     tech: ["Python", "Kalshi API", "Trading logic", "Risk controls"],
     links: [{ label: "GitHub demo", href: "https://github.com/jackvansickle1/kalshi-market-maker-simulator" }],
-    screenshots: [],
+    screenshots: [
+      {
+        src: "/project-images/kalshi-btc-bot/market-maker-public-demo.png",
+        caption:
+          "Public-safe market-making simulator with typed order-book models, inventory-aware quoting, deterministic risk checks, and a documented boundary around private production strategy",
+      },
+    ],
   },
 
   {
@@ -503,7 +509,13 @@ const projects = [
     ],
     tech: ["NinjaTrader", "C# / NinjaScript", "Futures", "Risk controls"],
     links: [{ label: "GitHub demo", href: "https://github.com/jackvansickle1/ninjatrader-risk-controls-demo" }],
-    screenshots: [],
+    screenshots: [
+      {
+        src: "/project-images/ninjatrader-bot/risk-controls-public-demo.png",
+        caption:
+          "Recruiter-safe NinjaTrader risk-control sample covering daily loss gates, consecutive-loss lockouts, ATR sizing, and strategy lifecycle boundaries without exposing entry signals",
+      },
+    ],
   },
 ];
 
