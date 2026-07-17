@@ -83,7 +83,8 @@ const SERVICE_TARGETS = [
     endpoint: "https://market.jackgpt.org/api/minecraft/health",
     publicUrl: "",
     showEndpoint: false,
-    description: "Minecraft server is answering the internal status probe.",
+    maintenance: true,
+    description: "Minecraft server is intentionally paused and excluded from outage scoring.",
   },
   {
     key: "website",
@@ -112,6 +113,16 @@ function buildTimeoutSignal(ms) {
 }
 
 async function checkTarget(target) {
+  if (target.maintenance) {
+    return {
+      ...target,
+      status: "maintenance",
+      httpStatus: "-",
+      latencyMs: null,
+      checkedAt: new Date().toISOString(),
+    };
+  }
+
   const startedAt = Date.now();
   const { signal, clear } = buildTimeoutSignal(6500);
 
