@@ -1317,6 +1317,11 @@ p {
   border-color: rgb(240 106 106 / 38%);
 }
 
+.status-pill.maintenance {
+  color: var(--jg-cyan);
+  border-color: rgb(98 200 229 / 35%);
+}
+
 .status-card h3 {
   margin-bottom: 8px;
 }

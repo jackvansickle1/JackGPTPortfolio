@@ -656,14 +656,14 @@ const fallbackStatuses = [
   {
     key: "minecraft",
     name: "Minecraft Server",
-    description: "Checking the public Minecraft server status probe.",
+    description: "Intentionally paused for now; excluded from outage scoring.",
     endpoint: "https://market.jackgpt.org/api/minecraft/health",
     publicUrl: "",
     showEndpoint: false,
     latencyMs: null,
     httpStatus: "-",
     checkedAt: null,
-    status: "checking",
+    status: "maintenance",
   },
   {
     key: "website",
@@ -693,6 +693,12 @@ function mergeStatuses(incoming) {
   if (!Array.isArray(incoming) || incoming.length === 0) return fallbackStatuses;
   return fallbackStatuses.map((fallback) => {
     const match = incoming.find((item) => item.key === fallback.key);
+    if (fallback.status === "maintenance") {
+      return {
+        ...fallback,
+        checkedAt: match?.checkedAt || fallback.checkedAt,
+      };
+    }
     return match ? { ...fallback, ...match } : fallback;
   });
 }
@@ -1992,6 +1998,8 @@ function HomePage() {
                 ? "Degraded"
                 : status.status === "offline"
                   ? "Offline"
+                  : status.status === "maintenance"
+                    ? "Paused"
                   : "Checking"}
           </span>
         </div>
