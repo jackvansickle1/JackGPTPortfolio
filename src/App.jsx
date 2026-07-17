@@ -22,7 +22,6 @@ import {
   Shield,
   Sparkles,
   TrendingUp,
-  TerminalSquare,
   Cloud,
   Compass,
   LoaderCircle,
@@ -829,47 +828,6 @@ const accessLinks = [
   },
 ];
 
-const visitorPath = [
-  {
-    eyebrow: "1",
-    title: "Launch guided demo mode",
-    body:
-      "Use the self-serve recruiter path when Jack is not narrating: Market Desk, AI Workspace, Image Gen/Search, Kalshi/Pearl/Ops, status, code, and contact.",
-    href: "#/demo",
-    cta: "Open demo mode",
-    icon: Compass,
-  },
-  {
-    eyebrow: "2",
-    title: "Open a case study",
-    body:
-      "Project cards drill into what was built, why it exists, how it works, screenshots, and public-safe code links when available.",
-    href: "#projects",
-    cta: "Browse projects",
-    icon: ImageIcon,
-  },
-  {
-    eyebrow: "3",
-    title: "Check what is online",
-    body:
-      "The homepage shows same-origin status, while status.jackgpt.org checks public reachability and synthetic journeys from Cloudflare.",
-    href: "https://status.jackgpt.org",
-    cta: "Open public status",
-    icon: Activity,
-    external: true,
-  },
-  {
-    eyebrow: "4",
-    title: "Review code and contact Jack",
-    body:
-      "GitHub contains recruiter-safe repos while private credentials and valuable strategy code stay out of public view. Contact options are available from the hero.",
-    href: "https://github.com/jackvansickle1",
-    cta: "Open GitHub",
-    icon: FolderGit,
-    external: true,
-  },
-];
-
 const companionPrompts = [
   "Give me a 5-minute recruiter tour.",
   "Walk me through the guided demo mode.",
@@ -1139,6 +1097,91 @@ const initialCompanionMessage = {
     "I can give you a recruiter-ready tour of JackGPT: guided demo mode, where to start, what each project proves, which demos are public, and what is intentionally private. Ask for a 5-minute path, architecture map, or project-by-project review.",
 };
 
+function BrandMark({ size = 32 }) {
+  return (
+    <svg
+      className="brand-symbol"
+      width={size}
+      height={size}
+      viewBox="0 0 64 64"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <rect x="4" y="4" width="56" height="56" rx="6" fill="currentColor" />
+      <path d="M17 20 29 32 17 44" className="brand-symbol-command" />
+      <path d="M33 44h11" className="brand-symbol-cursor" />
+      <rect x="45" y="15" width="8" height="8" rx="2" className="brand-symbol-node" />
+    </svg>
+  );
+}
+
+function SiteNav({ onOpenContact, onOpenGuide }) {
+  return (
+    <header className="site-nav">
+      <div className="site-nav-inner">
+        <a href="#top" className="brand-lockup" aria-label="JackGPT portfolio home">
+          <span className="brand-mark">
+            <BrandMark size={32} />
+          </span>
+          <span className="brand-copy">
+            <strong>JackGPT</strong>
+            <small>Jack VanSickle</small>
+          </span>
+        </a>
+
+        <nav className="nav-links" aria-label="Portfolio navigation">
+          <a href="#projects">Work</a>
+          <a href="#/demo">Demo</a>
+          <a href="#/architecture">Architecture</a>
+          <a href="#/blog">Notes</a>
+        </nav>
+
+        <div className="nav-actions">
+          <a
+            href="https://status.jackgpt.org"
+            className="nav-action"
+            target="_blank"
+            rel="noreferrer"
+            title="Open public status"
+          >
+            <Activity size={17} />
+            <span className="nav-action-text">Status</span>
+          </a>
+          <a
+            href="https://github.com/jackvansickle1"
+            className="nav-action icon-only"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Open Jack VanSickle's GitHub profile"
+            title="GitHub profile"
+          >
+            <FolderGit size={17} />
+          </a>
+          <button
+            type="button"
+            className="nav-action icon-only"
+            onClick={onOpenGuide}
+            aria-label="Open JackGPT recruiter guide"
+            aria-controls="guide-panel"
+            title="Ask the recruiter guide"
+          >
+            <MessageCircle size={17} />
+          </button>
+          <button
+            type="button"
+            className="nav-action icon-only"
+            onClick={onOpenContact}
+            aria-label="Open contact information"
+            title="Contact Jack"
+          >
+            <Mail size={17} />
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+}
+
 function App() {
   const [route, setRoute] = useState(window.location.hash || "#/");
 
@@ -1269,6 +1312,19 @@ function HomePage() {
   }, [isCompanionOpen, isContactOpen]);
 
   useEffect(() => {
+    if (!isCompanionOpen && !isContactOpen) return undefined;
+
+    const closeOnEscape = (event) => {
+      if (event.key !== "Escape") return;
+      setIsCompanionOpen(false);
+      setIsContactOpen(false);
+    };
+
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [isCompanionOpen, isContactOpen]);
+
+  useEffect(() => {
     if (!isCompanionOpen || !companionMessagesNode) return;
 
     const frameId = window.requestAnimationFrame(() => {
@@ -1345,86 +1401,115 @@ function HomePage() {
 
   return (
     <div className="app-shell">
-      <header className="hero section">
+      <SiteNav
+        onOpenContact={() => setIsContactOpen(true)}
+        onOpenGuide={() => setIsCompanionOpen(true)}
+      />
+
+      <header id="top" className="hero section">
         <div className="hero-copy">
-          <div className="brand-lockup" aria-label="JackGPT">
-            <span className="brand-mark" aria-hidden="true">
-              <TerminalSquare size={24} strokeWidth={2.2} />
-            </span>
-            <span>
-              <strong>JackGPT</strong>
-              <small>AI systems, automation, and infrastructure</small>
-            </span>
-          </div>
-          <span className="eyebrow">Jack VanSickle Portfolio</span>
+          <span className="eyebrow hero-eyebrow">
+            <span className="signal-node" aria-hidden="true" />
+            Recruiter portfolio / systems in production
+          </span>
           <h1 className="hero-title">
-            <span>AI, automation, and</span>
-            <span>self-hosted</span>
-            <span>infrastructure projects</span>
+            <span>Jack VanSickle builds</span>
+            <span className="hero-title-accent">AI products that operate</span>
+            <span>beyond the demo.</span>
           </h1>
           <p className="hero-text">
-            A live portfolio of self-hosted AI products, finance intelligence tooling,
-            GPU image generation, automation dashboards, and Docker/Cloudflare
-            infrastructure. Project cards open into detailed case studies with
-            implementation notes, screenshots, live links, and public-safe code.
+            I design, deploy, and maintain full-stack AI, fintech, automation, and
+            infrastructure systems. The work below is live, observable, and documented
+            with real interfaces, implementation detail, and public-safe boundaries.
           </p>
+          <div className="hero-capabilities" aria-label="Core engineering capabilities">
+            <span>React + FastAPI</span>
+            <span>Docker + Cloudflare</span>
+            <span>Local AI + GPU orchestration</span>
+          </div>
           <div className="hero-actions">
             <a href="#/demo" className="button primary">
-              Guided demo <ArrowRight size={16} />
-            </a>
-            <a href="#start" className="button primary">
-              Start here <ArrowRight size={16} />
+              Run the 5-minute tour <ArrowRight size={16} />
             </a>
             <a href="#projects" className="button secondary">
-              View projects <ArrowRight size={16} />
-            </a>
-            <a href="https://status.jackgpt.org" className="button secondary" target="_blank" rel="noreferrer">
-              Public status <ArrowUpRight size={14} />
-            </a>
-            <a href="#/architecture" className="button secondary">
-              Architecture
-            </a>
-            <a href="#/blog" className="button secondary">Blog</a>
-            <button type="button" className="button secondary" onClick={() => setIsContactOpen(true)}>
-              <Mail size={16} />
-              Contact / hire me
-            </button>
-            <a
-              href="https://github.com/jackvansickle1"
-              className="button secondary"
-              target="_blank"
-              rel="noreferrer"
-              aria-label="Open Jack VanSickle's GitHub profile"
-            >
-              <FolderGit size={16} />
-              GitHub
-              <ArrowUpRight size={14} />
+              Review the work <ArrowRight size={16} />
             </a>
           </div>
         </div>
-        <div className="hero-stats">
-          <StatCard label="Projects" value={String(projects.length)} />
-          <StatCard label="Live endpoints" value={String(accessLinks.length)} />
-          <StatCard label="Core stack" value="React, Docker, Cloudflare" />
-          <StatCard label="Focus" value="FinTech, AI, and automation" />
+
+        <div className="hero-visual" aria-label="Featured project previews">
+          <a className="hero-preview hero-preview-main" href="#/project/market-desk">
+            <img
+              src="/project-images/market-desk/market-desk-terminal.png"
+              alt="Market Desk equity research terminal showing an NVIDIA snapshot and service status"
+            />
+            <span className="hero-preview-caption">
+              <small>Flagship full-stack product</small>
+              <strong>Market Desk</strong>
+              <span>Market data, research briefs, charts, and stock-aware AI</span>
+            </span>
+          </a>
+          <div className="hero-preview-stack">
+            <a className="hero-preview" href="#/project/jackgpt">
+              <img
+                src="/project-images/jackgpt/jackgpt-chat-home.png"
+                alt="JackGPT local AI workspace ready for a new conversation"
+              />
+              <span className="hero-preview-caption">
+                <small>Self-hosted AI</small>
+                <strong>AI Workspace</strong>
+              </span>
+            </a>
+            <a className="hero-preview" href="#/project/automatic1111">
+              <img
+                src="/project-images/automatic1111/jackgpt-images-dashboard.png"
+                alt="JackGPT GPU image and video generation studio"
+              />
+              <span className="hero-preview-caption">
+                <small>Shared GPU platform</small>
+                <strong>Image Gen</strong>
+              </span>
+            </a>
+          </div>
         </div>
       </header>
+
+      <section className="proof-strip" aria-label="Portfolio evidence">
+        <div>
+          <strong>{projects.length}</strong>
+          <span>documented systems</span>
+        </div>
+        <div>
+          <strong>Product</strong>
+          <span>interfaces backed by real services</span>
+        </div>
+        <div>
+          <strong>Operations</strong>
+          <span>health checks, fallbacks, and repair paths</span>
+        </div>
+        <div>
+          <strong>Boundaries</strong>
+          <span>public proof without private leakage</span>
+        </div>
+      </section>
 
       <section id="start" className="section">
         <div className="section-header">
           <div>
-            <span className="eyebrow">New visitor path</span>
-            <h2>What to do first</h2>
+            <span className="eyebrow">Recruiter review path</span>
+            <h2>Three signals, in the order that matters</h2>
           </div>
           <p>
-            If you are seeing JackGPT without a walkthrough, use this quick path:
-            try a public demo, open the case studies, check live health, then review
-            the public code.
+            Start with product depth, move through the local AI stack, and close on
+            the operating discipline that keeps the public demos credible.
           </p>
+          <a href="#/demo" className="button secondary small section-header-action">
+            Open guided tour <ArrowRight size={16} />
+          </a>
         </div>
 
-        <div className="visitor-path">
-          {visitorPath.map((item) => {
+        <div className="demo-sequence-grid recruiter-sequence">
+          {demoSequence.slice(1).map((item, index) => {
             const Icon = item.icon;
             return (
               <a
@@ -1432,11 +1517,11 @@ function HomePage() {
                 href={item.href}
                 target={item.external ? "_blank" : undefined}
                 rel={item.external ? "noreferrer" : undefined}
-                className="visitor-card"
+                className="demo-sequence-card"
               >
-                <div className="visitor-card-top">
-                  <span className="step-badge">{item.eyebrow}</span>
-                  <Icon size={18} />
+                <div className="sequence-index">
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <Icon size={19} />
                 </div>
                 <h3>{item.title}</h3>
                 <p>{item.body}</p>
@@ -1449,52 +1534,15 @@ function HomePage() {
           })}
         </div>
 
-        <div className="visitor-note">
+        <div className="recruiter-note">
           <Shield size={19} />
           <div>
-            <strong>Some endpoints are instant demos, some ask visitors to sign up first.</strong>
+            <strong>Public proof is deliberate; private controls stay private.</strong>
             <p>
-              Public services are labeled below. Account-based AI surfaces can be
-              joined from their sign-in page, while admin tools stay visible for
-              architecture and status context but remain restricted.
+              Account-based demos are labeled, admin surfaces remain restricted, and
+              trading views expose sanitized health rather than strategy internals.
             </p>
           </div>
-        </div>
-      </section>
-
-      <section id="demo-mode" className="section spotlight-section">
-        <div className="section-header">
-          <div>
-            <span className="eyebrow">Recruiter demo mode</span>
-            <h2>A guided path when Jack is not there to narrate</h2>
-          </div>
-          <p>
-            The demo mode turns the ecosystem into a short walkthrough with the
-            strongest product, AI, operations, code, and contact beats already ordered.
-          </p>
-        </div>
-        <div className="demo-sequence-grid">
-          {demoSequence.map((item) => {
-            const Icon = item.icon;
-            return (
-              <a
-                key={item.title}
-                href={item.href}
-                target={item.external ? "_blank" : undefined}
-                rel={item.external ? "noreferrer" : undefined}
-                className="demo-sequence-card"
-              >
-                <span className="step-badge">{item.step}</span>
-                <Icon size={20} />
-                <h3>{item.title}</h3>
-                <p>{item.body}</p>
-                <span className="view-link">
-                  {item.cta}
-                  {item.external ? <ArrowUpRight size={15} /> : <ArrowRight size={15} />}
-                </span>
-              </a>
-            );
-          })}
         </div>
       </section>
 
@@ -1624,7 +1672,13 @@ function HomePage() {
 
       <div id="guide" className={`companion-widget ${isCompanionOpen ? "open" : ""}`}>
         {isCompanionOpen ? (
-          <article className="companion-panel" aria-label="JackGPT AI guide">
+          <article
+            id="guide-panel"
+            className="companion-panel"
+            role="dialog"
+            aria-modal="true"
+            aria-label="JackGPT AI guide"
+          >
             <div className="companion-head">
               <div className="companion-title">
                 <span className="companion-icon">
@@ -1729,6 +1783,8 @@ function HomePage() {
             className="companion-launcher"
             onClick={() => setIsCompanionOpen(true)}
             aria-label="Open JackGPT AI guide"
+            aria-controls="guide-panel"
+            aria-expanded="false"
           >
             <span className="launcher-icon">
               <MessageCircle size={24} />
@@ -1832,65 +1888,71 @@ function HomePage() {
       <section id="projects" className="section">
         <div className="section-header">
           <div>
-            <span className="eyebrow">Projects</span>
-            <h2>Projects</h2>
+            <span className="eyebrow">Selected engineering work</span>
+            <h2>Real systems, shown in use</h2>
           </div>
           <p>
-            Click any project card to open a dedicated case-study page with overview,
-            implementation details, screenshots, and demo links.
+            Each card opens a dedicated case study with architecture, development
+            decisions, screenshots, and live or public-safe code links.
           </p>
         </div>
 
-        <div className="project-guide" aria-label="How to review projects">
-          <div>
-            <span className="guide-kicker">Recruiter guide</span>
-            <strong>Every project card opens into a deeper walkthrough.</strong>
-            <p>
-              Start with Market Desk, JackGPT AI Workspace, JackGPT Image Gen, and
-              Kalshi Climate Desk for the strongest engineering story. Ops Control Room,
-              Pearl Desk, Moomoo, Salad, Mesh, and the status layer show the
-              operating discipline around the product surfaces.
-            </p>
-          </div>
-          <div className="guide-steps">
-            <span><ArrowUpRight size={15} /> Click a card</span>
-            <span><Server size={15} /> Read architecture</span>
-            <span><ImageIcon size={15} /> View screenshots</span>
-          </div>
+        <div className="project-index-key" aria-label="Project ordering">
+          <span><span className="key-line cyan" aria-hidden="true" /> Product and AI</span>
+          <span><span className="key-line mint" aria-hidden="true" /> Automation and operations</span>
+          <span><span className="key-line amber" aria-hidden="true" /> Finance and secondary builds</span>
         </div>
 
         <div className="project-grid">
           {homepageProjects.map((project, index) => {
             const Icon = project.icon;
+            const projectShot = project.screenshots[0];
+            const isFeatured = index < 4;
             return (
               <Motion.a
                 key={project.id}
                 href={`#/project/${project.id}`}
-                className="project-card"
+                className={`project-card ${isFeatured ? "project-card-featured" : "project-card-compact"} ${project.id === "casino" ? "secondary-project" : ""}`}
                 initial={{ opacity: 0, y: 18 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.15 }}
                 transition={{ duration: 0.35, delay: index * 0.05 }}
               >
-                <div className={`icon-wrap ${project.accent}`}>
-                  <Icon size={20} />
-                </div>
-                <div className="card-top">
-                  <h3>{project.name}</h3>
-                  <ArrowUpRight size={18} className="card-arrow" />
-                </div>
-                <p className="project-subtitle">{project.subtitle}</p>
-                <p className="project-summary">{project.summary}</p>
-                <div className="tag-row">
-                  {project.tags.map((tag) => (
-                    <span className="tag" key={tag}>
-                      {tag}
+                {projectShot ? (
+                  <div className="project-card-media">
+                    <img
+                      src={projectShot.src}
+                      alt={projectShot.caption}
+                      loading={index < 2 ? "eager" : "lazy"}
+                    />
+                    <span className={`project-role ${project.accent}`}>
+                      {project.id === "casino" ? "Secondary build" : isFeatured ? "Featured system" : "Case study"}
                     </span>
-                  ))}
-                </div>
-                <div className="project-card-footer">
-                  <span>{project.screenshots.length > 0 ? `${project.screenshots.length} screenshots` : "Overview page"}</span>
-                  <span className="view-link">View case study <ArrowRight size={15} /></span>
+                  </div>
+                ) : null}
+                <div className="project-card-body">
+                  <div className="project-card-heading">
+                    <div className={`icon-wrap ${project.accent}`}>
+                      <Icon size={19} />
+                    </div>
+                    <div className="card-top">
+                      <h3>{project.name}</h3>
+                      <ArrowUpRight size={18} className="card-arrow" />
+                    </div>
+                  </div>
+                  <p className="project-subtitle">{project.subtitle}</p>
+                  <p className="project-summary">{project.summary}</p>
+                  <div className="tag-row">
+                    {project.tags.map((tag) => (
+                      <span className="tag" key={tag}>
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="project-card-footer">
+                    <span>{project.screenshots.length > 0 ? `${project.screenshots.length} screenshots` : "Overview page"}</span>
+                    <span className="view-link">View case study <ArrowRight size={15} /></span>
+                  </div>
                 </div>
               </Motion.a>
             );
@@ -1961,6 +2023,29 @@ function HomePage() {
   </p>
 </section>
 
+      <footer className="site-footer">
+        <div className="footer-brand">
+          <span className="brand-mark" aria-hidden="true">
+            <BrandMark size={30} />
+          </span>
+          <div>
+            <strong>JackGPT</strong>
+            <span>Built and operated by Jack VanSickle</span>
+          </div>
+        </div>
+        <nav className="footer-links" aria-label="Footer navigation">
+          <a href="#projects">Work</a>
+          <a href="#/demo">Demo</a>
+          <a href="#/architecture">Architecture</a>
+          <a href="#/blog">Notes</a>
+          <a href="https://status.jackgpt.org" target="_blank" rel="noreferrer">Status</a>
+          <a href="https://github.com/jackvansickle1" target="_blank" rel="noreferrer">GitHub</a>
+        </nav>
+        <button type="button" className="button secondary small" onClick={() => setIsContactOpen(true)}>
+          <Mail size={16} /> Contact Jack
+        </button>
+      </footer>
+
     </div>
   );
 }
@@ -1968,9 +2053,25 @@ function HomePage() {
 function PageNav({ label = "Back to portfolio", href = "#/" }) {
   return (
     <div className="detail-nav">
-      <a href={href} className="button secondary small">
-        <ArrowLeft size={16} /> {label}
-      </a>
+      <div className="detail-nav-inner">
+        <a href="#/" className="brand-lockup" aria-label="JackGPT portfolio home">
+          <span className="brand-mark">
+            <BrandMark size={30} />
+          </span>
+          <span className="brand-copy">
+            <strong>JackGPT</strong>
+            <small>Jack VanSickle</small>
+          </span>
+        </a>
+        <nav className="detail-nav-links" aria-label="Portfolio routes">
+          <a href="#/demo">Demo</a>
+          <a href="#/architecture">Architecture</a>
+          <a href="#/blog">Notes</a>
+        </nav>
+        <a href={href} className="button secondary small detail-back-link">
+          <ArrowLeft size={16} /> {label}
+        </a>
+      </div>
     </div>
   );
 }
@@ -2241,11 +2342,7 @@ function ProjectDetail({ project }) {
 
   return (
     <div className="app-shell project-detail-page">
-      <div className="detail-nav">
-        <a href="#/" className="button secondary small">
-          <ArrowLeft size={16} /> Back to portfolio
-        </a>
-      </div>
+      <PageNav />
 
       <section className="detail-hero section">
         <div className="detail-heading">
