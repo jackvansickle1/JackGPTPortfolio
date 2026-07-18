@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Operating Signal YouTube thumbnail concept C</title>
+  <desc id="desc">A coral B2B video thumbnail with a dark typographic headline and a pipeline leak diagram.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff706f"/><stop offset="1" stop-color="#ff4d66"/></linearGradient>
+    <pattern id="wm" width="360" height="150" patternUnits="userSpaceOnUse" patternTransform="rotate(-18)"><text x="0" y="76" font-family="Arial" font-size="22" font-weight="700" fill="#08111f" fill-opacity=".1">PORTFOLIO SAMPLE</text></pattern>
+  </defs>
+  <rect width="1280" height="720" fill="url(#bg)"/>
+  <circle cx="1135" cy="-30" r="315" fill="#d7ff52"/>
+  <circle cx="1135" cy="-30" r="245" fill="none" stroke="#08111f" stroke-width="2" stroke-dasharray="8 16"/>
+  <rect x="58" y="48" width="355" height="48" rx="24" fill="#08111f"/>
+  <path d="M86 72h15l8-11 9 22 8-11h24" fill="none" stroke="#8af7d2" stroke-width="4" stroke-linecap="round"/>
+  <text x="167" y="80" font-family="Arial" font-size="21" font-weight="800" letter-spacing="3" fill="#fff">OPERATING SIGNAL</text>
+  <text x="58" y="231" font-family="Arial" font-size="92" font-weight="900" letter-spacing="-4" fill="#08111f">PIPELINE</text>
+  <text x="58" y="332" font-family="Arial" font-size="92" font-weight="900" letter-spacing="-4" fill="#08111f">DOESN'T</text>
+  <text x="58" y="433" font-family="Arial" font-size="92" font-weight="900" letter-spacing="-4" fill="#08111f">STALL.</text>
+  <rect x="58" y="466" width="557" height="122" rx="18" fill="#08111f"/>
+  <text x="88" y="552" font-family="Arial" font-size="88" font-weight="900" letter-spacing="-4" fill="#d7ff52">IT LEAKS.</text>
+  <text x="60" y="646" font-family="Arial" font-size="21" font-weight="800" letter-spacing="2" fill="#08111f">THE 4-STAGE AUDIT FOR REVENUE TEAMS</text>
+  <g transform="translate(700 164)">
+    <path d="M0 79h440l-80 286H81Z" fill="#101d30" stroke="#fff" stroke-width="5"/>
+    <path d="M52 124h336M70 184h300M86 244h266" stroke="#65758a" stroke-width="2" stroke-dasharray="8 11"/>
+    <path d="M78 127h72l27 55h84l28 62h63" fill="none" stroke="#8af7d2" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M261 182v80c0 37 23 51 50 51" fill="none" stroke="#d7ff52" stroke-width="15" stroke-linecap="round"/>
+    <path d="M308 290l8 54 34-42" fill="#d7ff52"/>
+    <circle cx="177" cy="182" r="20" fill="#ff4d66" stroke="#fff" stroke-width="5"/>
+    <text x="220" y="34" font-family="Arial" font-size="17" font-weight="800" text-anchor="middle" letter-spacing="3" fill="#08111f">WHERE VALUE ESCAPES</text>
+    <rect x="132" y="403" width="192" height="46" rx="23" fill="#08111f"/>
+    <text x="228" y="433" font-family="Arial" font-size="17" font-weight="800" text-anchor="middle" letter-spacing="2" fill="#fff">EP 044 / AUDIT</text>
+  </g>
+  <rect width="1280" height="720" fill="url(#wm)"/>
+  <rect x="1000" y="653" width="239" height="38" rx="19" fill="#08111f" stroke="#fff" stroke-opacity=".55"/>
+  <text x="1020" y="679" font-family="Arial" font-size="15" font-weight="800" letter-spacing="2" fill="#fff">NOT FOR PRODUCTION</text>
+</svg>

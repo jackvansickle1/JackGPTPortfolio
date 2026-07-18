@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Operating Signal fictional brand-system board</title>
+  <desc id="desc">A compact B2B show identity with a logo, palette, typography, signal motif, and thumbnail system notes.</desc>
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#8af7d2" stroke-opacity=".07"/></pattern>
+    <pattern id="wm" width="420" height="175" patternUnits="userSpaceOnUse" patternTransform="rotate(-18)"><text x="0" y="88" font-family="Arial" font-size="25" font-weight="700" fill="#fff" fill-opacity=".075">PORTFOLIO SAMPLE</text></pattern>
+  </defs>
+  <rect width="1600" height="1000" fill="#08111f"/>
+  <rect width="1600" height="1000" fill="url(#grid)"/>
+  <text x="70" y="70" font-family="Arial" font-size="18" font-weight="700" letter-spacing="4" fill="#8af7d2">FICTIONAL B2B SHOW IDENTITY / SYSTEM 01</text>
+  <text x="70" y="160" font-family="Arial" font-size="70" font-weight="900" letter-spacing="-2" fill="#fff">OPERATING</text>
+  <text x="70" y="238" font-family="Arial" font-size="70" font-weight="900" letter-spacing="-2" fill="#d7ff52">SIGNAL</text>
+  <path d="M74 286h40l19-30 25 61 22-31h70" fill="none" stroke="#ff5c68" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="70" y="353" font-family="Arial" font-size="24" font-weight="700" letter-spacing="2" fill="#93a3b8">FIND THE LEAK. FIX THE HANDOFF. SCALE THE SIGNAL.</text>
+  <rect x="70" y="415" width="650" height="250" rx="28" fill="#111d31" stroke="#34445d"/>
+  <text x="104" y="462" font-family="Arial" font-size="17" font-weight="700" letter-spacing="3" fill="#8af7d2">VISUAL IDEA</text>
+  <text x="104" y="520" font-family="Arial" font-size="32" font-weight="800" fill="#fff">Operational truth, made visible.</text>
+  <text x="104" y="570" font-family="Arial" font-size="22" fill="#b8c2ce">Signals, broken connections, and diagnostic panels</text>
+  <text x="104" y="605" font-family="Arial" font-size="22" fill="#b8c2ce">turn abstract revenue problems into a repeatable visual language.</text>
+  <text x="104" y="645" font-family="Arial" font-size="18" font-weight="700" letter-spacing="2" fill="#ff7580">BUILT FOR FAST EPISODE ITERATION</text>
+  <text x="70" y="735" font-family="Arial" font-size="17" font-weight="700" letter-spacing="3" fill="#8af7d2">PALETTE</text>
+  <g transform="translate(70 770)">
+    <rect width="140" height="105" rx="14" fill="#08111f" stroke="#fff" stroke-opacity=".3"/><text x="16" y="132" font-family="Arial" font-size="15" fill="#9cabbc">SIGNAL INK</text>
+    <rect x="165" width="140" height="105" rx="14" fill="#d7ff52"/><text x="181" y="132" font-family="Arial" font-size="15" fill="#9cabbc">ACID LIME</text>
+    <rect x="330" width="140" height="105" rx="14" fill="#ff5c68"/><text x="346" y="132" font-family="Arial" font-size="15" fill="#9cabbc">ALERT CORAL</text>
+    <rect x="495" width="140" height="105" rx="14" fill="#8af7d2"/><text x="511" y="132" font-family="Arial" font-size="15" fill="#9cabbc">CLEAN MINT</text>
+  </g>
+  <g transform="translate(790 70)">
+    <rect width="740" height="355" rx="28" fill="#f5f6f7"/>
+    <text x="42" y="55" font-family="Arial" font-size="16" font-weight="700" letter-spacing="3" fill="#5a6470">TYPE SYSTEM</text>
+    <text x="42" y="142" font-family="Arial" font-size="68" font-weight="900" letter-spacing="-3" fill="#08111f">HEADLINES HIT.</text>
+    <text x="42" y="205" font-family="Arial" font-size="30" font-weight="700" fill="#ff4d66">Supporting claims stay precise.</text>
+    <text x="42" y="259" font-family="Arial" font-size="20" fill="#485363">Arial Black / Arial Bold / Arial Regular</text>
+    <line x1="42" y1="292" x2="698" y2="292" stroke="#d2d7dc"/>
+    <text x="42" y="331" font-family="Arial" font-size="16" font-weight="700" letter-spacing="2" fill="#485363">ONE LARGE PROMISE  /  ONE DIAGRAM  /  ONE EPISODE CODE</text>
+  </g>
+  <g transform="translate(790 468)">
+    <text x="0" y="0" font-family="Arial" font-size="17" font-weight="700" letter-spacing="3" fill="#8af7d2">SCALABLE EPISODE GRAMMAR</text>
+    <rect x="0" y="38" width="740" height="420" rx="28" fill="#111d31" stroke="#34445d"/>
+    <g font-family="Arial" font-weight="800" fill="#fff">
+      <circle cx="79" cy="117" r="35" fill="#ff5c68"/><text x="79" y="126" font-size="25" text-anchor="middle">01</text>
+      <text x="137" y="110" font-size="25">CLAIM</text><text x="137" y="143" font-size="19" fill="#93a3b8">Use the audience's costly tension.</text>
+      <circle cx="79" cy="220" r="35" fill="#d7ff52"/><text x="79" y="229" font-size="25" text-anchor="middle" fill="#08111f">02</text>
+      <text x="137" y="213" font-size="25">DIAGRAM</text><text x="137" y="246" font-size="19" fill="#93a3b8">Make the failure visible at a glance.</text>
+      <circle cx="79" cy="323" r="35" fill="#8af7d2"/><text x="79" y="332" font-size="25" text-anchor="middle" fill="#08111f">03</text>
+      <text x="137" y="316" font-size="25">CODE</text><text x="137" y="349" font-size="19" fill="#93a3b8">Keep the system navigable and repeatable.</text>
+    </g>
+    <path d="M516 118h82l28-44 43 95 34-52h13" fill="none" stroke="#d7ff52" stroke-width="10" stroke-linecap="round"/>
+    <rect x="514" y="218" width="188" height="99" rx="18" fill="#08111f" stroke="#ff5c68" stroke-width="3"/>
+    <text x="608" y="260" font-family="Arial" font-size="17" font-weight="700" text-anchor="middle" letter-spacing="3" fill="#ff7580">TEST / LEARN</text>
+    <text x="608" y="292" font-family="Arial" font-size="15" font-weight="700" text-anchor="middle" letter-spacing="2" fill="#fff">REPEAT / SCALE</text>
+    <text x="40" y="397" font-family="Arial" font-size="16" font-weight="700" letter-spacing="2" fill="#687991">ALL NAMES AND COPY ARE ORIGINAL FICTIONAL PLACEHOLDERS.</text>
+  </g>
+  <rect width="1600" height="1000" fill="url(#wm)"/>
+  <rect x="1265" y="938" width="265" height="40" rx="20" fill="#08111f" stroke="#fff" stroke-opacity=".5"/>
+  <text x="1292" y="965" font-family="Arial" font-size="15" font-weight="800" letter-spacing="2" fill="#fff">NOT FOR PRODUCTION</text>
+</svg>
