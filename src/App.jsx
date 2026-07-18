@@ -24,6 +24,8 @@ import {
   TrendingUp,
   Cloud,
   Compass,
+  CheckCircle2,
+  CreditCard,
   LoaderCircle,
   MessageCircle,
   UserRound,
@@ -1139,6 +1141,7 @@ function SiteNav({ onOpenContact, onOpenGuide }) {
           <a href="#projects">Work</a>
           <a href="#/demo">Demo</a>
           <a href="#/architecture">Architecture</a>
+          <a href="#/hire/spreadsheet-rescue">Hire</a>
           <a href="#/blog">Notes</a>
         </nav>
 
@@ -1220,6 +1223,10 @@ function App() {
 
   if (route === "#/blog") {
     return <BlogIndexPage />;
+  }
+
+  if (route === "#/hire/spreadsheet-rescue") {
+    return <SpreadsheetRescuePage />;
   }
 
   if (selectedPost) {
@@ -1440,6 +1447,9 @@ function HomePage() {
             <a href="#projects" className="button secondary">
               Review the work <ArrowRight size={16} />
             </a>
+            <a href="#/hire/spreadsheet-rescue" className="button secondary">
+              Hire me for CSV cleanup <ArrowRight size={16} />
+            </a>
           </div>
         </div>
 
@@ -1628,6 +1638,13 @@ function HomePage() {
               we agree on handling.
             </p>
             <div className="contact-actions">
+              <a href="#/hire/spreadsheet-rescue" className="contact-link">
+                <CreditCard size={17} />
+                <span>
+                  <strong>View fixed Spreadsheet Rescue packages</strong>
+                  Starting at $29 with Venmo preferred
+                </span>
+              </a>
               <a
                 href="mailto:jvan8076@gmail.com?subject=Spreadsheet%20Rescue%20inquiry&body=File%20type%20%28Excel%2FCSV%29%3A%0AApproximate%20rows%3A%0ACleanup%20needed%3A%0ADeadline%3A%0A%0APlease%20do%20not%20attach%20confidential%20files%20to%20this%20first%20email."
                 className="contact-link"
@@ -2045,6 +2062,7 @@ function HomePage() {
           <a href="#projects">Work</a>
           <a href="#/demo">Demo</a>
           <a href="#/architecture">Architecture</a>
+          <a href="#/hire/spreadsheet-rescue">Hire</a>
           <a href="#/blog">Notes</a>
           <a href="https://status.jackgpt.org" target="_blank" rel="noreferrer">Status</a>
           <a href="https://github.com/jackvansickle1" target="_blank" rel="noreferrer">GitHub</a>
@@ -2074,12 +2092,187 @@ function PageNav({ label = "Back to portfolio", href = "#/" }) {
         <nav className="detail-nav-links" aria-label="Portfolio routes">
           <a href="#/demo">Demo</a>
           <a href="#/architecture">Architecture</a>
+          <a href="#/hire/spreadsheet-rescue">Hire</a>
           <a href="#/blog">Notes</a>
         </nav>
         <a href={href} className="button secondary small detail-back-link">
           <ArrowLeft size={16} /> {label}
         </a>
       </div>
+    </div>
+  );
+}
+
+function SpreadsheetRescuePage() {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  const intakeHref =
+    "mailto:jvan8076@gmail.com?subject=Spreadsheet%20Rescue%20%E2%80%94%20paid%20cleanup%20request&body=Package%20%28Quick%2FFull%2FRepeatable%29%3A%0AFile%20type%20%28CSV%20export%29%3A%0AApproximate%20rows%3A%0ACleanup%20needed%3A%0ADeadline%20and%20time%20zone%3A%0AAny%20sensitive%20data%3F%3A%0A%0APlease%20do%20not%20attach%20confidential%20files%20to%20this%20first%20email.";
+
+  const packages = [
+    {
+      name: "Quick Rescue",
+      price: "$29",
+      note: "One CSV export, up to 2,500 rows",
+      items: [
+        "Conservative header and whitespace cleanup",
+        "Approved blank-row and exact-duplicate removal",
+        "Up to two explicit field-normalization rules",
+        "Cleaned CSV, change report, and one scope-correction round",
+      ],
+    },
+    {
+      name: "Full Rescue",
+      price: "From $79",
+      note: "Up to three compatible CSV exports",
+      items: [
+        "Approved header, whitespace, blank-row, and duplicate cleanup",
+        "Explicit date, currency, and phone normalization rules",
+        "Markdown and JSON audit reports",
+        "Written validation summary and one scope-correction round",
+      ],
+    },
+    {
+      name: "Repeatable Cleanup",
+      price: "From $149",
+      note: "A reusable workflow for a stable CSV schema",
+      items: [
+        "Reusable JSON cleanup configuration",
+        "One verified example run on an approved export",
+        "Dry-run and safe-rerun walkthrough",
+        "Runbook, handoff notes, and one scope-correction round",
+      ],
+    },
+  ];
+
+  return (
+    <div className="app-shell route-page service-page">
+      <PageNav />
+
+      <section className="detail-hero section service-hero">
+        <span className="eyebrow">Same-day paid service</span>
+        <h1>Clean the CSV. Keep the evidence.</h1>
+        <p className="detail-description">
+          Spreadsheet Rescue turns messy CSV exports into conservative, reviewable
+          outputs. Your source stays untouched, ambiguous values stay unchanged,
+          and every approved change is summarized before the job closes.
+        </p>
+        <div className="detail-links service-actions">
+          <a href={intakeHref} className="button primary">
+            Request a paid slot <Mail size={16} />
+          </a>
+          <a
+            href="https://github.com/jackvansickle1/spreadsheet-rescue"
+            target="_blank"
+            rel="noreferrer"
+            className="button secondary"
+          >
+            Inspect the public tool <FolderGit size={16} />
+          </a>
+        </div>
+        <p className="service-availability">
+          Same-day delivery is available only after the file shape, scope, price,
+          and deadline are confirmed in writing.
+        </p>
+      </section>
+
+      <section className="section service-proof-strip" aria-label="Service safeguards">
+        <div>
+          <Shield size={18} />
+          <span><strong>Source preserved</strong>No in-place overwrite</span>
+        </div>
+        <div>
+          <CheckCircle2 size={18} />
+          <span><strong>16 tested behaviors</strong>Dry-run and audit controls</span>
+        </div>
+        <div>
+          <CreditCard size={18} />
+          <span><strong>Venmo preferred</strong>PayPal also accepted</span>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="section-header">
+          <div>
+            <span className="eyebrow">Clear starting scope</span>
+            <h2>Choose the smallest package that solves the problem</h2>
+          </div>
+          <p>
+            These are starting packages, not a promise that every workbook or export
+            fits. You receive a written scope before payment is requested.
+          </p>
+        </div>
+        <div className="detail-grid service-pricing-grid">
+          {packages.map((item) => (
+            <article className="detail-card service-price-card" key={item.name}>
+              <span className="eyebrow">{item.name}</span>
+              <strong className="service-price">{item.price}</strong>
+              <p className="service-price-note">{item.note}</p>
+              <ul className="detail-list service-list">
+                {item.items.map((point) => <li key={point}>{point}</li>)}
+              </ul>
+              <a href={intakeHref} className="view-link service-card-cta">
+                Check fit and availability <ArrowRight size={15} />
+              </a>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="section detail-grid service-terms-grid">
+        <article className="detail-card service-wide-card">
+          <div className="detail-card-header">
+            <CreditCard size={18} />
+            <h2>Payment without the awkward part</h2>
+          </div>
+          <p className="project-summary">
+            New buyers pay a 50% deposit only after written scope confirmation.
+            The balance is due after a delivery preview and audit summary, before
+            release of the final cleaned files.
+          </p>
+          <div className="payment-actions">
+            <a href="https://venmo.com/u/jv816" target="_blank" rel="noreferrer" className="button primary small">
+              Venmo @jv816 <ArrowUpRight size={15} />
+            </a>
+            <a href="https://www.paypal.com/paypalme/wwzw" target="_blank" rel="noreferrer" className="button secondary small">
+              PayPal @wwzw <ArrowUpRight size={15} />
+            </a>
+          </div>
+          <p className="service-disclaimer">
+            For paid services, tag a Venmo payment as a purchase or choose PayPal
+            Goods &amp; Services when available. Never use Friends &amp; Family for this work.
+          </p>
+        </article>
+
+        <article className="detail-card service-wide-card">
+          <div className="detail-card-header">
+            <Shield size={18} />
+            <h2>Start without exposing the data</h2>
+          </div>
+          <p className="project-summary">
+            The first email should contain only file type, approximate row count,
+            requested cleanup, deadline, and whether the data is sensitive. Do not
+            attach confidential files until a transfer and deletion plan is agreed.
+          </p>
+          <ul className="detail-list service-list">
+            <li>CSV exports only; formulas, macros, charts, and formatting are out of scope.</li>
+            <li>No fuzzy identity matching, enrichment, or invented missing values.</li>
+            <li>Ambiguous typed values remain unchanged and are counted in the report.</li>
+            <li>If delivered work misses the written scope, one correction round is included.</li>
+          </ul>
+        </article>
+      </section>
+
+      <section className="section service-final-cta">
+        <span className="eyebrow">Ready when the file is</span>
+        <h2>Send the shape of the problem, not the confidential file.</h2>
+        <p>I will confirm fit, exact scope, price, deadline, payment, and delivery terms in writing.</p>
+        <a href={intakeHref} className="button primary">
+          Start the intake email <Send size={16} />
+        </a>
+      </section>
     </div>
   );
 }

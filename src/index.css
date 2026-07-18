@@ -1872,6 +1872,136 @@ p {
   font-size: 1.05rem;
 }
 
+.service-hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.service-hero::after {
+  content: "CSV";
+  position: absolute;
+  right: max(24px, calc((100vw - 1200px) / 2));
+  bottom: -34px;
+  color: rgb(98 200 229 / 5%);
+  font-family: var(--jg-font-mono);
+  font-size: clamp(7rem, 18vw, 15rem);
+  font-weight: 800;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.service-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.service-availability,
+.service-disclaimer {
+  max-width: 760px;
+  margin: 18px 0 0;
+  color: var(--jg-muted);
+  font-family: var(--jg-font-mono);
+  font-size: 0.72rem;
+  line-height: 1.55;
+}
+
+.service-proof-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  padding-top: 30px;
+  padding-bottom: 0;
+}
+
+.service-proof-strip > div {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--jg-line);
+  border-radius: var(--jg-radius-sm);
+  background: var(--jg-surface);
+  color: var(--jg-cyan);
+}
+
+.service-proof-strip span {
+  display: grid;
+  gap: 2px;
+  color: var(--jg-muted);
+  font-size: 0.72rem;
+}
+
+.service-proof-strip strong {
+  color: var(--jg-text);
+  font-size: 0.82rem;
+}
+
+.service-price-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.service-price {
+  margin: 10px 0 4px;
+  color: var(--jg-text);
+  font-family: var(--jg-font-mono);
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.service-price-note {
+  min-height: 44px;
+  margin-bottom: 15px;
+  color: var(--jg-text-soft);
+  font-size: 0.82rem;
+}
+
+.service-list {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.service-list li + li {
+  margin-top: 8px;
+}
+
+.service-card-cta {
+  margin-top: auto;
+  padding-top: 20px;
+}
+
+.service-wide-card {
+  grid-column: span 6;
+}
+
+.payment-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.service-final-cta {
+  margin-top: 22px;
+  padding: 34px;
+  border: 1px solid var(--jg-line-strong);
+  border-left: 4px solid var(--jg-mint);
+  border-radius: var(--jg-radius);
+  background: linear-gradient(135deg, rgb(53 217 154 / 7%), var(--jg-surface));
+}
+
+.service-final-cta h2 {
+  max-width: 760px;
+  margin: 10px 0 10px;
+}
+
+.service-final-cta p {
+  max-width: 760px;
+  margin-bottom: 20px;
+  color: var(--jg-text-soft);
+}
+
 .detail-list {
   color: var(--jg-text-soft);
   font-size: 0.84rem;
