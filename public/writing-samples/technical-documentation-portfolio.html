@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Public technical documentation evidence from Jack VanSickle's software projects." />
+  <title>Jack VanSickle - Technical Documentation Portfolio</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17191e;
+      --muted: #5e6875;
+      --line: #dfe3e8;
+      --soft: #f4f5f6;
+      --paper: #fff;
+      --orange: #ef5b22;
+      --blue: #1f658d;
+      --max: 1120px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; color: var(--ink); background: var(--paper); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.55; }
+    a { color: inherit; }
+    .shell { width: min(var(--max), calc(100% - 40px)); margin: 0 auto; }
+    header { min-height: 72px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); }
+    .brand { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 850; letter-spacing: .13em; }
+    .mark { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; background: var(--orange); color: white; font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; }
+    header a { color: var(--muted); font-size: 14px; font-weight: 700; text-decoration: none; }
+    .hero { padding: 96px 0 78px; display: grid; grid-template-columns: 1.25fr .75fr; gap: 74px; align-items: end; }
+    .eyebrow { color: var(--orange); font-size: 13px; font-weight: 850; letter-spacing: .22em; text-transform: uppercase; }
+    h1 { max-width: 790px; margin: 18px 0 26px; font-size: clamp(52px, 8vw, 98px); line-height: .92; letter-spacing: -.065em; }
+    h1 span { color: var(--orange); }
+    .hero > div > p { max-width: 690px; margin: 0; color: var(--muted); font-size: 20px; }
+    .note { padding: 24px; border-left: 4px solid var(--orange); background: var(--soft); }
+    .note b { display: block; margin-bottom: 8px; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; }
+    .note p { margin: 0; color: var(--muted); font-size: 14px; }
+    .principles { padding: 26px 0 72px; }
+    .grid-four { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .principle { padding: 23px; border: 1px solid var(--line); border-radius: 14px; background: var(--paper); }
+    .principle .n { color: var(--orange); font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: 13px; font-weight: 800; }
+    .principle h2 { margin: 16px 0 8px; font-size: 18px; }
+    .principle p { margin: 0; color: var(--muted); font-size: 14px; }
+    .section { padding: 76px 0; border-top: 1px solid var(--line); }
+    .section-head { display: grid; grid-template-columns: .55fr 1.45fr; gap: 34px; margin-bottom: 34px; }
+    .section h2 { margin: 0; font-size: clamp(36px, 5vw, 60px); line-height: 1; letter-spacing: -.045em; }
+    .section-head p { max-width: 720px; margin: 0; color: var(--muted); font-size: 17px; }
+    .case { display: grid; grid-template-columns: .9fr 1.1fr; gap: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 22px; box-shadow: 0 20px 60px rgba(23,25,30,.07); }
+    .case + .case { margin-top: 22px; }
+    .case-copy { padding: 34px; }
+    .label { color: var(--orange); font-size: 12px; font-weight: 850; letter-spacing: .17em; text-transform: uppercase; }
+    .case h3 { margin: 12px 0 12px; font-size: 30px; letter-spacing: -.025em; }
+    .case-copy p { color: var(--muted); }
+    .case ul { margin: 22px 0; padding-left: 20px; }
+    .case li { margin: 8px 0; }
+    .button { display: inline-flex; min-height: 46px; align-items: center; padding: 0 18px; border-radius: 999px; background: var(--ink); color: white; font-size: 14px; font-weight: 750; text-decoration: none; }
+    .code { padding: 34px; background: #15171d; color: #e8edf2; display: flex; flex-direction: column; justify-content: center; }
+    .code .path { margin-bottom: 17px; color: #98a5b3; font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: 13px; }
+    pre { margin: 0; white-space: pre-wrap; word-break: break-word; font: 14px/1.65 ui-monospace, "SFMono-Regular", Consolas, monospace; }
+    .cmd { color: #ff7a49; }
+    .comment { color: #8f9aa6; }
+    .safe { color: #83ddba; }
+    .matrix { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .matrix article { padding: 28px; border-top: 4px solid var(--orange); background: var(--soft); }
+    .matrix h3 { margin: 0 0 12px; font-size: 20px; }
+    .matrix p { margin: 0; color: var(--muted); font-size: 15px; }
+    footer { padding: 76px 0 92px; border-top: 1px solid var(--line); }
+    footer h2 { margin: 12px 0 18px; font-size: clamp(38px, 6vw, 72px); line-height: .95; letter-spacing: -.05em; }
+    footer p { max-width: 720px; color: var(--muted); }
+    .links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+    .links .button.secondary { background: white; color: var(--ink); border: 1px solid var(--line); }
+    @media (max-width: 860px) {
+      .hero, .section-head, .case { grid-template-columns: 1fr; gap: 34px; }
+      .grid-four { grid-template-columns: 1fr 1fr; }
+      .matrix { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .shell { width: min(var(--max), calc(100% - 24px)); }
+      .hero { padding-top: 62px; }
+      .grid-four { grid-template-columns: 1fr; }
+      header .all-work { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="shell">
+    <div class="brand"><span class="mark">/&gt;</span> JV / DOCUMENTATION</div>
+    <a class="all-work" href="https://jackgpt.org">Full builder portfolio &rarr;</a>
+  </header>
+
+  <main>
+    <section class="shell hero">
+      <div>
+        <div class="eyebrow">Public technical-writing evidence</div>
+        <h1>From setup to <span>first success.</span></h1>
+        <p>Project documentation designed for developers and operators who want to skim, copy a working command, understand the failure boundary, and verify the result.</p>
+      </div>
+      <aside class="note">
+        <b>Experience disclosure</b>
+        <p>This is project-driven public documentation, not a claim of three years in a dedicated API technical-writer role or enterprise documentation tenure.</p>
+      </aside>
+    </section>
+
+    <section class="shell principles" aria-label="Documentation principles">
+      <div class="grid-four">
+        <article class="principle"><div class="n">01</div><h2>Lead with the task</h2><p>Give the reader a safe first action before explaining the entire system.</p></article>
+        <article class="principle"><div class="n">02</div><h2>Run the example</h2><p>Commands and expected outputs should agree with the software users actually receive.</p></article>
+        <article class="principle"><div class="n">03</div><h2>Name the boundary</h2><p>Ambiguity, privacy, destructive behavior, and failure states belong in the main path.</p></article>
+        <article class="principle"><div class="n">04</div><h2>Close the loop</h2><p>Show the check that proves the action worked, not only the command that starts it.</p></article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <div class="section-head">
+          <div class="eyebrow">01 / CLI docs</div>
+          <div><h2>Spreadsheet Rescue</h2><p>A dependency-free Python CLI documented around a conservative data-cleaning promise: the tool should never guess, overwrite the input, or hide what changed.</p></div>
+        </div>
+        <article class="case">
+          <div class="case-copy">
+            <div class="label">README / quickstart / safety model</div>
+            <h3>Make the first run reversible.</h3>
+            <p>The public guide starts with a zero-write dry run, then shows the production command and the three files a user should expect.</p>
+            <ul>
+              <li>PowerShell-first installation and invocation</li>
+              <li>Explicit configuration scope for typed fields</li>
+              <li>No-overwrite and ambiguous-value guarantees</li>
+              <li>Machine-readable and human-readable audit outputs</li>
+              <li>Sixteen automated tests behind the public release</li>
+            </ul>
+            <a class="button" href="https://github.com/jackvansickle1/spreadsheet-rescue">Read the documentation &rarr;</a>
+          </div>
+          <div class="code" aria-label="Spreadsheet Rescue quickstart excerpt">
+            <div class="path">README.md / Quick start</div>
+            <pre><span class="comment"># Prove the cleanup without writing files</span>
+<span class="cmd">python -m spreadsheet_rescue</span> `
+  .\customer_export.csv `
+  --config .\sample_config.json `
+  <span class="safe">--dry-run</span>
+
+<span class="comment"># Then create a separate audited output</span>
+<span class="cmd">python -m spreadsheet_rescue</span> `
+  .\customer_export.csv `
+  --config .\sample_config.json
+
+<span class="safe">customer_export_cleaned.csv</span>
+<span class="safe">customer_export_changes.json</span>
+<span class="safe">customer_export_changes.md</span></pre>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <div class="section-head">
+          <div class="eyebrow">02 / Product docs</div>
+          <div><h2>Market-data application</h2><p>A compact README for a React and FastAPI application, organized around the system surfaces a technical reviewer needs to inspect and run.</p></div>
+        </div>
+        <article class="case">
+          <div class="case-copy">
+            <div class="label">Architecture / development / health</div>
+            <h3>Separate behavior from evidence.</h3>
+            <p>The guide maps product features to the source files that implement them, then gives two short local paths: frontend build and container run.</p>
+            <ul>
+              <li>Frontend, backend, and optional dependency boundaries</li>
+              <li>Local build and Docker paths</li>
+              <li>Health endpoint and fallback behavior</li>
+              <li>Safety limits for generated research</li>
+            </ul>
+            <a class="button" href="https://github.com/jackvansickle1/jackgpt-market-desk">Read the documentation &rarr;</a>
+          </div>
+          <div class="code" aria-label="Market Desk build excerpt">
+            <div class="path">README.md / Development</div>
+            <pre><span class="comment"># Verify the client build</span>
+<span class="cmd">cd</span> frontend
+<span class="cmd">npm install</span>
+<span class="cmd">npm run build</span>
+
+<span class="comment"># Run the complete public service</span>
+<span class="cmd">docker build</span> -t jackgpt-market-desk .
+<span class="cmd">docker run</span> --rm -p 8010:8010 `
+  jackgpt-market-desk
+
+<span class="safe">GET /health</span>
+<span class="comment"># Reports backend and dependency state</span></pre>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <div class="section-head">
+          <div class="eyebrow">03 / Operations docs</div>
+          <div><h2>Self-hosted stack template</h2><p>A recruiter-safe Docker Compose template whose documentation explains the architecture while making the excluded secrets, data, and host details equally visible.</p></div>
+        </div>
+        <div class="matrix">
+          <article><h3>What runs</h3><p>Model service, chat surface, metasearch, image UI, optional edge proxy, health and restart patterns.</p></article>
+          <article><h3>What persists</h3><p>Service data volumes and configuration boundaries are visible without publishing the user's live environment.</p></article>
+          <article><h3>What stays private</h3><p>Tunnel tokens, account IDs, credentials, chats, logs, models, private paths, and hostnames are explicitly excluded.</p></article>
+        </div>
+        <div style="margin-top:24px"><a class="button" href="https://github.com/jackvansickle1/jackgpt-selfhosted-stack-template">Read the documentation &rarr;</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">
+      <div class="eyebrow">Jack VanSickle / Missouri, USA</div>
+      <h2>Clarity is a product feature.</h2>
+      <p>I am available for a paid, tightly scoped technical-writing trial with the scope, rate, deliverables, and source/IP terms agreed before work begins.</p>
+      <div class="links">
+        <a class="button" href="mailto:jvan8076@gmail.com">jvan8076@gmail.com</a>
+        <a class="button secondary" href="https://github.com/jackvansickle1">GitHub</a>
+        <a class="button secondary" href="https://jackgpt.org/writing-samples/rent-to-own-cost-checklist">General writing sample</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
