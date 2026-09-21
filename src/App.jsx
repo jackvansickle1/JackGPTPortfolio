@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useRef, useState } from "react";
 import { motion as Motion } from "framer-motion";
 import {
   Activity,
@@ -33,6 +33,9 @@ import {
   X,
 } from "lucide-react";
 import "./index.css";
+import Modal from "./Modal";
+import { filterProjects, projectCategories, publicServices } from "./project-discovery";
+import { useLiveStatuses } from "./useLiveStatuses";
 
 const projects = [
   {
@@ -132,7 +135,7 @@ const projects = [
       "Tested remote access and connectivity through the tunnel to verify stability.",
     ],
     tech: ["MeshCentral", "Docker", "Cloudflare Tunnel", "Remote access"],
-    links: [{ label: "mesh.jackgpt.org", href: "https://mesh.jackgpt.org" }],
+    links: [],
     screenshots: [
       {
         src: "/project-images/meshcentral/jackgpt-mesh-login.png",
@@ -328,7 +331,6 @@ const projects = [
     ],
     tech: ["FastAPI", "Docker Compose", "Cloudflare Access", "Docker SDK", "Playwright", "ntfy", "Host-agent bridge"],
     links: [
-      { label: "ops.jackgpt.org (private)", href: "https://ops.jackgpt.org" },
       {
         label: "GitHub: architecture note",
         href: "https://github.com/jackvansickle1/JackGPTPortfolio/blob/main/public/code-notes/jackgpt-ops-control-room.md",
@@ -573,6 +575,7 @@ const fallbackStatuses = [
     description: "Checking the remote-management portal.",
     endpoint: "https://mesh.jackgpt.org",
     publicUrl: "https://mesh.jackgpt.org",
+    showEndpoint: false,
     latencyMs: null,
     httpStatus: "-",
     checkedAt: null,
@@ -690,20 +693,6 @@ const fallbackStatuses = [
     status: "checking",
   },
 ];
-
-function mergeStatuses(incoming) {
-  if (!Array.isArray(incoming) || incoming.length === 0) return fallbackStatuses;
-  return fallbackStatuses.map((fallback) => {
-    const match = incoming.find((item) => item.key === fallback.key);
-    if (fallback.status === "maintenance") {
-      return {
-        ...fallback,
-        checkedAt: match?.checkedAt || fallback.checkedAt,
-      };
-    }
-    return match ? { ...fallback, ...match } : fallback;
-  });
-}
 
 function formatCheckedAt(value) {
   if (!value) return "Waiting for first check";
@@ -835,6 +824,8 @@ const accessLinks = [
     note: "Use this page to jump into demos, case studies, code, and live status.",
   },
 ];
+
+const promotedServices = publicServices(accessLinks);
 
 const companionPrompts = [
   "Give me a 5-minute recruiter tour.",
@@ -1242,100 +1233,36 @@ function App() {
 
 
 function HomePage() {
-  const [liveStatuses, setLiveStatuses] = useState(fallbackStatuses);
-  const [activeAccessIndex, setActiveAccessIndex] = useState(0);
-  const [isCompanionOpen, setIsCompanionOpen] = useState(false);
+  const { liveStatuses, statusMeta } = useLiveStatuses(fallbackStatuses);
+  const [projectQuery, setProjectQuery] = useState("");
+  const [projectCategory, setProjectCategory] = useState("all");
+  const visibleProjects = filterProjects(homepageProjects, projectQuery, projectCategory);
+  const [isCompanionOpen, setIsCompanionOpen] = useState(() => window.location.hash === "#guide");
+  const companionOpenerRef = useRef(null);
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [companionMessages, setCompanionMessages] = useState([initialCompanionMessage]);
   const [companionMessagesNode, setCompanionMessagesNode] = useState(null);
   const [companionInput, setCompanionInput] = useState("");
   const [companionLoading, setCompanionLoading] = useState(false);
+  const [companionReplyState, setCompanionReplyState] = useState("Ready");
   const [companionStatus, setCompanionStatus] = useState("Ready with recruiter project context");
-  const [statusMeta, setStatusMeta] = useState({
-    loading: true,
-    error: "",
-    source: "/api/status/summary",
-  });
 
-  useEffect(() => {
-    let cancelled = false;
-
-    const loadStatuses = async () => {
-      try {
-        const response = await fetch("/api/status/summary", {
-          headers: { accept: "application/json" },
-          cache: "default",
-        });
-
-        if (!response.ok) {
-          throw new Error(`Status endpoint returned ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        if (cancelled) return;
-
-        setLiveStatuses(mergeStatuses(data.services));
-        setStatusMeta({
-          loading: false,
-          error: "",
-          source: "/api/status/summary",
-        });
-      } catch (error) {
-        if (cancelled) return;
-
-        setLiveStatuses((current) =>
-          current.map((item) => ({
-            ...item,
-            status: item.checkedAt ? item.status : "checking",
-          }))
-        );
-        setStatusMeta({
-          loading: false,
-          error: error instanceof Error ? error.message : "Status check failed",
-          source: "/api/status/summary",
-        });
-      }
-    };
-
-    loadStatuses();
-    const intervalId = setInterval(loadStatuses, 60000);
-
-    return () => {
-      cancelled = true;
-      clearInterval(intervalId);
-    };
-  }, []);
+  const openCompanion = (event) => {
+    companionOpenerRef.current = event.currentTarget;
+    setIsCompanionOpen(true);
+  };
 
   useEffect(() => {
     const openFromGuideHash = () => {
       if (window.location.hash === "#guide") {
+        companionOpenerRef.current = document.activeElement;
         setIsCompanionOpen(true);
       }
     };
 
-    openFromGuideHash();
     window.addEventListener("hashchange", openFromGuideHash);
     return () => window.removeEventListener("hashchange", openFromGuideHash);
   }, []);
-
-  useEffect(() => {
-    document.body.classList.toggle("modal-scroll-lock", isCompanionOpen || isContactOpen);
-    return () => document.body.classList.remove("modal-scroll-lock");
-  }, [isCompanionOpen, isContactOpen]);
-
-  useEffect(() => {
-    if (!isCompanionOpen && !isContactOpen) return undefined;
-
-    const closeOnEscape = (event) => {
-      if (event.key !== "Escape") return;
-      setIsCompanionOpen(false);
-      setIsContactOpen(false);
-    };
-
-    window.addEventListener("keydown", closeOnEscape);
-    return () => window.removeEventListener("keydown", closeOnEscape);
-  }, [isCompanionOpen, isContactOpen]);
 
   useEffect(() => {
     if (!isCompanionOpen || !companionMessagesNode) return;
@@ -1364,6 +1291,7 @@ function HomePage() {
     setCompanionMessages(outgoingMessages);
     setCompanionInput("");
     setCompanionLoading(true);
+    setCompanionReplyState("Thinking");
     setCompanionStatus("Building a recruiter-focused answer...");
 
     try {
@@ -1385,6 +1313,7 @@ function HomePage() {
       }
 
       const aiStatus = data.dependencies?.ollama?.status;
+      setCompanionReplyState(aiStatus === "online" && data.answer ? "AI reply" : "Fallback");
       setCompanionMessages([
         ...outgoingMessages,
         {
@@ -1398,6 +1327,7 @@ function HomePage() {
           : "Answered with reliable public-context fallback"
       );
     } catch (error) {
+      setCompanionReplyState("Unavailable");
       setCompanionMessages([
         ...outgoingMessages,
         {
@@ -1416,7 +1346,7 @@ function HomePage() {
     <div className="app-shell">
       <SiteNav
         onOpenContact={() => setIsContactOpen(true)}
-        onOpenGuide={() => setIsCompanionOpen(true)}
+        onOpenGuide={openCompanion}
       />
 
       <header id="top" className="hero section">
@@ -1609,14 +1539,8 @@ function HomePage() {
       </section>
 
       {isContactOpen ? (
-        <div className="contact-overlay" role="presentation" onClick={() => setIsContactOpen(false)}>
-          <article
-            className="contact-card"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Contact Jack VanSickle"
-            onClick={(event) => event.stopPropagation()}
-          >
+        <Modal className="contact-dialog" label="Contact Jack VanSickle" onClose={() => setIsContactOpen(false)}>
+          <article className="contact-card">
             <div className="contact-head">
               <div>
                 <span className="eyebrow">Contact</span>
@@ -1690,17 +1614,15 @@ function HomePage() {
               </a>
             </div>
           </article>
-        </div>
+        </Modal>
       ) : null}
 
       <div id="guide" className={`companion-widget ${isCompanionOpen ? "open" : ""}`}>
         {isCompanionOpen ? (
+          <Modal className="companion-widget open" label="JackGPT AI guide" returnFocusRef={companionOpenerRef} onClose={() => setIsCompanionOpen(false)}>
           <article
             id="guide-panel"
             className="companion-panel"
-            role="dialog"
-            aria-modal="true"
-            aria-label="JackGPT AI guide"
           >
             <div className="companion-head">
               <div className="companion-title">
@@ -1713,9 +1635,9 @@ function HomePage() {
                 </div>
               </div>
               <div className="companion-actions">
-                <span className={`status-pill ${companionLoading ? "checking" : "online"}`}>
+                <span className={`status-pill ${companionReplyState === "AI reply" ? "online" : companionReplyState === "Unavailable" || companionReplyState === "Fallback" ? "degraded" : "checking"}`}>
                   {companionLoading ? <LoaderCircle size={14} className="spin-icon" /> : <MessageCircle size={14} />}
-                  {companionLoading ? "Thinking" : "Ready"}
+                  {companionReplyState}
                 </span>
                 <button
                   type="button"
@@ -1728,7 +1650,7 @@ function HomePage() {
               </div>
             </div>
 
-            <div className="companion-messages" aria-live="polite" ref={setCompanionMessagesNode}>
+            <div className="companion-messages" role="log" aria-label="Guide conversation" tabIndex={0} ref={setCompanionMessagesNode}>
               {companionMessages.map((message, index) => (
                 <div className={`companion-message ${message.role}`} key={`${message.role}-${index}`}>
                   <span className="message-avatar">
@@ -1784,7 +1706,7 @@ function HomePage() {
                 value={companionInput}
                 onChange={(event) => setCompanionInput(event.target.value)}
                 onKeyDown={(event) => {
-                  if (event.key === "Enter" && !event.shiftKey) {
+                  if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing && event.nativeEvent.keyCode !== 229 && !window.matchMedia("(pointer: coarse)").matches) {
                     event.preventDefault();
                     askCompanion();
                   }
@@ -1800,14 +1722,16 @@ function HomePage() {
               </button>
             </form>
           </article>
-        ) : (
+          </Modal>
+        ) : null}
           <button
             type="button"
             className="companion-launcher"
-            onClick={() => setIsCompanionOpen(true)}
+            hidden={isCompanionOpen}
+            onClick={openCompanion}
             aria-label="Open JackGPT AI guide"
             aria-controls="guide-panel"
-            aria-expanded="false"
+            aria-expanded={isCompanionOpen}
           >
             <span className="launcher-icon">
               <MessageCircle size={24} />
@@ -1817,7 +1741,6 @@ function HomePage() {
               <small>Recruiter guide</small>
             </span>
           </button>
-        )}
       </div>
 
       <section id="live-services" className="section">
@@ -1827,18 +1750,13 @@ function HomePage() {
             <h2>Live services and public endpoints</h2>
           </div>
           <p>
-            Direct links to the live interfaces that are published as part of the
-            JackGPT environment. Badges show which services are instant public demos,
-            which ones use signup, and which ones are intentionally restricted.
+            Public JackGPT demos, dashboards, and signup-based tools.
+            Private operations are documented in the case studies.
           </p>
         </div>
 
-        <div className="access-carousel-shell">
-          <div
-            className="access-grid access-carousel-track"
-            style={{ transform: `translateX(-${activeAccessIndex * 100}%)` }}
-          >
-            {accessLinks.map((link, index) => (
+          <div className="access-grid">
+            {promotedServices.map((link, index) => (
               <Motion.a
                 key={link.href}
                 href={link.href}
@@ -1862,50 +1780,6 @@ function HomePage() {
             ))}
           </div>
 
-          <div className="access-carousel-controls" aria-label="Access panel controls">
-            <button
-              type="button"
-              className="carousel-button"
-              onClick={() =>
-                setActiveAccessIndex((current) =>
-                  current === 0 ? accessLinks.length - 1 : current - 1
-                )
-              }
-              aria-label="Previous endpoint"
-            >
-              <ArrowLeft size={18} />
-            </button>
-
-            <div className="carousel-dots" aria-label="Endpoint pages">
-              {accessLinks.map((link, index) => (
-                <button
-                  key={link.href}
-                  type="button"
-                  className={`carousel-dot ${index === activeAccessIndex ? "active" : ""}`}
-                  onClick={() => setActiveAccessIndex(index)}
-                  aria-label={`Go to ${link.label}`}
-                  aria-pressed={index === activeAccessIndex}
-                />
-              ))}
-            </div>
-            <span className="carousel-count" aria-live="polite">
-              {activeAccessIndex + 1} / {accessLinks.length}
-            </span>
-
-            <button
-              type="button"
-              className="carousel-button"
-              onClick={() =>
-                setActiveAccessIndex((current) =>
-                  current === accessLinks.length - 1 ? 0 : current + 1
-                )
-              }
-              aria-label="Next endpoint"
-            >
-              <ArrowRight size={18} />
-            </button>
-          </div>
-        </div>
       </section>
 
       <section id="projects" className="section">
@@ -1926,11 +1800,28 @@ function HomePage() {
           <span><span className="key-line amber" aria-hidden="true" /> Finance and secondary builds</span>
         </div>
 
-        <div className="project-grid">
-          {homepageProjects.map((project, index) => {
+        <div className="project-filters">
+          <label className="project-search">
+            <Search size={18} aria-hidden="true" />
+            <span className="sr-only">Search projects</span>
+            <input type="search" value={projectQuery} onChange={(event) => setProjectQuery(event.target.value)} placeholder="Search projects" aria-controls="project-results" />
+          </label>
+          <label>
+            <span className="sr-only">Project category</span>
+            <select value={projectCategory} onChange={(event) => setProjectCategory(event.target.value)} aria-controls="project-results">
+              {Object.entries(projectCategories).map(([value, label]) => <option value={value} key={value}>{label}</option>)}
+            </select>
+          </label>
+          <span className="project-count" role="status">{visibleProjects.length} of {homepageProjects.length} projects</span>
+          {projectQuery || projectCategory !== "all" ? (
+            <button className="carousel-button" type="button" aria-label="Clear project filters" title="Clear project filters" onClick={() => { setProjectQuery(""); setProjectCategory("all"); }}><X size={18} /></button>
+          ) : null}
+        </div>
+        <div className="project-grid" id="project-results">
+          {visibleProjects.map((project, index) => {
             const Icon = project.icon;
             const projectShot = project.screenshots[0];
-            const isFeatured = index < 4;
+            const isFeatured = homepageProjects.indexOf(project) < 4;
             return (
               <Motion.a
                 key={project.id}
@@ -1981,6 +1872,7 @@ function HomePage() {
             );
           })}
         </div>
+        {visibleProjects.length === 0 ? <p className="empty-state">No projects match these filters.</p> : null}
       </section>
 
 <section id="status" className="section">
@@ -2017,6 +1909,10 @@ function HomePage() {
                   ? "Offline"
                   : status.status === "maintenance"
                     ? "Paused"
+                  : status.status === "stale"
+                    ? "Stale"
+                  : status.status === "unknown"
+                    ? "Unknown"
                   : "Checking"}
           </span>
         </div>
@@ -2039,12 +1935,12 @@ function HomePage() {
       </Motion.article>
     ))}
   </div>
-  <p className="status-footnote">
+  <p className="status-footnote" role="status">
     {statusMeta.loading
-      ? "Running first live check..."
+      ? "Refreshing live checks..."
       : statusMeta.error
         ? `Last refresh error: ${statusMeta.error}`
-        : "Status checks refresh automatically every 60 seconds."}
+        : "Checks refresh every 60 seconds while this page is visible and online. Checks older than two minutes are marked stale."}
   </p>
 </section>
 
@@ -2638,7 +2534,7 @@ function ProjectDetail({ project }) {
                 onClick={() => setSelectedShotState({ projectId: project.id, shot })}
               >
                 <figure>
-                  <img src={shot.src} alt={shot.caption} />
+                  <img src={shot.src} alt={shot.caption} loading="lazy" decoding="async" />
                   <figcaption>{shot.caption}</figcaption>
                 </figure>
               </button>
@@ -2653,14 +2549,8 @@ function ProjectDetail({ project }) {
       </section>
 
       {selectedShot && (
-        <div
-          className="lightbox"
-          onClick={() => setSelectedShotState({ projectId: project.id, shot: null })}
-        >
-          <div
-            className="lightbox-content"
-            onClick={(event) => event.stopPropagation()}
-          >
+        <Modal className="screenshot-dialog" label="Project screenshot" onClose={() => setSelectedShotState({ projectId: project.id, shot: null })}>
+          <div className="lightbox-content">
             <button
               type="button"
               className="lightbox-close"
@@ -2672,7 +2562,7 @@ function ProjectDetail({ project }) {
             <img src={selectedShot.src} alt={selectedShot.caption} />
             <p>{selectedShot.caption}</p>
           </div>
-        </div>
+        </Modal>
       )}
     </div>
   );
