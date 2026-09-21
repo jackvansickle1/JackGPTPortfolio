@@ -13,6 +13,8 @@ import {
   Globe,
   Image as ImageIcon,
   LineChart,
+  LayoutGrid,
+  List,
   Mail,
   MonitorSmartphone,
   PhoneCall,
@@ -33,6 +35,7 @@ import {
   X,
 } from "lucide-react";
 import "./index.css";
+import "./portfolio-gui.css";
 import Modal from "./Modal";
 import { filterProjects, projectCategories, publicServices } from "./project-discovery";
 import { useLiveStatuses } from "./useLiveStatuses";
@@ -1129,7 +1132,7 @@ function SiteNav({ onOpenContact, onOpenGuide }) {
         </a>
 
         <nav className="nav-links" aria-label="Portfolio navigation">
-          <a href="#projects">Work</a>
+          <a href="#projects" aria-current={window.location.hash === "#projects" ? "location" : undefined}>Work</a>
           <a href="#/demo">Demo</a>
           <a href="#/architecture">Architecture</a>
           <a href="#/hire/spreadsheet-rescue">Hire</a>
@@ -1143,6 +1146,7 @@ function SiteNav({ onOpenContact, onOpenGuide }) {
             target="_blank"
             rel="noreferrer"
             title="Open public status"
+            aria-label="Open public status"
           >
             <Activity size={17} />
             <span className="nav-action-text">Status</span>
@@ -1236,6 +1240,7 @@ function HomePage() {
   const { liveStatuses, statusMeta } = useLiveStatuses(fallbackStatuses);
   const [projectQuery, setProjectQuery] = useState("");
   const [projectCategory, setProjectCategory] = useState("all");
+  const [projectView, setProjectView] = useState("grid");
   const visibleProjects = filterProjects(homepageProjects, projectQuery, projectCategory);
   const [isCompanionOpen, setIsCompanionOpen] = useState(() => window.location.hash === "#guide");
   const companionOpenerRef = useRef(null);
@@ -1343,7 +1348,7 @@ function HomePage() {
   };
 
   return (
-    <div className="app-shell">
+    <div className="app-shell portfolio-home">
       <SiteNav
         onOpenContact={() => setIsContactOpen(true)}
         onOpenGuide={openCompanion}
@@ -1539,7 +1544,7 @@ function HomePage() {
       </section>
 
       {isContactOpen ? (
-        <Modal className="contact-dialog" label="Contact Jack VanSickle" onClose={() => setIsContactOpen(false)}>
+        <Modal className="contact-dialog portfolio-dialog" label="Contact Jack VanSickle" onClose={() => setIsContactOpen(false)}>
           <article className="contact-card">
             <div className="contact-head">
               <div>
@@ -1551,6 +1556,7 @@ function HomePage() {
                 className="companion-close"
                 onClick={() => setIsContactOpen(false)}
                 aria-label="Close contact information"
+                title="Close contact information"
               >
                 <X size={17} />
               </button>
@@ -1619,7 +1625,7 @@ function HomePage() {
 
       <div id="guide" className={`companion-widget ${isCompanionOpen ? "open" : ""}`}>
         {isCompanionOpen ? (
-          <Modal className="companion-widget open" label="JackGPT AI guide" returnFocusRef={companionOpenerRef} onClose={() => setIsCompanionOpen(false)}>
+          <Modal className="companion-widget open portfolio-dialog" label="JackGPT AI guide" returnFocusRef={companionOpenerRef} onClose={() => setIsCompanionOpen(false)}>
           <article
             id="guide-panel"
             className="companion-panel"
@@ -1644,6 +1650,7 @@ function HomePage() {
                   className="companion-close"
                   onClick={() => setIsCompanionOpen(false)}
                   aria-label="Close JackGPT guide"
+                  title="Close JackGPT guide"
                 >
                   <X size={17} />
                 </button>
@@ -1716,9 +1723,8 @@ function HomePage() {
                 rows={3}
                 aria-label="Ask the JackGPT guide a question"
               />
-              <button type="submit" className="button primary companion-send" disabled={companionLoading || !companionInput.trim()}>
+              <button type="submit" className="button primary companion-send" aria-label="Ask" title="Send question" disabled={companionLoading || !companionInput.trim()}>
                 <Send size={16} />
-                Ask
               </button>
             </form>
           </article>
@@ -1730,6 +1736,7 @@ function HomePage() {
             hidden={isCompanionOpen}
             onClick={openCompanion}
             aria-label="Open JackGPT AI guide"
+            title="Open JackGPT AI guide"
             aria-controls="guide-panel"
             aria-expanded={isCompanionOpen}
           >
@@ -1806,18 +1813,22 @@ function HomePage() {
             <span className="sr-only">Search projects</span>
             <input type="search" value={projectQuery} onChange={(event) => setProjectQuery(event.target.value)} placeholder="Search projects" aria-controls="project-results" />
           </label>
-          <label>
+          <label className="project-category">
             <span className="sr-only">Project category</span>
             <select value={projectCategory} onChange={(event) => setProjectCategory(event.target.value)} aria-controls="project-results">
               {Object.entries(projectCategories).map(([value, label]) => <option value={value} key={value}>{label}</option>)}
             </select>
           </label>
-          <span className="project-count" role="status">{visibleProjects.length} of {homepageProjects.length} projects</span>
-          {projectQuery || projectCategory !== "all" ? (
-            <button className="carousel-button" type="button" aria-label="Clear project filters" title="Clear project filters" onClick={() => { setProjectQuery(""); setProjectCategory("all"); }}><X size={18} /></button>
-          ) : null}
+          <div className="project-filter-actions">
+            <span className="project-count" role="status">{visibleProjects.length} of {homepageProjects.length} projects</span>
+            <button className="carousel-button" type="button" aria-label="Clear project filters" title="Clear project filters" disabled={!projectQuery && projectCategory === "all"} onClick={() => { setProjectQuery(""); setProjectCategory("all"); }}><X size={18} /></button>
+            <div className="project-view-control" role="group" aria-label="Project view">
+              <button type="button" aria-label="Grid view" title="Grid view" aria-pressed={projectView === "grid"} onClick={() => setProjectView("grid")}><LayoutGrid size={18} /></button>
+              <button type="button" aria-label="List view" title="List view" aria-pressed={projectView === "list"} onClick={() => setProjectView("list")}><List size={18} /></button>
+            </div>
+          </div>
         </div>
-        <div className="project-grid" id="project-results">
+        <div className={`project-grid ${projectView === "list" ? "project-list" : ""}`} id="project-results">
           {visibleProjects.map((project, index) => {
             const Icon = project.icon;
             const projectShot = project.screenshots[0];
@@ -1892,6 +1903,7 @@ function HomePage() {
       <Motion.article
         key={status.name}
         className="status-card"
+        data-status={status.status}
         initial={{ opacity: 0, y: 18 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.15 }}
