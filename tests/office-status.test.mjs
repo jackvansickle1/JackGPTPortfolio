@@ -25,6 +25,7 @@ async function probe(t, response, now = NOW) {
     calls.push({ url, options });
     if (url === RELAY) {
       if ("cache" in options) throw new TypeError("The 'cache' field on 'RequestInitializerDict' is not implemented.");
+      if (options.redirect === "error") throw new TypeError("Invalid redirect value; use follow or manual.");
       if (response instanceof Error) throw response;
       return response;
     }
@@ -53,7 +54,7 @@ test("Office checks only the uncached read-only relay without following login re
   assert.match(office.description, /Private.*owner sign-in required/);
   const { options } = calls.find(({ url }) => url === RELAY);
   assert.equal(options.method, "GET");
-  assert.equal(options.redirect, "error");
+  assert.equal(options.redirect, "manual");
   assert.equal("cache" in options, false);
   assert.deepEqual(options.cf, { cacheTtlByStatus: { "100-599": -1 }, cacheEverything: false });
   assert.equal(options.headers["cache-control"], "no-cache, no-store");

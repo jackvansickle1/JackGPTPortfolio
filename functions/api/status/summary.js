@@ -176,7 +176,8 @@ async function checkTarget(target) {
     const fetchTarget = (method) =>
       fetch(target.endpoint, {
         method,
-        redirect: isOffice ? "error" : "follow",
+        // workerd supports manual, not error; readOfficeHealth rejects all 3xx.
+        redirect: isOffice ? "manual" : "follow",
         signal,
         // Avoid Request.cache, which throws on older Pages compatibility dates.
         cf: isOffice ? { cacheTtlByStatus: { "100-599": -1 }, cacheEverything: false } : { cacheTtl: 20, cacheEverything: true },
