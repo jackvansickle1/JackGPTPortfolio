@@ -80,6 +80,18 @@ test("Office ignores malicious endpoint, description, and access metadata from t
   await expect(page.locator('a[href^="javascript:"], a[href*="attacker.invalid"]')).toHaveCount(0);
 });
 
+test("Office uses a fixed public label only for a verified public mode", async ({ page }) => {
+  await page.route("**/api/status/summary", route => route.fulfill({ json: {
+    services: [{ key: "office", status: "online", accessMode: "Public", checkedAt: new Date().toISOString(), latencyMs: 42, httpStatus: 200 }],
+  } }));
+  await page.goto("/");
+  const card = page.locator("#status .status-card").filter({ hasText: "JackGPT Office" });
+  await expect(card.locator(".status-pill")).toHaveText("Online");
+  await expect(card).toContainText("Public; no sign-in required.");
+  await expect(card).not.toContainText("owner sign-in required");
+  await expect(card.getByRole("link", { name: "office.jackgpt.org", exact: true })).toHaveAttribute("href", "https://office.jackgpt.org");
+});
+
 test("failed refreshes mark cached checks stale and recover", async ({ page }) => {
   let requests = 0;
   let fail = false;

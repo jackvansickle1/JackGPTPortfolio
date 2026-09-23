@@ -577,6 +577,7 @@ const fallbackStatuses = [
     name: "JackGPT Office",
     description: "Checking the sanitized Office health relay.",
     accessNote: "Private; owner sign-in required.",
+    accessMode: "Private",
     endpoint: "https://moomoo.jackgpt.org/office/health",
     publicUrl: "https://office.jackgpt.org",
     latencyMs: null,

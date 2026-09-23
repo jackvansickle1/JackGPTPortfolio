@@ -170,6 +170,27 @@ test("Office clamps bounded source clock skew without presenting future browser 
   assert.equal(office.checkedAt, new Date(NOW).toISOString());
 });
 
+test("Office public label requires an explicit allowlisted mode and expires with health", async (t) => {
+  const { office } = await probe(t, jsonResponse(payload({ accessMode: "Public" })));
+  assert.equal(office.status, "online");
+  assert.equal(office.accessMode, "Public");
+  assert.match(office.description, /Public.*no sign-in required/);
+  let state = statusStateReducer(createStatusState([{ ...office, accessNote: "Private; owner sign-in required." }]), {
+    type: "success", payload: { services: [office] }, now: NOW,
+  });
+  assert.equal(state.liveStatuses[0].accessNote, "Public; no sign-in required.");
+  state = statusStateReducer(state, { type: "expire", now: NOW + STATUS_MAX_AGE_MS });
+  assert.equal(state.liveStatuses[0].accessNote, "Access requirements could not be verified.");
+});
+
+for (const mode of [null, "public", "invalid", [], {}]) {
+  test(`Office rejects invalid access mode ${JSON.stringify(mode)}`, async (t) => {
+    const { office } = await probe(t, jsonResponse(payload({ accessMode: mode })));
+    assert.equal(office.status, "offline");
+    assert.equal(office.accessMode, "Private");
+  });
+}
+
 test("Office rejects impossible calendar dates that Date.parse would normalize", async (t) => {
   const { office } = await probe(t, jsonResponse(payload({ checkedAt: "2026-02-30T12:00:00.000Z" })), Date.parse("2026-03-02T12:00:00.000Z"));
   assert.equal(office.status, "offline");

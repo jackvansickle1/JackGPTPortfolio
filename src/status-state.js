@@ -33,6 +33,7 @@ function unavailable(service, message, missing = false) {
     ...service,
     status: hasCheck && !missing ? "stale" : "unknown",
     description: `${message} ${hasCheck ? "Previous metrics are not current." : "No verified check yet."}`,
+    ...(service.key === "office" && service.accessMode === "Public" ? { accessNote: "Access requirements could not be verified." } : {}),
   };
 }
 
@@ -46,6 +47,7 @@ function failedState(state, error) {
 
 function validCheck(service, now) {
   if (!isRecord(service) || typeof service.status !== "string" || !Object.hasOwn(DESCRIPTIONS, service.status)) return false;
+  if (service.key === "office" && !["Private", "Public"].includes(service.accessMode === undefined ? "Private" : service.accessMode)) return false;
   const time = checkedTime(service.checkedAt);
   if (!Number.isFinite(time) || time > now) return false;
   if (
@@ -123,6 +125,10 @@ function receiveSummary(state, payload, now) {
       httpStatus: check.httpStatus ?? "-",
       checkedAt: check.checkedAt,
       description: DESCRIPTIONS[check.status],
+      ...(fallback.key === "office" ? {
+        accessMode: check.accessMode ?? "Private",
+        accessNote: check.accessMode === "Public" ? "Public; no sign-in required." : "Private; owner sign-in required.",
+      } : {}),
     };
     if (check.status !== "maintenance" && !isFresh(time, now)) {
       incomplete = true;

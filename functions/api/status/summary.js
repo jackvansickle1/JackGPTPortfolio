@@ -123,6 +123,7 @@ function buildTimeoutSignal(ms) {
 async function readOfficeHealth(response) {
   const unavailable = {
     status: "offline",
+    accessMode: "Private",
     description: "Private Office health could not be verified; owner sign-in required.",
   };
   if (response.redirected || response.headers.get("content-type")?.split(";")[0].trim().toLowerCase() !== "application/json") return unavailable;
@@ -132,6 +133,7 @@ async function readOfficeHealth(response) {
     if (
       data === null || typeof data !== "object" || Array.isArray(data) ||
       data.service !== "office" || !["online", "degraded", "offline"].includes(data.status) ||
+      !["Private", "Public"].includes(data.accessMode === undefined ? "Private" : data.accessMode) ||
       typeof data.description !== "string" || !data.description.trim() ||
       typeof data.checkedAt !== "string" ||
       !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?(?:Z|[+-]\d{2}:\d{2})$/.test(data.checkedAt)
@@ -149,8 +151,11 @@ async function readOfficeHealth(response) {
     // Do not freshen old checks. Clamp small source-clock skew to receipt time.
     return {
       status: data.status,
+      accessMode: data.accessMode ?? "Private",
       checkedAt: age < 0 ? new Date(Date.now()).toISOString() : data.checkedAt,
-      description: `Private Office health is ${data.status}; owner sign-in required.`,
+      description: data.accessMode === "Public"
+        ? `Public Office health is ${data.status}; no sign-in required.`
+        : `Private Office health is ${data.status}; owner sign-in required.`,
     };
   } catch {
     return unavailable;
@@ -214,12 +219,14 @@ async function checkTarget(target) {
         : "offline";
     let description = target.description;
     let checkedAt;
+    let officeAccessMode;
 
     if (isOffice) {
       const health = await readOfficeHealth(response);
       status = health.status;
       description = health.description;
       checkedAt = health.checkedAt;
+      officeAccessMode = health.accessMode;
     } else if (target.readJsonStatus) {
       try {
         const data = await response.clone().json();
@@ -262,6 +269,7 @@ async function checkTarget(target) {
       latencyMs,
       description,
       checkedAt: checkedAt || new Date().toISOString(),
+      ...(isOffice ? { accessMode: officeAccessMode } : {}),
     };
   } catch (error) {
     return {
