@@ -92,7 +92,7 @@ for (const [label, data] of [
   ["non-ISO timestamp", payload({ checkedAt: "September 23, 2026 12:00:00 GMT" })],
   ["malformed timestamp", payload({ checkedAt: "not-a-date" })],
   ["impossible timestamp", payload({ checkedAt: "2026-09-23T25:00:00Z" })],
-  ["future timestamp", payload({ checkedAt: new Date(NOW + 1).toISOString() })],
+    ["future timestamp", payload({ checkedAt: new Date(NOW + 5_001).toISOString() })],
   ["stale timestamp", payload({ checkedAt: new Date(NOW - 180_001).toISOString() })],
   ["missing description", payload({ description: undefined })],
   ["object description", payload({ description: {} })],
@@ -162,6 +162,12 @@ test("Office accepts timezone-qualified ISO timestamps", async (t) => {
   const { office } = await probe(t, jsonResponse(payload({ checkedAt })));
   assert.equal(office.status, "online");
   assert.equal(office.checkedAt, checkedAt);
+});
+
+test("Office clamps bounded source clock skew without presenting future browser checks", async (t) => {
+  const { office } = await probe(t, jsonResponse(payload({ checkedAt: new Date(NOW + 5_000).toISOString() })));
+  assert.equal(office.status, "online");
+  assert.equal(office.checkedAt, new Date(NOW).toISOString());
 });
 
 test("Office rejects impossible calendar dates that Date.parse would normalize", async (t) => {

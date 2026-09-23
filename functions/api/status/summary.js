@@ -142,14 +142,14 @@ async function readOfficeHealth(response) {
     const [year, month, day] = data.checkedAt.slice(0, 10).split("-").map(Number);
     const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate();
     if (
-      !Number.isFinite(checkedAt) || age < 0 || age > 180_000 || day > daysInMonth ||
+      !Number.isFinite(checkedAt) || age < -5_000 || age > 180_000 || day > daysInMonth ||
       response.status !== (data.status === "online" ? 200 : 503)
     ) return unavailable;
 
-    // Never relay descriptions or extra fields, and never freshen the source check time.
+    // Do not freshen old checks. Clamp small source-clock skew to receipt time.
     return {
       status: data.status,
-      checkedAt: data.checkedAt,
+      checkedAt: age < 0 ? new Date(Date.now()).toISOString() : data.checkedAt,
       description: `Private Office health is ${data.status}; owner sign-in required.`,
     };
   } catch {
