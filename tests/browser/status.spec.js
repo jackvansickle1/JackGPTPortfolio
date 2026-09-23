@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-test("Office appears only in status with its private human link and unknown fallback", async ({ page }, testInfo) => {
+test("Office appears only in status with its human link and unknown fallback", async ({ page }, testInfo) => {
   await page.route("**/api/status/summary", (route) => route.fulfill({ json: {
     services: [{ key: "openwebui", status: "online", checkedAt: new Date().toISOString() }],
   } }));
@@ -18,7 +18,7 @@ test("Office appears only in status with its private human link and unknown fall
   const link = card.getByRole("link", { name: "office.jackgpt.org", exact: true });
   await expect(link).toHaveAttribute("href", "https://office.jackgpt.org");
   await expect(link).toBeVisible();
-  await expect(card.getByText("Private; owner sign-in required.", { exact: true })).toBeVisible();
+  await expect(card.getByText("Access requirements not yet verified.", { exact: true })).toBeVisible();
   await expect(card.locator(".status-pill")).toHaveText("Unknown");
   await expect(card.locator(".status-description")).toContainText("This service was missing from the latest update.");
   await expect(card.locator(".metric-value")).toHaveText(["-", "-", "Waiting for first check"]);
