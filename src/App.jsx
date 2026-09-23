@@ -573,6 +573,18 @@ const fallbackStatuses = [
     status: "checking",
   },
   {
+    key: "office",
+    name: "JackGPT Office",
+    description: "Checking the sanitized Office health relay.",
+    accessNote: "Private; owner sign-in required.",
+    endpoint: "https://moomoo.jackgpt.org/office/health",
+    publicUrl: "https://office.jackgpt.org",
+    latencyMs: null,
+    httpStatus: "-",
+    checkedAt: null,
+    status: "checking",
+  },
+  {
     key: "meshcentral",
     name: "JackGPT Mesh",
     description: "Checking the remote-management portal.",
@@ -1929,7 +1941,10 @@ function HomePage() {
           </span>
         </div>
         <h3>{status.name}</h3>
-        <p className="status-description">{status.description}</p>
+        <p className="status-description">
+          {status.description}
+          {status.accessNote ? <><br /><span>{status.accessNote}</span></> : null}
+        </p>
         {status.publicUrl && status.showEndpoint !== false ? (
           <a className="status-endpoint" href={status.publicUrl} target="_blank" rel="noreferrer">
             {formatEndpointHost(status.publicUrl)}

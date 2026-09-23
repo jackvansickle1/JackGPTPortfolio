@@ -8,6 +8,14 @@ const SERVICE_TARGETS = [
     description: "Public AI workspace and model routing are reachable.",
   },
   {
+    key: "office",
+    name: "JackGPT Office",
+    endpoint: "https://moomoo.jackgpt.org/office/health",
+    publicUrl: "https://office.jackgpt.org",
+    description: "Private Office; owner sign-in required.",
+    readJsonStatus: true,
+  },
+  {
     key: "images",
     name: "JackGPT Image Gen",
     endpoint: "https://images.jackgpt.org",
@@ -112,6 +120,43 @@ function buildTimeoutSignal(ms) {
   };
 }
 
+async function readOfficeHealth(response) {
+  const unavailable = {
+    status: "offline",
+    description: "Private Office health could not be verified; owner sign-in required.",
+  };
+  if (response.redirected || response.headers.get("content-type")?.split(";")[0].trim().toLowerCase() !== "application/json") return unavailable;
+
+  try {
+    const data = await response.json();
+    if (
+      data === null || typeof data !== "object" || Array.isArray(data) ||
+      data.service !== "office" || !["online", "degraded", "offline"].includes(data.status) ||
+      typeof data.description !== "string" || !data.description.trim() ||
+      typeof data.checkedAt !== "string" ||
+      !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?(?:Z|[+-]\d{2}:\d{2})$/.test(data.checkedAt)
+    ) return unavailable;
+
+    const checkedAt = Date.parse(data.checkedAt);
+    const age = Date.now() - checkedAt;
+    const [year, month, day] = data.checkedAt.slice(0, 10).split("-").map(Number);
+    const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate();
+    if (
+      !Number.isFinite(checkedAt) || age < 0 || age > 180_000 || day > daysInMonth ||
+      response.status !== (data.status === "online" ? 200 : 503)
+    ) return unavailable;
+
+    // Never relay descriptions or extra fields, and never freshen the source check time.
+    return {
+      status: data.status,
+      checkedAt: data.checkedAt,
+      description: `Private Office health is ${data.status}; owner sign-in required.`,
+    };
+  } catch {
+    return unavailable;
+  }
+}
+
 async function checkTarget(target) {
   if (target.maintenance) {
     return {
@@ -125,14 +170,16 @@ async function checkTarget(target) {
 
   const startedAt = Date.now();
   const { signal, clear } = buildTimeoutSignal(6500);
+  const isOffice = target.key === "office";
 
   try {
     const fetchTarget = (method) =>
       fetch(target.endpoint, {
         method,
-        redirect: "follow",
+        redirect: isOffice ? "error" : "follow",
+        ...(isOffice ? { cache: "no-store" } : {}),
         signal,
-        cf: { cacheTtl: 20, cacheEverything: true },
+        cf: isOffice ? { cacheTtl: 0, cacheEverything: false } : { cacheTtl: 20, cacheEverything: true },
         headers: {
           accept: target.readJsonStatus || target.minResults ? "application/json" : "text/html,application/json;q=0.9,*/*;q=0.8",
           "user-agent": "jackgpt-status-probe",
@@ -164,8 +211,14 @@ async function checkTarget(target) {
           : "online"
         : "offline";
     let description = target.description;
+    let checkedAt;
 
-    if (target.readJsonStatus) {
+    if (isOffice) {
+      const health = await readOfficeHealth(response);
+      status = health.status;
+      description = health.description;
+      checkedAt = health.checkedAt;
+    } else if (target.readJsonStatus) {
       try {
         const data = await response.clone().json();
         if (["online", "degraded", "offline"].includes(data.status)) {
@@ -206,7 +259,7 @@ async function checkTarget(target) {
       httpStatus,
       latencyMs,
       description,
-      checkedAt: new Date().toISOString(),
+      checkedAt: checkedAt || new Date().toISOString(),
     };
   } catch (error) {
     return {
