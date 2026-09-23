@@ -177,10 +177,11 @@ async function checkTarget(target) {
       fetch(target.endpoint, {
         method,
         redirect: isOffice ? "error" : "follow",
-        ...(isOffice ? { cache: "no-store" } : {}),
         signal,
-        cf: isOffice ? { cacheTtl: 0, cacheEverything: false } : { cacheTtl: 20, cacheEverything: true },
+        // Avoid Request.cache, which throws on older Pages compatibility dates.
+        cf: isOffice ? { cacheTtlByStatus: { "100-599": -1 }, cacheEverything: false } : { cacheTtl: 20, cacheEverything: true },
         headers: {
+          ...(isOffice ? { "cache-control": "no-cache, no-store", pragma: "no-cache" } : {}),
           accept: target.readJsonStatus || target.minResults ? "application/json" : "text/html,application/json;q=0.9,*/*;q=0.8",
           "user-agent": "jackgpt-status-probe",
         },

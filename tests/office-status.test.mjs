@@ -24,6 +24,7 @@ async function probe(t, response, now = NOW) {
   t.mock.method(globalThis, "fetch", async (url, options) => {
     calls.push({ url, options });
     if (url === RELAY) {
+      if ("cache" in options) throw new TypeError("The 'cache' field on 'RequestInitializerDict' is not implemented.");
       if (response instanceof Error) throw response;
       return response;
     }
@@ -53,8 +54,9 @@ test("Office checks only the uncached read-only relay without following login re
   const { options } = calls.find(({ url }) => url === RELAY);
   assert.equal(options.method, "GET");
   assert.equal(options.redirect, "error");
-  assert.equal(options.cache, "no-store");
-  assert.deepEqual(options.cf, { cacheTtl: 0, cacheEverything: false });
+  assert.equal("cache" in options, false);
+  assert.deepEqual(options.cf, { cacheTtlByStatus: { "100-599": -1 }, cacheEverything: false });
+  assert.equal(options.headers["cache-control"], "no-cache, no-store");
   assert.equal(options.headers.accept, "application/json");
   assert.ok(options.signal instanceof AbortSignal);
   assert.equal(Object.keys(options.headers).some((name) => /authorization|cookie/i.test(name)), false);
