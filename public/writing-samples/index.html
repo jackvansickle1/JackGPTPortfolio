@@ -11,6 +11,7 @@
   <meta property="og:description" content="Source-grounded tutorials, software documentation and clear consumer explainers." />
   <meta property="og:url" content="https://jackgpt.org/writing-samples/" />
   <link rel="stylesheet" href="/static-sales.css" />
+  <script defer src="/copy-email.js"></script>
   <title>Writing samples | Jack VanSickle</title>
 </head>
 <body class="writing-page">
@@ -23,9 +24,11 @@
       <div class="eyebrow">Writing portfolio</div>
       <h1>Make the system understandable without sanding off the truth.</h1>
       <p class="lede">Source-grounded tutorials, developer documentation and plain-English explainers—each tied to visible evidence and explicit limits.</p>
-      <div class="actions"><a class="button" href="mailto:jvan8076@gmail.com?subject=Paid%20technical-writing%20inquiry">Discuss a paid trial</a><a class="button secondary" href="/hire/">See all services</a></div>
+      <div class="actions"><a class="button" href="mailto:jvan8076@gmail.com?subject=Paid%20technical-writing%20inquiry">Discuss a paid trial</a><button class="button secondary" type="button" data-copy-email="jvan8076@gmail.com" aria-describedby="copy-email-status">Copy project email</button><a class="button secondary" href="/hire/">See all services</a></div>
+      <span id="copy-email-status" class="copy-status" aria-live="polite"></span>
     </section>
-    <section class="shell section">
+    <section class="shell section" aria-labelledby="writing-samples-heading">
+      <h2 id="writing-samples-heading" class="visually-hidden">Selected writing samples</h2>
       <div class="grid">
         <article class="card"><div class="eyebrow">Python · FastAPI · pytest</div><h3>Make the Fallback a Contract</h3><p>A source-grounded tutorial for testing malformed input, invalid model output and network timeouts without making a live AI call.</p><a class="card-link" href="/writing-samples/reliable-fastapi-dependency-testing">Read the tutorial →</a></article>
         <article class="card"><div class="eyebrow">Technical documentation</div><h3>Documentation portfolio</h3><p>Public evidence from a CSV-cleanup workflow, a React/FastAPI application and a self-hosted stack template.</p><a class="card-link" href="/writing-samples/technical-documentation-portfolio">Review the portfolio →</a></article>
