@@ -9,6 +9,7 @@ import {
   Cpu,
   Dices,
   ExternalLink,
+  FileText,
   FolderGit,
   Globe,
   Image as ImageIcon,
@@ -1599,15 +1600,15 @@ function HomePage() {
                 </span>
               </a>
               <a
-                href="https://github.com/jackvansickle1/spreadsheet-rescue"
+                href="/spreadsheet-rescue/work-sample.pdf"
                 className="contact-link"
                 target="_blank"
                 rel="noreferrer"
               >
-                <FolderGit size={17} />
+                <FileText size={17} />
                 <span>
                   <strong>View the Spreadsheet Rescue work sample</strong>
-                  Public tool, reports, PDF, and verified release
+                  Sanitized PDF and fictional demo outputs
                 </span>
               </a>
               <a href="mailto:jackvansickle@mst.edu" className="contact-link">
@@ -2088,12 +2089,12 @@ function SpreadsheetRescuePage() {
             Request a paid slot <Mail size={16} />
           </a>
           <a
-            href="https://github.com/jackvansickle1/spreadsheet-rescue"
+            href="/spreadsheet-rescue/work-sample.pdf"
             target="_blank"
             rel="noreferrer"
             className="button secondary"
           >
-            Inspect the public tool <FolderGit size={16} />
+            View the sanitized work sample <FileText size={16} />
           </a>
         </div>
         <p className="service-availability">
@@ -2114,6 +2115,76 @@ function SpreadsheetRescuePage() {
         <div>
           <CreditCard size={18} />
           <span><strong>Venmo preferred</strong>PayPal also accepted</span>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="section-header">
+          <div>
+            <span className="eyebrow">Public-safe proof</span>
+            <h2>Review the result without exposing private code or customer data</h2>
+          </div>
+          <p>
+            The fulfillment implementation remains private. Every downloadable
+            example below uses fictional composite records and contains no client data.
+          </p>
+        </div>
+        <div className="detail-grid service-terms-grid">
+          <article className="detail-card service-wide-card">
+            <div className="detail-card-header">
+              <FileText size={18} />
+              <h2>Three-page work sample</h2>
+            </div>
+            <p className="project-summary">
+              A visual overview of the cleanup promise, a fictional before-and-after,
+              and the conservative profile, clean, validate, and document workflow.
+            </p>
+            <div className="payment-actions">
+              <a
+                href="/spreadsheet-rescue/work-sample.pdf"
+                target="_blank"
+                rel="noreferrer"
+                className="button primary small"
+              >
+                Open the PDF <ArrowUpRight size={15} />
+              </a>
+            </div>
+          </article>
+
+          <article className="detail-card service-wide-card">
+            <div className="detail-card-header">
+              <CheckCircle2 size={18} />
+              <h2>Verified synthetic run</h2>
+            </div>
+            <p className="project-summary">
+              Compare the fictional source with the cleaned CSV, then inspect the
+              same run's plain-language change report and machine-readable audit.
+            </p>
+            <div className="payment-actions">
+              <a href="/spreadsheet-rescue/demo-source.csv" className="button secondary small" download>
+                Source CSV
+              </a>
+              <a href="/spreadsheet-rescue/demo-cleaned.csv" className="button secondary small" download>
+                Cleaned CSV
+              </a>
+              <a
+                href="/spreadsheet-rescue/demo-change-report.md"
+                target="_blank"
+                rel="noreferrer"
+                className="button secondary small"
+              >
+                Change report
+              </a>
+              <a
+                href="/spreadsheet-rescue/demo-audit.json"
+                target="_blank"
+                rel="noreferrer"
+                className="button secondary small"
+              >
+                JSON audit
+              </a>
+            </div>
+          </article>
         </div>
       </section>
 
