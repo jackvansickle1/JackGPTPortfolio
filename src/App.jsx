@@ -1149,7 +1149,8 @@ function SiteNav({ onOpenContact, onOpenGuide }) {
           <a href="#projects" aria-current={window.location.hash === "#projects" ? "location" : undefined}>Work</a>
           <a href="#/demo">Demo</a>
           <a href="#/architecture">Architecture</a>
-          <a href="#/hire/spreadsheet-rescue">Hire</a>
+          <a href="/hire/index.html">Hire</a>
+          <a href="/writing-samples/index.html">Writing</a>
           <a href="#/blog">Notes</a>
         </nav>
 
@@ -1381,8 +1382,8 @@ function HomePage() {
           </h1>
           <p className="hero-text">
             I design, deploy, and maintain full-stack AI, fintech, automation, and
-            infrastructure systems. The work below is live, observable, and documented
-            with real interfaces, implementation detail, and public-safe boundaries.
+            infrastructure systems. Much of the work below is operated live; private
+            and code-only work is labeled and documented with public-safe evidence.
           </p>
           <div className="hero-capabilities" aria-label="Core engineering capabilities">
             <span>React + FastAPI</span>
@@ -1396,8 +1397,8 @@ function HomePage() {
             <a href="#projects" className="button secondary">
               Review the work <ArrowRight size={16} />
             </a>
-            <a href="#/hire/spreadsheet-rescue" className="button secondary">
-              Hire me for CSV cleanup <ArrowRight size={16} />
+            <a href="/hire/index.html" className="button secondary">
+              Hire me for a fixed-scope job <ArrowRight size={16} />
             </a>
           </div>
         </div>
@@ -1987,7 +1988,8 @@ function HomePage() {
           <a href="#projects">Work</a>
           <a href="#/demo">Demo</a>
           <a href="#/architecture">Architecture</a>
-          <a href="#/hire/spreadsheet-rescue">Hire</a>
+          <a href="/hire/index.html">Hire</a>
+          <a href="/writing-samples/index.html">Writing</a>
           <a href="#/blog">Notes</a>
           <a href="https://status.jackgpt.org" target="_blank" rel="noreferrer">Status</a>
           <a href="https://github.com/jackvansickle1" target="_blank" rel="noreferrer">GitHub</a>
@@ -2017,7 +2019,8 @@ function PageNav({ label = "Back to portfolio", href = "#/" }) {
         <nav className="detail-nav-links" aria-label="Portfolio routes">
           <a href="#/demo">Demo</a>
           <a href="#/architecture">Architecture</a>
-          <a href="#/hire/spreadsheet-rescue">Hire</a>
+          <a href="/hire/index.html">Hire</a>
+          <a href="/writing-samples/index.html">Writing</a>
           <a href="#/blog">Notes</a>
         </nav>
         <a href={href} className="button secondary small detail-back-link">
