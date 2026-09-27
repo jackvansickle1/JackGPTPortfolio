@@ -40,7 +40,7 @@ try {
     await page.getByRole('button', { name: 'Open JackGPT recruiter guide' }).click();
     await capture('guide');
     await page.keyboard.press('Escape');
-    await page.goto('http://127.0.0.1:5196/#/hire/spreadsheet-rescue');
+    await page.goto('http://127.0.0.1:5196/hire/spreadsheet-rescue/');
     await page.getByRole('heading', { name: 'Clean the CSV. Keep the evidence.' }).waitFor();
     await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
     await capture('service');
