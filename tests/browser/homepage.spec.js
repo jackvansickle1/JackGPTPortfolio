@@ -58,7 +58,11 @@ test("case-study screenshot traps focus, closes with Escape, and restores scroll
 });
 
 test("contact route stays private and modal focus survives close", async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "clipboard", { configurable: true, value: undefined });
+  });
   await page.goto("/");
+  await page.evaluate(() => { document.execCommand = () => true; });
   const opener = page.getByRole("button", { name: "Open contact information" });
   await opener.click();
   const dialog = page.getByRole("dialog", { name: "Contact Jack VanSickle" });
@@ -73,10 +77,18 @@ test("contact route stays private and modal focus survives close", async ({ page
   expect(dialogText).not.toMatch(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.edu\b/i);
   expect(dialogText).not.toMatch(/(?:\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}/);
   expect(dialogText).not.toMatch(/\b(?:venmo|paypal|cash\s*app)\b/i);
+  await dialog.getByRole("button", { name: "Copy project email" }).click();
+  await expect(dialog.getByRole("status")).toHaveText("Project email copied.");
   await page.keyboard.press("Shift+Tab");
   expect(await dialog.evaluate((element) => element.contains(document.activeElement))).toBe(true);
   await page.keyboard.press("Escape");
   await expect(opener).toBeFocused();
+});
+
+test("homepage exposes one main landmark", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.locator("main#main-content")).toHaveCount(1);
+  await expect(page.locator("main h1")).toHaveCount(1);
 });
 
 test("companion preserves full conversation and shows fallback/error status on small screens", async ({ page }, testInfo) => {

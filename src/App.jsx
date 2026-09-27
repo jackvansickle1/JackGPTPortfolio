@@ -26,6 +26,7 @@ import {
   TrendingUp,
   Cloud,
   Compass,
+  Copy,
   CheckCircle2,
   CreditCard,
   LoaderCircle,
@@ -1259,6 +1260,7 @@ function HomePage() {
   const [isCompanionOpen, setIsCompanionOpen] = useState(() => window.location.hash === "#guide");
   const companionOpenerRef = useRef(null);
   const [isContactOpen, setIsContactOpen] = useState(false);
+  const [copyEmailState, setCopyEmailState] = useState("");
   const [companionMessages, setCompanionMessages] = useState([initialCompanionMessage]);
   const [companionMessagesNode, setCompanionMessagesNode] = useState(null);
   const [companionInput, setCompanionInput] = useState("");
@@ -1361,12 +1363,47 @@ function HomePage() {
     }
   };
 
+  const copyProjectEmail = async () => {
+    const email = "jvan8076@gmail.com";
+    let copied = false;
+
+    if (navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(email);
+        copied = true;
+      } catch {
+        // Fall through to the selection-based path for restricted browsers.
+      }
+    }
+
+    if (!copied) {
+      const field = document.createElement("textarea");
+      field.value = email;
+      field.setAttribute("readonly", "");
+      field.style.position = "fixed";
+      field.style.opacity = "0";
+      document.body.append(field);
+      field.select();
+      try {
+        copied = document.execCommand("copy");
+      } catch {
+        copied = false;
+      } finally {
+        field.remove();
+      }
+    }
+
+    setCopyEmailState(copied ? "Project email copied." : `Copy unavailable. Select ${email}.`);
+  };
+
   return (
     <div className="app-shell portfolio-home">
       <SiteNav
         onOpenContact={() => setIsContactOpen(true)}
         onOpenGuide={openCompanion}
       />
+
+      <main id="main-content">
 
       <header id="top" className="hero section">
         <div className="hero-copy">
@@ -1612,7 +1649,22 @@ function HomePage() {
                   jvan8076@gmail.com
                 </span>
               </a>
+              <button
+                type="button"
+                className="contact-link"
+                onClick={copyProjectEmail}
+                aria-describedby="copy-project-email-status"
+              >
+                <Copy size={17} />
+                <span>
+                  <strong>Copy project email</strong>
+                  Works without opening a mail application
+                </span>
+              </button>
             </div>
+            <p id="copy-project-email-status" className="contact-copy-status" role="status" aria-live="polite">
+              {copyEmailState}
+            </p>
           </article>
         </Modal>
       ) : null}
@@ -1952,6 +2004,8 @@ function HomePage() {
         : "Checks refresh every 60 seconds while this page is visible and online. Checks older than two minutes are marked stale."}
   </p>
 </section>
+
+      </main>
 
       <footer className="site-footer">
         <div className="footer-brand">

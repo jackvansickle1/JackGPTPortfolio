@@ -71,6 +71,23 @@ test('writing headline fits narrow phones without clipping', async ({ page }) =>
   }
 });
 
+test('buyer pages copy the project email without requiring a mail client', async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, 'clipboard', { configurable: true, value: undefined });
+  });
+
+  for (const path of ['/hire/', '/hire/spreadsheet-rescue/', '/writing-samples/']) {
+    await page.goto(path);
+    await page.evaluate(() => { document.execCommand = () => true; });
+    await page.getByRole('button', { name: 'Copy project email' }).click();
+    await expect(page.locator('#copy-email-status')).toHaveText('Project email copied.');
+  }
+
+  await page.goto('/writing-samples/');
+  await expect(page.getByRole('heading', { level: 2, name: 'Selected writing samples' })).toHaveCount(1);
+  await expect(page.locator('main h1 + p')).toHaveCount(1);
+});
+
 test('crawler control files are real text and XML resources', async ({ request }) => {
   const robots = await request.get('/robots.txt');
   expect(robots.ok()).toBe(true);

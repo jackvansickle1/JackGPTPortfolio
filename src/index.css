@@ -1451,6 +1451,20 @@ p {
   font-size: 0.76rem;
 }
 
+button.contact-link {
+  width: 100%;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.contact-copy-status {
+  min-height: 1.4em;
+  margin: 8px 0 0;
+  color: var(--jg-muted);
+  font-size: 0.76rem;
+}
+
 .companion-widget {
   position: fixed;
   right: 20px;
