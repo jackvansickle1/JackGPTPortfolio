@@ -111,3 +111,10 @@ footer { padding: 34px 0 60px; color: var(--muted); border-top: 1px solid var(--
   h1 { font-size: 3.3rem; }
   .card, .cta { padding: 22px; }
 }
+
+@media (max-width: 380px) {
+  .writing-page h1 {
+    font-size: clamp(2.65rem, 12vw, 3rem);
+    overflow-wrap: anywhere;
+  }
+}

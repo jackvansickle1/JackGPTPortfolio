@@ -19,7 +19,7 @@ test('all primary routes remain reachable and project navigation clears the fixe
   await expect.poll(() => page.locator('#projects').evaluate((element) => element.getBoundingClientRect().top)).toBeGreaterThanOrEqual(headerBottom);
   await expect(nav.getByRole('link', { name: 'Work', exact: true })).toHaveAttribute('aria-current', 'location');
   await nav.getByRole('link', { name: 'Hire', exact: true }).click();
-  await expect(page).toHaveURL(/\/hire\/index\.html$/);
+  await expect(page).toHaveURL(/\/hire\/$/);
   await expect(page.getByRole('heading', { name: 'Small technical jobs with a visible finish line.' })).toBeVisible();
   await expect(page.getByText('From $29', { exact: true })).toBeVisible();
 });
