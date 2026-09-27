@@ -28,7 +28,8 @@ test('spreadsheet offer exposes only sanctioned proof and a safe intake', async 
     await expect(page.locator(`a[href="${href}"]`).first()).toBeVisible();
   }
   await expect(page.locator('a[href*="mailto:jvan8076@gmail.com"]').first()).toBeVisible();
-  expect(await page.locator('body').innerText()).not.toContain('github.com/jackvansickle1/spreadsheet-rescue');
+  await expect(page.locator('a[href*="github.com"]')).toHaveCount(0);
+  expect((await page.locator('body').innerText()).toLowerCase()).not.toContain('github.com/');
 });
 
 test('writing hub and articles have canonical metadata and paid-work exits', async ({ page }) => {

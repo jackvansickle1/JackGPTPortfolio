@@ -68,9 +68,11 @@ test("contact route stays private and modal focus survives close", async ({ page
   const email = dialog.locator('a[href^="mailto:"]');
   await expect(email).toHaveCount(1);
   await expect(email).toHaveAttribute("href", /^mailto:jvan8076@gmail\.com\?subject=Paid%20project%20inquiry.*do%20not%20attach%20credentials%20or%20confidential%20files/);
-  await expect(dialog.locator('a[href^="tel:"]')).toHaveCount(0);
-  await expect(dialog).not.toContainText("jackvansickle@mst.edu");
-  await expect(dialog).not.toContainText("Venmo preferred");
+  await expect(dialog.locator('a[href^="http://"], a[href^="https://"], a[href^="tel:"]')).toHaveCount(0);
+  const dialogText = await dialog.innerText();
+  expect(dialogText).not.toMatch(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.edu\b/i);
+  expect(dialogText).not.toMatch(/(?:\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}/);
+  expect(dialogText).not.toMatch(/\b(?:venmo|paypal|cash\s*app)\b/i);
   await page.keyboard.press("Shift+Tab");
   expect(await dialog.evaluate((element) => element.contains(document.activeElement))).toBe(true);
   await page.keyboard.press("Escape");
