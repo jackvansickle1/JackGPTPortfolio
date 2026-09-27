@@ -1,0 +1,993 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="Jack VanSickle" />
+  <meta name="description" content="A source-grounded FastAPI tutorial for testing deterministic fallbacks when an AI dependency returns invalid output or times out." />
+  <meta name="theme-color" content="#f3f0e9" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Make the Fallback a Contract" />
+  <meta property="og:description" content="Testing an AI-assisted FastAPI endpoint without a network." />
+  <title>Make the Fallback a Contract | Jack VanSickle</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --canvas: #f3f0e9;
+      --paper: #fffdf9;
+      --ink: #14222f;
+      --muted: #5d6972;
+      --line: #d7d7cf;
+      --line-strong: #bfc3bd;
+      --accent: #e85f36;
+      --accent-ink: #b54827;
+      --accent-soft: #f9e2d8;
+      --teal: #087976;
+      --teal-soft: #dcefed;
+      --navy: #152c3c;
+      --code: #101b25;
+      --code-top: #182733;
+      --code-ink: #dce8f2;
+      --code-muted: #8495a4;
+      --shadow: 0 22px 70px rgba(30, 40, 45, 0.09);
+      --measure: 760px;
+      --wide: 1120px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 24px;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 0%, rgba(232, 95, 54, 0.11), transparent 30rem),
+        radial-gradient(circle at 94% 18%, rgba(8, 121, 118, 0.09), transparent 31rem),
+        var(--canvas);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.65;
+      text-rendering: optimizeLegibility;
+    }
+
+    a {
+      color: var(--teal);
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 0.19em;
+    }
+
+    a:hover { color: #045e5c; }
+
+    a:focus-visible,
+    pre:focus-visible {
+      outline: 3px solid rgba(232, 95, 54, 0.55);
+      outline-offset: 4px;
+      border-radius: 4px;
+    }
+
+    .skip-link {
+      position: fixed;
+      z-index: 20;
+      top: 12px;
+      left: 12px;
+      padding: 10px 14px;
+      color: #fff;
+      background: var(--navy);
+      border-radius: 8px;
+      transform: translateY(-160%);
+      transition: transform 160ms ease;
+    }
+
+    .skip-link:focus { transform: translateY(0); }
+
+    .masthead {
+      width: min(var(--wide), calc(100% - 40px));
+      min-height: 76px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      border-bottom: 1px solid var(--line-strong);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    .masthead-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+    .masthead-mark {
+      width: 35px;
+      height: 35px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      color: #fff;
+      background: var(--navy);
+      border-radius: 9px;
+      font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+      font-size: 0.76rem;
+      letter-spacing: -0.04em;
+    }
+
+    .masthead-context { color: var(--muted); }
+
+    .hero {
+      width: min(var(--wide), calc(100% - 40px));
+      margin: 0 auto;
+      padding: 84px 0 72px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.55fr);
+      gap: clamp(42px, 7vw, 90px);
+      align-items: end;
+    }
+
+    .eyebrow {
+      margin: 0;
+      color: var(--accent-ink);
+      font-size: 0.76rem;
+      font-weight: 850;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 850px;
+      margin: 20px 0 26px;
+      color: var(--navy);
+      font-size: clamp(3.35rem, 7.8vw, 6.65rem);
+      line-height: 0.91;
+      letter-spacing: -0.065em;
+      text-wrap: balance;
+    }
+
+    h1 em {
+      color: var(--accent);
+      font-style: normal;
+    }
+
+    .dek {
+      max-width: 760px;
+      margin: 0 0 22px;
+      color: #344550;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.22rem, 2.1vw, 1.55rem);
+      line-height: 1.5;
+    }
+
+    .byline {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 650;
+    }
+
+    .byline time { white-space: nowrap; }
+
+    .contract-card {
+      padding: 24px;
+      color: #edf6f7;
+      background: var(--navy);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .contract-card h2 {
+      margin: 0 0 18px;
+      color: #fff;
+      font-size: 0.76rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .contract-card ol {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: contract;
+    }
+
+    .contract-card li {
+      position: relative;
+      margin: 0;
+      padding: 14px 0 14px 42px;
+      border-top: 1px solid rgba(255, 255, 255, 0.13);
+      counter-increment: contract;
+      font-size: 0.88rem;
+      line-height: 1.45;
+    }
+
+    .contract-card li::before {
+      content: counter(contract, decimal-leading-zero);
+      position: absolute;
+      top: 14px;
+      left: 0;
+      color: #71d2ce;
+      font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .article-shell {
+      width: min(1040px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 72px 0 100px;
+      display: grid;
+      grid-template-columns: 210px minmax(0, var(--measure));
+      gap: 64px;
+      border-top: 1px solid var(--line-strong);
+    }
+
+    .toc {
+      align-self: start;
+      position: sticky;
+      top: 24px;
+      padding-top: 6px;
+    }
+
+    .toc p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 0.69rem;
+      font-weight: 850;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .toc ol {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .toc li { margin: 0 0 10px; }
+
+    .toc a {
+      color: #485761;
+      font-size: 0.84rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .toc a:hover { color: var(--teal); }
+
+    .toc .source-snapshot {
+      margin-top: 26px;
+      padding: 16px 0 0;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.77rem;
+      line-height: 1.55;
+    }
+
+    .prose { min-width: 0; }
+
+    .prose > p,
+    .prose > ul,
+    .prose > ol {
+      margin-top: 0;
+      margin-bottom: 1.25em;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.09rem;
+      line-height: 1.78;
+    }
+
+    .prose > p:first-child {
+      color: #293b46;
+      font-size: 1.2rem;
+    }
+
+    .prose > p:first-child::first-letter {
+      float: left;
+      margin: 0.08em 0.09em 0 0;
+      color: var(--accent);
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 4rem;
+      font-weight: 900;
+      line-height: 0.78;
+    }
+
+    .prose h2 {
+      margin: 2.35em 0 0.8em;
+      padding-top: 0.25em;
+      color: var(--navy);
+      font-size: clamp(1.75rem, 3.2vw, 2.45rem);
+      line-height: 1.12;
+      letter-spacing: -0.035em;
+      text-wrap: balance;
+    }
+
+    .prose h2::before {
+      content: "";
+      display: block;
+      width: 62px;
+      height: 5px;
+      margin-bottom: 18px;
+      background: linear-gradient(90deg, var(--accent) 0 36px, var(--teal) 36px);
+      border-radius: 999px;
+    }
+
+    .prose strong { color: var(--navy); }
+
+    .prose :not(pre) > code,
+    .toc code {
+      padding: 0.13em 0.34em;
+      color: #8d351d;
+      background: #f4e9e3;
+      border: 1px solid #ead8cf;
+      border-radius: 5px;
+      font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+      font-size: 0.86em;
+    }
+
+    .boundary-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 30px 0 38px;
+      padding: 0;
+      list-style: none;
+      counter-reset: boundary;
+    }
+
+    .boundary-list li {
+      position: relative;
+      min-height: 132px;
+      padding: 22px 20px 20px 52px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      counter-increment: boundary;
+      font-size: 0.94rem;
+      line-height: 1.52;
+      box-shadow: 0 8px 28px rgba(30, 40, 45, 0.035);
+    }
+
+    .boundary-list li::before {
+      content: counter(boundary);
+      position: absolute;
+      top: 20px;
+      left: 18px;
+      width: 23px;
+      height: 23px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: var(--teal);
+      border-radius: 50%;
+      font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+      font-size: 0.72rem;
+      font-weight: 800;
+    }
+
+    .code-figure {
+      margin: 34px 0 38px;
+    }
+
+    .code-figure figcaption {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
+    .code-frame {
+      overflow: hidden;
+      background: var(--code);
+      border: 1px solid #263845;
+      border-radius: 14px;
+      box-shadow: 0 18px 55px rgba(16, 27, 37, 0.17);
+    }
+
+    .code-header {
+      min-height: 46px;
+      padding: 0 17px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      color: #aab9c5;
+      background: var(--code-top);
+      border-bottom: 1px solid #2a3a47;
+      font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+      font-size: 0.72rem;
+    }
+
+    .code-dots {
+      display: inline-flex;
+      gap: 5px;
+    }
+
+    .code-dots i {
+      width: 8px;
+      height: 8px;
+      display: block;
+      background: #607584;
+      border-radius: 50%;
+    }
+
+    .code-dots i:first-child { background: #ef7958; }
+    .code-dots i:nth-child(2) { background: #e7bf5d; }
+    .code-dots i:last-child { background: #62c3a4; }
+
+    pre {
+      margin: 0;
+      padding: 22px 24px 26px;
+      overflow-x: auto;
+      color: var(--code-ink);
+      background: var(--code);
+      tab-size: 4;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    pre code {
+      display: block;
+      width: max-content;
+      min-width: 100%;
+      font-family: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 0.82rem;
+      line-height: 1.7;
+    }
+
+    .tok-keyword { color: #ff9d7a; }
+    .tok-fn { color: #7dd3fc; }
+    .tok-string { color: #a7e3b5; }
+    .tok-name { color: #c4b5fd; }
+    .tok-number { color: #f7d47b; }
+    .tok-comment { color: var(--code-muted); font-style: italic; }
+    .tok-decorator { color: #75ddd8; }
+    .tok-builtin { color: #f0b5dc; }
+
+    .callout {
+      margin: 34px 0;
+      padding: 25px 27px;
+      background: var(--teal-soft);
+      border: 1px solid #beddd9;
+      border-left: 5px solid var(--teal);
+      border-radius: 10px;
+    }
+
+    .callout-label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--teal);
+      font-size: 0.71rem;
+      font-weight: 850;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .callout p {
+      margin: 0;
+      color: #264d4d;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1rem;
+      line-height: 1.68;
+    }
+
+    .outcomes {
+      margin: 36px 0;
+      overflow: hidden;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+
+    .outcome-row {
+      display: grid;
+      grid-template-columns: minmax(150px, 0.75fr) minmax(0, 1.25fr);
+      gap: 20px;
+      padding: 18px 20px;
+      border-top: 1px solid var(--line);
+    }
+
+    .outcome-row:first-child { border-top: 0; }
+
+    .outcome-row strong {
+      font-size: 0.84rem;
+      line-height: 1.5;
+    }
+
+    .outcome-row span {
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.55;
+    }
+
+    .sources {
+      margin-top: 76px;
+      padding: 34px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 14px 45px rgba(30, 40, 45, 0.04);
+    }
+
+    .sources h2 {
+      margin-top: 0;
+      font-size: 1.7rem;
+    }
+
+    .sources ol {
+      margin: 0;
+      padding-left: 1.35em;
+    }
+
+    .sources li {
+      margin: 0.75em 0;
+      padding-left: 0.35em;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    .sources a { font-weight: 750; }
+
+    .source-domain {
+      display: block;
+      color: #7b858b;
+      font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+      font-size: 0.73rem;
+    }
+
+    .article-footer {
+      width: min(var(--measure), calc(100% - 40px));
+      margin: 0 auto;
+      padding: 28px 0 70px;
+      color: var(--muted);
+      border-top: 1px solid var(--line-strong);
+      font-size: 0.78rem;
+      text-align: center;
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+        align-items: start;
+      }
+
+      .contract-card { max-width: 660px; }
+
+      .article-shell {
+        grid-template-columns: 1fr;
+        gap: 42px;
+      }
+
+      .toc {
+        position: static;
+        padding: 18px 20px;
+        background: rgba(255, 253, 249, 0.72);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+      }
+
+      .toc ol {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 18px;
+      }
+
+      .toc li { margin: 0; }
+
+      .toc .source-snapshot {
+        margin-top: 16px;
+        padding-top: 13px;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .masthead,
+      .hero,
+      .article-shell {
+        width: min(100% - 24px, var(--wide));
+      }
+
+      .masthead {
+        min-height: 68px;
+        font-size: 0.68rem;
+      }
+
+      .masthead-context { display: none; }
+
+      .hero { padding: 54px 0 48px; }
+
+      h1 {
+        margin-top: 15px;
+        font-size: clamp(2.75rem, 14vw, 4.1rem);
+      }
+
+      .dek { font-size: 1.16rem; }
+
+      .contract-card { padding: 20px; }
+
+      .article-shell {
+        padding: 48px 0 72px;
+        gap: 34px;
+      }
+
+      .boundary-list { grid-template-columns: 1fr; }
+
+      .boundary-list li { min-height: 0; }
+
+      .prose > p,
+      .prose > ul,
+      .prose > ol {
+        font-size: 1.02rem;
+      }
+
+      .prose > p:first-child { font-size: 1.1rem; }
+
+      .prose h2 { margin-top: 2.05em; }
+
+      .code-figure {
+        width: calc(100% + 12px);
+        margin-left: -6px;
+      }
+
+      .code-header { padding: 0 13px; }
+
+      pre { padding: 18px 17px 22px; }
+
+      pre code { font-size: 0.75rem; }
+
+      .callout { padding: 21px; }
+
+      .outcome-row {
+        grid-template-columns: 1fr;
+        gap: 5px;
+      }
+
+      .sources { padding: 25px 21px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .skip-link { transition: none; }
+    }
+
+    @media print {
+      body { background: #fff; }
+      .skip-link, .toc { display: none; }
+      .masthead, .hero, .article-shell, .article-footer { width: 100%; }
+      .hero, .article-shell { display: block; }
+      .contract-card { margin-top: 28px; box-shadow: none; }
+      .article-shell { border-top: 1px solid #999; }
+      .code-frame, .sources { break-inside: avoid; box-shadow: none; }
+      a { color: inherit; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#article">Skip to article</a>
+
+  <header class="masthead" aria-label="Article header">
+    <div class="masthead-brand">
+      <span class="masthead-mark" aria-hidden="true">{ }</span>
+      <span>Jack VanSickle / Engineering notes</span>
+    </div>
+    <span class="masthead-context">Public code walkthrough</span>
+  </header>
+
+  <main>
+    <header class="hero">
+      <div>
+        <p class="eyebrow">FastAPI &#183; Failure handling &#183; Testing</p>
+        <h1>Make the fallback a <em>contract.</em></h1>
+        <p class="dek">Testing an AI-assisted FastAPI endpoint without a network.</p>
+        <p class="byline">By Jack VanSickle &#183; <time datetime="2026-09-26">September 26, 2026</time> &#183; 9-minute read</p>
+      </div>
+
+      <aside class="contract-card" aria-labelledby="contract-title">
+        <h2 id="contract-title">The failure contract</h2>
+        <ol>
+          <li>Invalid input remains a client error.</li>
+          <li>Unusable model output returns grounded data.</li>
+          <li>Transport failure marks AI as degraded.</li>
+          <li>Budget exhaustion returns and caches the fallback.</li>
+        </ol>
+      </aside>
+    </header>
+
+    <div class="article-shell">
+      <nav class="toc" aria-label="Article outline">
+        <p>In this article</p>
+        <ol>
+          <li><a href="#failure-policy">Read the failure policy</a></li>
+          <li><a href="#two-clocks">Separate the two clocks</a></li>
+          <li><a href="#test-contracts">Test the outcomes</a></li>
+          <li><a href="#what-tests-buy">Keep the contract small</a></li>
+          <li><a href="#sources">Sources</a></li>
+        </ol>
+        <div class="source-snapshot">
+          Source snapshot: public Market Desk commit <code>92c022c</code>. Production excerpts link to exact lines.
+        </div>
+      </nav>
+
+      <article class="prose" id="article">
+        <p>An API that calls an AI model has at least two products hiding inside it. One is the model-enhanced response you hope to return. The other is the response your users receive when the model is slow, unreachable, or confidently emits the wrong shape.</p>
+
+        <p>The second product deserves tests too.</p>
+
+        <p>I will use the public <a href="https://github.com/jackvansickle1/jackgpt-market-desk/tree/92c022c047253f229fefcde431a2dfe6684fe7c2">JackGPT Market Desk repository at commit <code>92c022c</code></a> as a concrete example. Its <code>/api/analyze</code> endpoint assembles a market snapshot, builds a deterministic research brief, and can optionally ask a local Ollama-compatible model to improve the wording. The important architectural choice is that the deterministic brief exists <em>before</em> the model call. AI enrichment can fail without erasing the underlying result.</p>
+
+        <p>The goal here is not to test Ollama. It is to prove the FastAPI application's contract at four boundaries:</p>
+
+        <ol class="boundary-list">
+          <li>Invalid client input remains a client error.</li>
+          <li>Syntactically unusable model output falls back without pretending the whole API failed.</li>
+          <li>A transport timeout returns the fallback and marks the AI dependency degraded.</li>
+          <li>Exhausting the endpoint's response budget also returns—and caches—the fallback.</li>
+        </ol>
+
+        <section aria-labelledby="failure-policy">
+          <h2 id="failure-policy">Read the failure policy before writing the test</h2>
+
+          <p>Market Desk first validates the ticker in a small domain function. It raises FastAPI's <code>HTTPException</code> with a 400 response for characters outside the accepted set:</p>
+
+          <figure class="code-figure">
+            <figcaption><a href="https://github.com/jackvansickle1/jackgpt-market-desk/blob/92c022c047253f229fefcde431a2dfe6684fe7c2/backend/main.py#L360-L367">Market Desk <code>backend/main.py</code>, lines 360–367</a></figcaption>
+            <div class="code-frame">
+              <div class="code-header"><span>ticker validation</span><span class="code-dots" aria-hidden="true"><i></i><i></i><i></i></span></div>
+              <pre tabindex="0" aria-label="Python ticker validation excerpt"><code><span class="tok-keyword">def</span> <span class="tok-fn">normalize_ticker</span>(raw: <span class="tok-builtin">str</span>) -&gt; <span class="tok-builtin">str</span>:
+    ticker = raw.strip().upper().replace(<span class="tok-string">"/"</span>, <span class="tok-string">"."</span>)
+    <span class="tok-keyword">if not</span> TICKER_PATTERN.fullmatch(ticker):
+        <span class="tok-keyword">raise</span> HTTPException(
+            status_code=<span class="tok-number">400</span>,
+            detail=<span class="tok-string">"Ticker must be 1-12 characters and may only contain letters, numbers, dots, or hyphens."</span>,
+        )
+    <span class="tok-keyword">return</span> ticker</code></pre>
+            </div>
+          </figure>
+
+          <p>FastAPI's official <a href="https://fastapi.tiangolo.com/tutorial/handling-errors/">Handling Errors guide</a> makes the intended mechanism explicit: raise <code>HTTPException</code>; do not return it. The framework stops the request and serializes its <code>detail</code> value.</p>
+
+          <p>The more interesting policy sits at the AI boundary. <code>fallback_brief()</code> runs first. If AI enhancement is disabled, that brief is the final result. If enhancement is enabled, the code distinguishes invalid model content from operational failure:</p>
+
+          <figure class="code-figure">
+            <figcaption><a href="https://github.com/jackvansickle1/jackgpt-market-desk/blob/92c022c047253f229fefcde431a2dfe6684fe7c2/backend/main.py#L2467-L2491">Market Desk <code>research_brief()</code>, lines 2467–2491</a></figcaption>
+            <div class="code-frame">
+              <div class="code-header"><span>fallback selection</span><span class="code-dots" aria-hidden="true"><i></i><i></i><i></i></span></div>
+              <pre tabindex="0" aria-label="Python fallback selection excerpt"><code>base = fallback_brief(quote)
+<span class="tok-keyword">if not</span> AI_BRIEF_ENABLED:
+    _brief_cache[ticker] = (time.monotonic(), base)
+    <span class="tok-keyword">return</span> base, {
+        <span class="tok-string">"status"</span>: <span class="tok-string">"online"</span>,
+        <span class="tok-string">"model"</span>: DEFAULT_MODEL,
+        <span class="tok-string">"message"</span>: <span class="tok-string">"Fast data-grounded Market Desk brief served; GPT-OSS is reserved for contextual chat."</span>,
+    }
+
+<span class="tok-keyword">try</span>:
+    brief, ai_status = <span class="tok-keyword">await</span> ollama_brief(quote, base)
+<span class="tok-keyword">except</span> <span class="tok-builtin">ValueError</span>:
+    brief = base
+    ai_status = {
+        <span class="tok-string">"status"</span>: <span class="tok-string">"online"</span>,
+        <span class="tok-string">"model"</span>: DEFAULT_MODEL,
+        <span class="tok-string">"message"</span>: <span class="tok-string">"Ollama is reachable; deterministic grounded brief used because the model output did not pass strict JSON validation."</span>,
+    }
+<span class="tok-keyword">except</span> <span class="tok-builtin">Exception</span> <span class="tok-keyword">as</span> error:
+    brief = base
+    ai_status = {
+        <span class="tok-string">"status"</span>: <span class="tok-string">"degraded"</span>,
+        <span class="tok-string">"model"</span>: DEFAULT_MODEL,
+        <span class="tok-string">"message"</span>: <span class="tok-string">f"Ollama is unavailable or slow; using deterministic fallback brief ({type(error).__name__})."</span>,
+    }</code></pre>
+            </div>
+          </figure>
+
+          <p>A <code>ValueError</code> means the model was reachable but its response did not satisfy strict JSON parsing. A network exception takes the degraded path. Both preserve useful output, but their status metadata tells operators two different stories.</p>
+
+          <p>There is a second deadline around the entire enrichment operation:</p>
+
+          <figure class="code-figure">
+            <figcaption><a href="https://github.com/jackvansickle1/jackgpt-market-desk/blob/92c022c047253f229fefcde431a2dfe6684fe7c2/backend/main.py#L2497-L2509">Market Desk <code>research_brief_for_request()</code>, lines 2497–2509</a></figcaption>
+            <div class="code-frame">
+              <div class="code-header"><span>request budget</span><span class="code-dots" aria-hidden="true"><i></i><i></i><i></i></span></div>
+              <pre tabindex="0" aria-label="Python request budget excerpt"><code><span class="tok-keyword">async def</span> <span class="tok-fn">research_brief_for_request</span>(quote: <span class="tok-builtin">dict</span>[<span class="tok-builtin">str</span>, Any]) -&gt; <span class="tok-builtin">tuple</span>[<span class="tok-builtin">dict</span>[<span class="tok-builtin">str</span>, Any], <span class="tok-builtin">dict</span>[<span class="tok-builtin">str</span>, Any]]:
+    <span class="tok-string">"""Keep the main ticker search responsive even when the local model is busy."""</span>
+    timeout = <span class="tok-builtin">min</span>(<span class="tok-builtin">max</span>(AI_TIMEOUT_SECONDS, <span class="tok-number">3.0</span>), <span class="tok-number">4.0</span>)
+    <span class="tok-keyword">try</span>:
+        <span class="tok-keyword">return await</span> asyncio.wait_for(research_brief(quote), timeout=timeout)
+    <span class="tok-keyword">except</span> <span class="tok-builtin">TimeoutError</span>:
+        brief = fallback_brief(quote)
+        _brief_cache[quote[<span class="tok-string">"ticker"</span>]] = (time.monotonic(), brief)
+        <span class="tok-keyword">return</span> brief, {
+            <span class="tok-string">"status"</span>: <span class="tok-string">"degraded"</span>,
+            <span class="tok-string">"model"</span>: DEFAULT_MODEL,
+            <span class="tok-string">"message"</span>: <span class="tok-string">"Ollama exceeded the ticker-search response budget; returned the deterministic data-grounded research brief."</span>,
+        }</code></pre>
+            </div>
+          </figure>
+
+          <p>Python's <a href="https://docs.python.org/3/library/asyncio-task.html#asyncio.wait_for"><code>asyncio.wait_for()</code> documentation</a> says a timeout cancels the awaited operation and raises <code>TimeoutError</code>. It also warns that cancellation itself can make elapsed time exceed the numeric timeout, so this is a response <em>budget</em>, not a benchmark guarantee.</p>
+        </section>
+
+        <section aria-labelledby="two-clocks">
+          <h2 id="two-clocks">Two clocks, two jobs</h2>
+
+          <p>It helps to separate the timeout inside the model client from the timeout around the use case. In <a href="https://github.com/jackvansickle1/jackgpt-market-desk/blob/92c022c047253f229fefcde431a2dfe6684fe7c2/backend/main.py#L2421-L2432"><code>ollama_brief()</code>, lines 2421–2432</a>, HTTPX receives <code>AI_TIMEOUT_SECONDS</code> for the POST, checks the HTTP status, reads the JSON envelope, and then sends the model's text to a stricter object extractor. That timeout governs network work. The outer <code>asyncio.wait_for()</code> governs how long ticker search is willing to wait for the <em>whole</em> enrichment coroutine.</p>
+
+          <p>HTTPX documents four timeout categories: connect, read, write, and pool. A scalar timeout configures a general limit; a production service can split those categories when, for example, connecting should fail quickly but model generation may legitimately take longer to produce response data. The outer budget remains useful even then because it represents a product decision rather than a transport detail: after this point, rebuild the deterministic brief from the quote already in hand.</p>
+
+          <aside class="callout" aria-label="Status design takeaway">
+            <span class="callout-label">Status is part of the contract</span>
+            <p>If object extraction raises <code>ValueError</code>, the service knows enough to say the model endpoint was reachable but its content was unusable. A <code>ReadTimeout</code> says response data did not arrive within the configured read allowance. The payload survives both failures; the metadata preserves the diagnostic difference.</p>
+          </aside>
+        </section>
+
+        <section aria-labelledby="test-contracts">
+          <h2 id="test-contracts">Test outcomes, not live dependencies</h2>
+
+          <p>FastAPI's <a href="https://fastapi.tiangolo.com/tutorial/testing/"><code>TestClient</code> testing guide</a> shows how to exercise an application without opening a real HTTP socket. For the internal async functions, pytest's <a href="https://docs.pytest.org/en/stable/how-to/monkeypatch.html"><code>monkeypatch</code> fixture guide</a> explains how to replace the model call for one test and restore it afterward. That lets us produce each failure on demand—no stopped containers, invalid DNS, or sleeping test suite required.</p>
+
+          <p>Create <code>tests/test_failure_contracts.py</code>:</p>
+
+          <figure class="code-figure">
+            <figcaption>Test setup, client-error contract, and malformed-output fallback</figcaption>
+            <div class="code-frame">
+              <div class="code-header"><span>tests/test_failure_contracts.py &#183; part 1</span><span class="code-dots" aria-hidden="true"><i></i><i></i><i></i></span></div>
+              <pre tabindex="0" aria-label="Python tests for validation and malformed model output"><code><span class="tok-keyword">import</span> asyncio
+
+<span class="tok-keyword">import</span> httpx
+<span class="tok-keyword">import</span> pytest
+<span class="tok-keyword">from</span> fastapi.testclient <span class="tok-keyword">import</span> TestClient
+
+<span class="tok-keyword">from</span> backend <span class="tok-keyword">import</span> main
+
+
+client = TestClient(main.app)
+
+
+<span class="tok-decorator">@pytest.fixture</span>
+<span class="tok-keyword">def</span> <span class="tok-fn">quote</span>():
+    <span class="tok-keyword">return</span> {
+        <span class="tok-string">"ticker"</span>: <span class="tok-string">"DEMO"</span>,
+        <span class="tok-string">"companyName"</span>: <span class="tok-string">"Demo Company"</span>,
+        <span class="tok-string">"technicals"</span>: {},
+        <span class="tok-string">"financials"</span>: {},
+        <span class="tok-string">"analystView"</span>: {},
+    }
+
+
+<span class="tok-decorator">@pytest.fixture(autouse=True)</span>
+<span class="tok-keyword">def</span> <span class="tok-fn">clear_caches</span>():
+    main._brief_cache.clear()
+    main._rate_buckets.clear()
+    <span class="tok-keyword">yield</span>
+    main._brief_cache.clear()
+    main._rate_buckets.clear()
+
+
+<span class="tok-keyword">def</span> <span class="tok-fn">test_invalid_ticker_stays_a_client_error</span>():
+    response = client.get(<span class="tok-string">"/api/analyze"</span>, params={<span class="tok-string">"ticker"</span>: <span class="tok-string">"bad symbol!"</span>})
+
+    <span class="tok-keyword">assert</span> response.status_code == <span class="tok-number">400</span>
+    <span class="tok-keyword">assert</span> response.json()[<span class="tok-string">"detail"</span>].startswith(<span class="tok-string">"Ticker must be 1-12 characters"</span>)
+
+
+<span class="tok-keyword">def</span> <span class="tok-fn">test_non_json_model_output_uses_grounded_fallback</span>(monkeypatch, quote):
+    <span class="tok-keyword">async def</span> <span class="tok-fn">invalid_model_output</span>(_quote, _base):
+        <span class="tok-keyword">raise</span> <span class="tok-builtin">ValueError</span>(<span class="tok-string">"model response was not JSON"</span>)
+
+    monkeypatch.setattr(main, <span class="tok-string">"AI_BRIEF_ENABLED"</span>, <span class="tok-builtin">True</span>)
+    monkeypatch.setattr(main, <span class="tok-string">"ollama_brief"</span>, invalid_model_output)
+
+    brief, status = asyncio.run(main.research_brief(quote))
+
+    <span class="tok-keyword">assert</span> brief[<span class="tok-string">"source"</span>] == <span class="tok-string">"deterministic-fallback"</span>
+    <span class="tok-keyword">assert</span> status[<span class="tok-string">"status"</span>] == <span class="tok-string">"online"</span>
+    <span class="tok-keyword">assert</span> <span class="tok-string">"strict JSON validation"</span> <span class="tok-keyword">in</span> status[<span class="tok-string">"message"</span>]</code></pre>
+            </div>
+          </figure>
+
+          <p>The autouse fixture matters. Both the brief cache and rate-limit buckets live at module scope. Without resetting them, one case could silently consume another case's cached result or request allowance. Determinism includes isolating state, not just blocking network calls.</p>
+
+          <p>Now add the two timeout cases:</p>
+
+          <figure class="code-figure">
+            <figcaption>Transport-timeout and request-budget contracts</figcaption>
+            <div class="code-frame">
+              <div class="code-header"><span>tests/test_failure_contracts.py &#183; part 2</span><span class="code-dots" aria-hidden="true"><i></i><i></i><i></i></span></div>
+              <pre tabindex="0" aria-label="Python tests for model and request budget timeouts"><code><span class="tok-keyword">def</span> <span class="tok-fn">test_model_read_timeout_marks_ai_degraded</span>(monkeypatch, quote):
+    request = httpx.Request(<span class="tok-string">"POST"</span>, <span class="tok-string">"http://ollama:11434/api/generate"</span>)
+
+    <span class="tok-keyword">async def</span> <span class="tok-fn">timed_out_model</span>(_quote, _base):
+        <span class="tok-keyword">raise</span> httpx.ReadTimeout(<span class="tok-string">"test timeout"</span>, request=request)
+
+    monkeypatch.setattr(main, <span class="tok-string">"AI_BRIEF_ENABLED"</span>, <span class="tok-builtin">True</span>)
+    monkeypatch.setattr(main, <span class="tok-string">"ollama_brief"</span>, timed_out_model)
+
+    brief, status = asyncio.run(main.research_brief(quote))
+
+    <span class="tok-keyword">assert</span> brief[<span class="tok-string">"source"</span>] == <span class="tok-string">"deterministic-fallback"</span>
+    <span class="tok-keyword">assert</span> status[<span class="tok-string">"status"</span>] == <span class="tok-string">"degraded"</span>
+    <span class="tok-keyword">assert</span> <span class="tok-string">"ReadTimeout"</span> <span class="tok-keyword">in</span> status[<span class="tok-string">"message"</span>]
+
+
+<span class="tok-keyword">def</span> <span class="tok-fn">test_request_budget_timeout_returns_and_caches_fallback</span>(monkeypatch, quote):
+    <span class="tok-keyword">async def</span> <span class="tok-fn">budget_exhausted</span>(_quote):
+        <span class="tok-keyword">raise</span> <span class="tok-builtin">TimeoutError</span>
+
+    monkeypatch.setattr(main, <span class="tok-string">"research_brief"</span>, budget_exhausted)
+
+    brief, status = asyncio.run(main.research_brief_for_request(quote))
+
+    <span class="tok-keyword">assert</span> brief[<span class="tok-string">"source"</span>] == <span class="tok-string">"deterministic-fallback"</span>
+    <span class="tok-keyword">assert</span> status[<span class="tok-string">"status"</span>] == <span class="tok-string">"degraded"</span>
+    <span class="tok-keyword">assert</span> <span class="tok-string">"response budget"</span> <span class="tok-keyword">in</span> status[<span class="tok-string">"message"</span>]
+    <span class="tok-keyword">assert</span> main._brief_cache[<span class="tok-string">"DEMO"</span>][<span class="tok-number">1</span>] == brief</code></pre>
+            </div>
+          </figure>
+
+          <p>The <code>httpx.Request</code> in the first test is only attached to the synthetic exception; it sends nothing. HTTPX documents <a href="https://www.python-httpx.org/exceptions/"><code>ReadTimeout</code> as a subtype of <code>TimeoutException</code></a>, specifically for timing out while receiving response data. The second test injects <code>TimeoutError</code> at the function boundary. It verifies the application's recovery contract immediately rather than making the suite wait for the configured three-to-four-second budget.</p>
+
+          <aside class="callout" aria-label="Test scope note">
+            <span class="callout-label">A seam test, not a stopwatch test</span>
+            <p>The request-budget case proves what <code>research_brief_for_request()</code> does when it receives the exception promised by <code>asyncio.wait_for()</code>. It does not attempt to prove Python's cancellation implementation or measure operating-system scheduling. The standard library owns those mechanics; this application owns the resulting brief, metadata, and cache entry.</p>
+          </aside>
+
+          <p>The mix of one HTTP-level test and three function-level tests is intentional too. <code>TestClient</code> is the right level for confirming that <code>HTTPException</code> becomes the expected JSON response and status code. Direct calls are the right level for distinguishing malformed model content from transport failure without mocking the unrelated market-data and search branches used by <code>/api/analyze</code>. A larger endpoint test could patch every dependency and assert the complete response, but it would obscure the small failure contract we care about here.</p>
+
+          <p>This split makes failures easier to read. If the 400 case breaks, inspect routing, validation, or exception translation. If a fallback case breaks, inspect the model boundary. If the cache assertion breaks, inspect timeout recovery. Each test names one policy and introduces only the minimum synthetic failure needed to reach it.</p>
+
+          <p>Run the suite after installing the public repository's dependencies and pytest:</p>
+
+          <figure class="code-figure">
+            <figcaption>Install the pinned application dependencies, then run the focused suite</figcaption>
+            <div class="code-frame">
+              <div class="code-header"><span>terminal</span><span class="code-dots" aria-hidden="true"><i></i><i></i><i></i></span></div>
+              <pre tabindex="0" aria-label="Commands to install dependencies and run the test suite"><code><span class="tok-name">python</span> -m pip install -r backend/requirements.txt pytest
+<span class="tok-name">python</span> -m pytest -q tests/test_failure_contracts.py</code></pre>
+            </div>
+          </figure>
+        </section>
+
+        <section aria-labelledby="what-tests-buy">
+          <h2 id="what-tests-buy">What these four tests buy you</h2>
+
+          <div class="outcomes" aria-label="Test outcomes">
+            <div class="outcome-row"><strong>Input contract</strong><span>Malformed ticker → HTTP 400 with the domain error intact.</span></div>
+            <div class="outcome-row"><strong>Content contract</strong><span>Invalid model JSON → deterministic brief with reachable-status context.</span></div>
+            <div class="outcome-row"><strong>Transport contract</strong><span>HTTPX read timeout → deterministic brief and degraded AI status.</span></div>
+            <div class="outcome-row"><strong>Budget contract</strong><span>Request timeout → deterministic brief, degraded status, and cache write.</span></div>
+          </div>
+
+          <p>The first test protects error taxonomy. A malformed ticker is the caller's problem, so it must not be blurred into the endpoint's 404 path for unavailable market data. The next two protect graceful degradation: bad AI output and a network timeout both preserve the deterministic brief, while the dependency metadata remains specific enough to diagnose the difference. The final test protects the latency escape hatch and the cache write that follows it.</p>
+
+          <p>Notice what the tests do <em>not</em> assert. They do not freeze generated timestamps, reproduce a model's prose, depend on a particular stock price, or claim a performance number. Those would make the suite brittle or misleading. The stable contract is smaller: response class, fallback source, dependency state, diagnostic category, and cache outcome.</p>
+
+          <p>There is also a useful hardening lesson in the production excerpt. The broad <code>except Exception</code> keeps this public demo available, but it can also convert an unexpected programming defect into a degraded dependency message. In a service with stricter observability requirements, I would narrow that catch to expected HTTPX, parsing, and protocol exceptions, then let unknown defects surface to error monitoring. The deterministic tests still help: they define the behavior that must survive that refactor.</p>
+
+          <p><strong>Graceful degradation becomes trustworthy only when it is repeatable.</strong> Build the fallback before the optional call, make status metadata part of the response contract, bound the wait, isolate shared state, and force each failure in tests. Then “the AI is optional” is no longer an optimistic architecture diagram. It is an executable guarantee.</p>
+        </section>
+
+        <section class="sources" id="sources" aria-labelledby="sources-title">
+          <h2 id="sources-title">Sources and verification</h2>
+          <ol>
+            <li><a href="https://github.com/jackvansickle1/jackgpt-market-desk/tree/92c022c047253f229fefcde431a2dfe6684fe7c2">JackGPT Market Desk source at commit <code>92c022c</code></a><span class="source-domain">github.com</span></li>
+            <li><a href="https://fastapi.tiangolo.com/tutorial/testing/">FastAPI documentation: Testing with <code>TestClient</code></a><span class="source-domain">fastapi.tiangolo.com</span></li>
+            <li><a href="https://fastapi.tiangolo.com/tutorial/handling-errors/">FastAPI documentation: Handling Errors</a><span class="source-domain">fastapi.tiangolo.com</span></li>
+            <li><a href="https://www.python-httpx.org/advanced/timeouts/">HTTPX documentation: Timeouts</a><span class="source-domain">python-httpx.org</span></li>
+            <li><a href="https://www.python-httpx.org/exceptions/">HTTPX documentation: Exception hierarchy</a><span class="source-domain">python-httpx.org</span></li>
+            <li><a href="https://docs.python.org/3/library/asyncio-task.html#asyncio.wait_for">Python documentation: <code>asyncio.wait_for()</code></a><span class="source-domain">docs.python.org</span></li>
+            <li><a href="https://docs.pytest.org/en/stable/how-to/monkeypatch.html">pytest documentation: Monkeypatching functions and state</a><span class="source-domain">docs.pytest.org</span></li>
+          </ol>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer class="article-footer">
+    Written and designed by Jack VanSickle &#183; Technical writing sample &#183; September 26, 2026
+  </footer>
+</body>
+</html>
