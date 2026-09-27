@@ -6,9 +6,11 @@
   <meta name="author" content="Jack VanSickle" />
   <meta name="description" content="A source-grounded FastAPI tutorial for testing deterministic fallbacks when an AI dependency returns invalid output or times out." />
   <meta name="theme-color" content="#f3f0e9" />
+  <link rel="canonical" href="https://jackgpt.org/writing-samples/reliable-fastapi-dependency-testing.html" />
   <meta property="og:type" content="article" />
   <meta property="og:title" content="Make the Fallback a Contract" />
   <meta property="og:description" content="Testing an AI-assisted FastAPI endpoint without a network." />
+  <meta property="og:url" content="https://jackgpt.org/writing-samples/reliable-fastapi-dependency-testing.html" />
   <title>Make the Fallback a Contract | Jack VanSickle</title>
   <style>
     :root {
@@ -532,6 +534,21 @@
 
     .sources a { font-weight: 750; }
 
+    .hire-panel {
+      margin-top: 64px;
+      padding: 32px;
+      color: #eef7fb;
+      background: var(--navy);
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .hire-panel h2 { margin: 0 0 10px; color: #fff; font-size: 1.7rem; }
+    .hire-panel p { margin: 0; color: #bfd0db; }
+    .hire-panel div { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
+    .hire-panel a { padding: 10px 15px; color: #071821; background: var(--cyan, #7ee1df); border-radius: 999px; font-weight: 800; text-decoration: none; }
+    .hire-panel a + a { color: #eef7fb; background: transparent; border: 1px solid rgba(238, 247, 251, 0.3); }
+
     .source-domain {
       display: block;
       color: #7b858b;
@@ -968,6 +985,15 @@ client = TestClient(main.app)
           <p>There is also a useful hardening lesson in the production excerpt. The broad <code>except Exception</code> keeps this public demo available, but it can also convert an unexpected programming defect into a degraded dependency message. In a service with stricter observability requirements, I would narrow that catch to expected HTTPX, parsing, and protocol exceptions, then let unknown defects surface to error monitoring. The deterministic tests still help: they define the behavior that must survive that refactor.</p>
 
           <p><strong>Graceful degradation becomes trustworthy only when it is repeatable.</strong> Build the fallback before the optional call, make status metadata part of the response contract, bound the wait, isolate shared state, and force each failure in tests. Then “the AI is optional” is no longer an optimistic architecture diagram. It is an executable guarantee.</p>
+        </section>
+
+        <section class="hire-panel" aria-labelledby="hire-title">
+          <h2 id="hire-title">Need this level of evidence in your docs?</h2>
+          <p>I am available for a paid, tightly scoped technical-writing trial. Topic, fee, sources, deadline, acceptance, revisions, rights, AI policy, and payment timing are agreed before work begins.</p>
+          <div>
+            <a href="mailto:jvan8076@gmail.com?subject=Paid%20technical-writing%20trial">Discuss a paid trial</a>
+            <a href="/writing-samples/index.html">See all writing samples</a>
+          </div>
         </section>
 
         <section class="sources" id="sources" aria-labelledby="sources-title">

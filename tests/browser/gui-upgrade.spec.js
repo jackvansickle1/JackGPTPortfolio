@@ -11,7 +11,7 @@ test.beforeEach(async ({ page }) => {
 test('all primary routes remain reachable and project navigation clears the fixed header', async ({ page }) => {
   await page.goto('/');
   const nav = page.getByRole('navigation', { name: 'Portfolio navigation' });
-  for (const name of ['Work', 'Demo', 'Architecture', 'Hire', 'Notes']) {
+  for (const name of ['Work', 'Demo', 'Architecture', 'Hire', 'Writing', 'Notes']) {
     await expect(nav.getByRole('link', { name, exact: true })).toBeInViewport();
   }
   await nav.getByRole('link', { name: 'Work', exact: true }).click();
@@ -19,8 +19,9 @@ test('all primary routes remain reachable and project navigation clears the fixe
   await expect.poll(() => page.locator('#projects').evaluate((element) => element.getBoundingClientRect().top)).toBeGreaterThanOrEqual(headerBottom);
   await expect(nav.getByRole('link', { name: 'Work', exact: true })).toHaveAttribute('aria-current', 'location');
   await nav.getByRole('link', { name: 'Hire', exact: true }).click();
-  await expect(page).toHaveURL(/#\/hire\/spreadsheet-rescue$/);
-  await expect(page.getByText('$29', { exact: true })).toBeVisible();
+  await expect(page).toHaveURL(/\/hire\/index\.html$/);
+  await expect(page.getByRole('heading', { name: 'Small technical jobs with a visible finish line.' })).toBeVisible();
+  await expect(page.getByText('From $29', { exact: true })).toBeVisible();
 });
 
 test('grid and list views retain filtering, ordering, image assets and accessible state', async ({ page }, testInfo) => {
