@@ -57,13 +57,20 @@ test("case-study screenshot traps focus, closes with Escape, and restores scroll
   await expect(shot.locator("img")).toHaveAttribute("loading", "lazy");
 });
 
-test("contact details and modal focus survive close", async ({ page }) => {
+test("contact route stays private and modal focus survives close", async ({ page }) => {
   await page.goto("/");
   const opener = page.getByRole("button", { name: "Open contact information" });
   await opener.click();
   const dialog = page.getByRole("dialog", { name: "Contact Jack VanSickle" });
-  await expect(dialog.locator('a[href="mailto:jackvansickle@mst.edu"]')).toBeVisible();
-  await expect(dialog.locator('a[href="tel:+18164166618"]')).toBeVisible();
+  await expect(dialog.locator('a[href="/hire/"]')).toBeVisible();
+  await expect(dialog.locator('a[href="/hire/spreadsheet-rescue/"]')).toBeVisible();
+  await expect(dialog.locator('a[href="/writing-samples/"]')).toBeVisible();
+  const email = dialog.locator('a[href^="mailto:"]');
+  await expect(email).toHaveCount(1);
+  await expect(email).toHaveAttribute("href", /^mailto:jvan8076@gmail\.com\?subject=Paid%20project%20inquiry.*do%20not%20attach%20credentials%20or%20confidential%20files/);
+  await expect(dialog.locator('a[href^="tel:"]')).toHaveCount(0);
+  await expect(dialog).not.toContainText("jackvansickle@mst.edu");
+  await expect(dialog).not.toContainText("Venmo preferred");
   await page.keyboard.press("Shift+Tab");
   expect(await dialog.evaluate((element) => element.contains(document.activeElement))).toBe(true);
   await page.keyboard.press("Escape");
