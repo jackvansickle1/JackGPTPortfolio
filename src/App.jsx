@@ -18,7 +18,6 @@ import {
   List,
   Mail,
   MonitorSmartphone,
-  PhoneCall,
   Search,
   Send,
   Server,
@@ -1577,60 +1576,40 @@ function HomePage() {
               </button>
             </div>
             <p>
-              Available for paid CSV cleanup, including Excel worksheets exported
-              to CSV, plus recruiting and project follow-up. For Spreadsheet Rescue,
-              start with the scope below and do not attach confidential data before
-              we agree on handling.
+              Available for paid CSV cleanup, technical writing, recruiting, and
+              project follow-up. Start with a scoped service or sample below. Do not
+              attach credentials or confidential data to the first email.
             </p>
             <div className="contact-actions">
+              <a href="/hire/" className="contact-link">
+                <CreditCard size={17} />
+                <span>
+                  <strong>Browse paid services</strong>
+                  Fixed-scope offers and safe intake details
+                </span>
+              </a>
               <a href="/hire/spreadsheet-rescue/" className="contact-link">
                 <CreditCard size={17} />
                 <span>
                   <strong>View fixed Spreadsheet Rescue packages</strong>
-                  Starting at $29 with Venmo preferred
+                  Starting at $29; written scope before payment
                 </span>
               </a>
-              <a
-                href="mailto:jvan8076@gmail.com?subject=Spreadsheet%20Rescue%20inquiry&body=File%20type%20%28Excel%2FCSV%29%3A%0AApproximate%20rows%3A%0ACleanup%20needed%3A%0ADeadline%3A%0A%0APlease%20do%20not%20attach%20confidential%20files%20to%20this%20first%20email."
-                className="contact-link"
-              >
-                <Mail size={17} />
-                <span>
-                  <strong>Hire me for Spreadsheet Rescue</strong>
-                  Request a paid cleanup quote
-                </span>
-              </a>
-              <a
-                href="/spreadsheet-rescue/work-sample.pdf"
-                className="contact-link"
-                target="_blank"
-                rel="noreferrer"
-              >
+              <a href="/writing-samples/" className="contact-link">
                 <FileText size={17} />
                 <span>
-                  <strong>View the Spreadsheet Rescue work sample</strong>
-                  Sanitized PDF and fictional demo outputs
+                  <strong>View technical writing samples</strong>
+                  Published, source-grounded portfolio pieces
                 </span>
               </a>
-              <a href="mailto:jackvansickle@mst.edu" className="contact-link">
+              <a
+                href="mailto:jvan8076@gmail.com?subject=Paid%20project%20inquiry&body=Project%20type%3A%0APublic%20URL%20or%20file%20shape%3A%0ADesired%20result%3A%0ADeadline%20and%20time%20zone%3A%0ABudget%20range%3A%0A%0APlease%20do%20not%20attach%20credentials%20or%20confidential%20files%20to%20this%20first%20email."
+                className="contact-link"
+              >
                 <Mail size={17} />
                 <span>
-                  <strong>School email</strong>
-                  jackvansickle@mst.edu
-                </span>
-              </a>
-              <a href="mailto:jvan8076@gmail.com" className="contact-link">
-                <Mail size={17} />
-                <span>
-                  <strong>Personal email</strong>
+                  <strong>Email for paid project inquiries</strong>
                   jvan8076@gmail.com
-                </span>
-              </a>
-              <a href="tel:+18164166618" className="contact-link">
-                <PhoneCall size={17} />
-                <span>
-                  <strong>Phone</strong>
-                  816-416-6618
                 </span>
               </a>
             </div>

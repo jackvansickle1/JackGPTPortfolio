@@ -69,7 +69,8 @@ test('requested viewports retain fit, working navigation, and a visible next sec
     await page.getByRole('button', { name: 'Open contact information' }).click();
     const dialog = page.getByRole('dialog', { name: 'Contact Jack VanSickle' });
     expect(await dialog.evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true);
-    await expect(dialog.locator('a[href="tel:+18164166618"]')).toBeVisible();
+    await expect(dialog.locator('a[href^="mailto:jvan8076@gmail.com?subject=Paid%20project%20inquiry"]')).toBeVisible();
+    await expect(dialog.locator('a[href^="tel:"]')).toHaveCount(0);
     await page.keyboard.press('Escape');
   }
 });
