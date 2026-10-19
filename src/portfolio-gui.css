@@ -37,6 +37,10 @@
 .portfolio-home .section-header { align-items: flex-start; gap: 16px 40px; margin-bottom: 26px; }
 .portfolio-home .section-header h2 { font-size: 26px; line-height: 1.25; font-weight: 650; }
 .portfolio-home .section-header > p { max-width: 440px; color: var(--jg-muted); font-size: 14px; line-height: 1.65; }
+@media (min-width: 1101px) {
+  .portfolio-home .section-header { grid-template-columns: minmax(240px, .9fr) minmax(300px, 1.3fr); }
+  .portfolio-home .section-header-action { grid-column: 2; justify-self: start; align-self: start; }
+}
 .portfolio-home .signal-node { background: var(--jg-lime); box-shadow: none; }
 
 /* Compact persistent navigation, including a direct service-directory link. */
