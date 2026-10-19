@@ -8,7 +8,7 @@ test.beforeEach(async ({ page }) => {
   await page.route('**/api/companion', (route) => route.fulfill({ status: 503, json: { detail: 'Guide temporarily unavailable' } }));
 });
 
-test('all primary routes remain reachable and project navigation clears the fixed header', async ({ page }) => {
+test('all primary routes remain reachable and project navigation clears the sticky header', async ({ page }) => {
   await page.goto('/');
   const nav = page.getByRole('navigation', { name: 'Portfolio navigation' });
   for (const name of ['Services', 'Work', 'Demo', 'Architecture', 'Hire', 'Writing', 'Notes']) {
@@ -22,6 +22,59 @@ test('all primary routes remain reachable and project navigation clears the fixe
   await expect(page).toHaveURL(/\/hire\/$/);
   await expect(page.getByRole('heading', { name: 'Small technical jobs with a visible finish line.' })).toBeVisible();
   await expect(page.getByText('From $29', { exact: true })).toBeVisible();
+});
+
+test('evidence cells stay centered, readable and separate from compact phones to ultrawide', async ({ page }) => {
+  for (const width of [320, 390, 768, 1024, 1365, 1920, 2560]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/');
+    const geometry = await page.locator('.proof-strip').evaluate((strip) => {
+      const box = strip.getBoundingClientRect();
+      const intro = document.querySelector('.portfolio-intro').getBoundingClientRect();
+      return {
+        left: box.left, right: box.right, introLeft: intro.left, introRight: intro.right,
+        padding: getComputedStyle(strip).paddingInlineStart,
+        cells: [...strip.children].map((cell) => ({
+          rect: cell.getBoundingClientRect().toJSON(), client: cell.clientWidth, scroll: cell.scrollWidth,
+        })),
+      };
+    });
+    expect(Math.abs(geometry.left - geometry.introLeft)).toBeLessThan(1);
+    expect(Math.abs(geometry.right - geometry.introRight)).toBeLessThan(1);
+    expect(geometry.padding).toBe('0px');
+    for (const cell of geometry.cells) {
+      expect(cell.rect.width).toBeGreaterThan(120);
+      expect(cell.scroll).toBeLessThanOrEqual(cell.client + 1);
+    }
+    for (let i = 0; i < geometry.cells.length; i++) {
+      for (let j = i + 1; j < geometry.cells.length; j++) {
+        const a = geometry.cells[i].rect, b = geometry.cells[j].rect;
+        const overlapX = Math.min(a.right, b.right) - Math.max(a.left, b.left);
+        const overlapY = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+        expect(overlapX > 1 && overlapY > 1).toBe(false);
+      }
+    }
+  }
+});
+
+test('all seven navigation links fit and remain available after an anchor scroll', async ({ page }) => {
+  for (const width of [320, 360, 375, 390, 480, 768, 1100, 1101, 1365]) {
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto('/');
+    const nav = page.locator('.site-nav');
+    const links = page.getByRole('navigation', { name: 'Portfolio navigation' }).getByRole('link');
+    await expect(links).toHaveCount(7);
+    for (const link of await links.all()) {
+      const box = await link.boundingBox();
+      const clientWidth = await page.evaluate(() => document.documentElement.clientWidth);
+      expect(box.x).toBeGreaterThanOrEqual(0);
+      expect(box.x + box.width).toBeLessThanOrEqual(clientWidth + 1);
+    }
+    await page.getByRole('navigation', { name: 'Portfolio navigation' }).getByRole('link', { name: 'Work', exact: true }).click();
+    await expect.poll(() => nav.evaluate((el) => Math.abs(el.getBoundingClientRect().top))).toBeLessThan(1);
+    const headerBottom = await nav.evaluate((el) => el.getBoundingClientRect().bottom);
+    await expect.poll(() => page.locator('#projects').evaluate((el) => el.getBoundingClientRect().top)).toBeGreaterThanOrEqual(headerBottom);
+  }
 });
 
 test('grid and list views retain filtering, ordering, image assets and accessible state', async ({ page }, testInfo) => {
@@ -91,6 +144,11 @@ test('guide feedback survives intermediate breakpoints and its icon sends full c
     await expect(dialog.locator('.companion-title p')).toBeVisible();
     await expect(dialog.locator('.companion-title p')).toHaveText('Guide temporarily unavailable');
     expect(await dialog.evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true);
+    await expect(dialog.locator('.companion-form')).toHaveCSS('flex-direction', 'row');
+    const inputBox = await input.boundingBox();
+    const sendBox = await dialog.getByRole('button', { name: 'Ask', exact: true }).boundingBox();
+    expect(Math.abs(inputBox.y - sendBox.y)).toBeLessThan(2);
+    expect(sendBox.x).toBeGreaterThanOrEqual(inputBox.x + inputBox.width - 1);
     await expect(dialog.getByRole('button', { name: 'Close JackGPT guide' })).toBeInViewport();
   }
 });

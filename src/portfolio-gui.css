@@ -44,8 +44,8 @@
 .portfolio-home .signal-node { background: var(--jg-lime); box-shadow: none; }
 
 /* Compact persistent navigation, including a direct service-directory link. */
-.portfolio-home { padding-top: 73px; }
-.portfolio-home .site-nav { position: fixed; background: var(--jg-bg-raised); border-color: var(--jg-line); }
+.portfolio-home { padding-top: 0; }
+.portfolio-home .site-nav { position: sticky; background: var(--jg-bg-raised); border-color: var(--jg-line); }
 .portfolio-home .site-nav-inner { width: min(1328px, calc(100% - 48px)); min-height: 72px; gap: 20px; }
 .portfolio-home .brand-copy { gap: 4px; }
 .portfolio-home .brand-copy strong { font-size: 20px; font-weight: 700; }
@@ -82,9 +82,10 @@
 .product-preview-caption svg { grid-column: 2; grid-row: 1 / 3; align-self: center; color: var(--jg-mint); }
 .product-preview:hover { border-color: var(--jg-mint); }
 .product-preview:hover strong { color: var(--jg-mint); }
-.portfolio-home .proof-strip { width: min(1240px, calc(100% - 64px)); min-height: 84px; background: transparent; border: 0; border-bottom: 1px solid var(--jg-line); }
+.portfolio-home .proof-strip { width: min(1240px, calc(100% - 64px)); margin-inline: auto; padding-inline: 0; min-height: 84px; background: transparent; border: 0; border-bottom: 1px solid var(--jg-line); }
 .portfolio-home .proof-strip > div { padding: 18px 24px; }
-.portfolio-home .proof-strip > div:first-child { padding-left: 0; }
+.portfolio-home .proof-strip > div:first-child { padding-left: 0; border-left: 0; }
+.portfolio-home .proof-strip > div:last-child { border-right: 0; }
 .portfolio-home .proof-strip strong { font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--jg-text); }
 .portfolio-home .proof-strip span { font-size: 12px; color: var(--jg-muted); line-height: 1.5; }
 
@@ -236,7 +237,7 @@
 .portfolio-dialog .companion-message.user { padding: 12px; border-left: 2px solid var(--jg-mint); background: var(--jg-surface-2); max-width: 92%; }
 .portfolio-dialog .companion-prompts { padding-top: 12px; border-top: 1px solid var(--jg-line); }
 .portfolio-dialog .prompt-chip { justify-content: flex-start; text-align: left; padding: 10px; min-height: 44px; font-size: 12px; }
-.portfolio-dialog .companion-form { border-top: 1px solid var(--jg-line); padding-top: 14px; align-items: stretch; }
+.portfolio-dialog .companion-form { border-top: 1px solid var(--jg-line); padding-top: 14px; flex-direction: row; align-items: stretch; }
 .portfolio-dialog .companion-form textarea { min-height: 74px; font-size: 14px; }
 .portfolio-dialog .companion-send { width: 48px; min-width: 48px; padding: 0; }
 .portfolio-dialog .companion-send svg { width: 19px; height: 19px; }
@@ -248,7 +249,6 @@
 .portfolio-home .site-footer :is(p, a) { font-size: 13px; }
 
 @media (max-width: 1100px) {
-  .portfolio-home { padding-top: 125px; }
   .portfolio-home .site-nav-inner { flex-wrap: wrap; gap: 0 16px; padding-block: 10px 0; }
   .portfolio-home .nav-actions { margin-left: auto; border: 0; padding: 0; }
   .portfolio-home .nav-links { display: flex; order: 3; width: 100%; margin: 10px 0 0; padding-block: 4px; border-top: 1px solid var(--jg-line); gap: 6px; }
@@ -339,12 +339,16 @@
   .portfolio-dialog.modal-dialog .companion-send { min-width: 46px; width: 46px; padding: 0; }
   .portfolio-dialog.modal-dialog .companion-form textarea { font-size: 16px; }
 }
+@media (max-width: 480px) {
+  .portfolio-home .nav-links { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .portfolio-home .nav-links a { justify-content: center; padding-inline: 2px; }
+  .portfolio-home .section { scroll-margin-top: 184px; }
+}
 @media (max-width: 360px) {
   .portfolio-home .brand-copy { display: none; }
   .portfolio-home .nav-links { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .portfolio-home .nav-links a { justify-content: center; }
-  .portfolio-home { padding-top: 169px; }
-  .portfolio-home .section { scroll-margin-top: 184px; }
+  .portfolio-home .section { scroll-margin-top: 228px; }
   .intro-actions { grid-template-columns: 1fr; }
   .portfolio-home .project-filter-actions { gap: 6px; }
   .portfolio-home .project-count { min-width: 0; }
