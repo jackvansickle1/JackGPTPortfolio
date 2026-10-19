@@ -12,7 +12,7 @@ test.beforeEach(async ({ page }) => {
 test("project discovery and public services retain recruiter priorities", async ({ page }, testInfo) => {
   await page.goto("/");
   const cards = page.locator("#project-results .project-card");
-  await expect(cards).toHaveCount(13);
+  await expect(cards).toHaveCount(15);
   await expect(cards.first()).toContainText("JackGPT Market Desk");
   await expect(cards.last()).toContainText("JackGPT Casino");
   await page.getByRole("searchbox", { name: "Search projects" }).fill("ollama");
@@ -20,10 +20,14 @@ test("project discovery and public services retain recruiter priorities", async 
   await page.getByRole("combobox", { name: "Project category" }).selectOption("games");
   await expect(page.getByText("No projects match these filters.")).toBeVisible();
   await page.getByRole("button", { name: "Clear project filters" }).click();
-  await expect(cards).toHaveCount(13);
+  await expect(cards).toHaveCount(15);
   const services = page.locator("#live-services .access-card");
   await expect(services.first()).toContainText("Market Desk");
   await expect(services.last()).toContainText("Casino");
+  await expect(services.filter({ hasText: "Rally Sports" })).toContainText("no real money, cash value, or prizes");
+  await expect(services.filter({ hasText: "Portfolio Research" })).toHaveCount(0);
+  await expect(page.locator('.private-service-note')).toContainText('Private / owner access');
+  await expect(page.locator('#live-services a[href="https://trade.jackgpt.org"]')).toHaveCount(0);
   await expect(page.locator('#live-services a[href*="ops.jackgpt.org"], #live-services a[href*="files.jackgpt.org"], #live-services a[href*="mesh.jackgpt.org"]')).toHaveCount(0);
   await expect(page.locator('a[href="https://ops.jackgpt.org"], a[href="https://mesh.jackgpt.org"]')).toHaveCount(0);
   await expect(cards.filter({ hasText: "Ops Control Room" })).toHaveCount(1);

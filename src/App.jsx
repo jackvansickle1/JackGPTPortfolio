@@ -40,8 +40,10 @@ import "./portfolio-gui.css";
 import Modal from "./Modal";
 import { filterProjects, projectCategories, publicServices } from "./project-discovery";
 import { useLiveStatuses } from "./useLiveStatuses";
+import { serviceAccessLinks, serviceProjects, serviceStatuses } from "./homepage-services";
 
 const projects = [
+  ...serviceProjects,
   {
     id: "jackgpt",
     name: "JackGPT AI Workspace",
@@ -108,7 +110,7 @@ const projects = [
     links: [{ label: "images.jackgpt.org", href: "https://images.jackgpt.org" }],
     screenshots: [
       {
-        src: "/project-images/automatic1111/jackgpt-images-dashboard.png",
+        src: "/project-images/automatic1111/jackgpt-images-studio-20261019.jpg",
         caption: "JackGPT Image Gen studio with dedicated still-image and video creation modes",
       },
       {
@@ -217,7 +219,7 @@ const projects = [
     ],
     screenshots: [
       {
-        src: "/project-images/market-desk/market-desk-terminal.png",
+        src: "/project-images/market-desk/market-desk-terminal-20261019.jpg",
         caption: "Market Desk terminal with a live NVIDIA snapshot, valuation fields, and dependency status",
       },
       {
@@ -532,6 +534,8 @@ const homepageProjectOrder = [
   "jackgpt",
   "automatic1111",
   "jackgpt-search",
+  "sports",
+  "trade",
   "kalshi-temperature-bot",
   "pearl-desk",
   "ops-control-room",
@@ -551,6 +555,7 @@ const homepageProjects = [...projects].sort((left, right) => {
 
 
 const fallbackStatuses = [
+  ...serviceStatuses,
   {
     key: "openwebui",
     name: "JackGPT AI Workspace",
@@ -734,6 +739,7 @@ function formatEndpointHost(value) {
 
 
 const accessLinks = [
+  ...serviceAccessLinks,
 
   {
     label: "JackGPT AI Workspace",
@@ -931,7 +937,7 @@ const demoClips = [
     body:
       "Load a ticker, scan the snapshot, explain the chart/financial statements/signals, then ask the stock chat a business question.",
     href: "https://market.jackgpt.org",
-    image: "/project-images/market-desk/market-desk-terminal.png",
+    image: "/project-images/market-desk/market-desk-terminal-20261019.jpg",
   },
   {
     title: "Ops Control Room story",
@@ -1146,6 +1152,7 @@ function SiteNav({ onOpenContact, onOpenGuide }) {
         </a>
 
         <nav className="nav-links" aria-label="Portfolio navigation">
+          <a href="#live-services" aria-current={window.location.hash === "#live-services" ? "location" : undefined}>Services</a>
           <a href="#projects" aria-current={window.location.hash === "#projects" ? "location" : undefined}>Work</a>
           <a href="#/demo">Demo</a>
           <a href="#/architecture">Architecture</a>
@@ -1405,28 +1412,25 @@ function HomePage() {
 
       <main id="main-content">
 
-      <header id="top" className="hero section">
-        <div className="hero-copy">
-          <span className="eyebrow hero-eyebrow">
+      <header id="top" className="portfolio-intro section">
+        <div className="intro-copy">
+          <span className="eyebrow">
             <span className="signal-node" aria-hidden="true" />
-            Recruiter portfolio / systems in production
+            JackGPT / Product engineering
           </span>
-          <h1 className="hero-title">
-            <span>Jack VanSickle builds</span>
-            <span className="hero-title-accent">AI products that operate</span>
-            <span>beyond the demo.</span>
-          </h1>
-          <p className="hero-text">
-            I design, deploy, and maintain full-stack AI, fintech, automation, and
-            infrastructure systems. Much of the work below is operated live; private
+          <h1>Jack VanSickle</h1>
+          <p className="intro-lead">AI products. Research tools. Systems that run.</p>
+          <p className="intro-description">
+            I design, deploy, and maintain full-stack products, from local AI and
+            shared GPU services to research interfaces and infrastructure. Private
             and code-only work is labeled and documented with public-safe evidence.
           </p>
-          <div className="hero-capabilities" aria-label="Core engineering capabilities">
+          <div className="intro-capabilities" aria-label="Core engineering capabilities">
             <span>React + FastAPI</span>
             <span>Docker + Cloudflare</span>
             <span>Local AI + GPU orchestration</span>
           </div>
-          <div className="hero-actions">
+          <div className="intro-actions">
             <a href="#/demo" className="button primary">
               Run the 5-minute tour <ArrowRight size={16} />
             </a>
@@ -1439,40 +1443,40 @@ function HomePage() {
           </div>
         </div>
 
-        <div className="hero-visual" aria-label="Featured project previews">
-          <a className="hero-preview hero-preview-main" href="#/project/market-desk">
+        <div className="product-preview-strip" aria-label="Featured project previews">
+          <a className="product-preview" href="#/project/market-desk">
             <img
-              src="/project-images/market-desk/market-desk-terminal.png"
+              src="/project-images/market-desk/market-desk-terminal-20261019.jpg"
               alt="Market Desk equity research terminal showing an NVIDIA snapshot and service status"
             />
-            <span className="hero-preview-caption">
-              <small>Flagship full-stack product</small>
+            <span className="product-preview-caption">
+              <small>Research</small>
               <strong>Market Desk</strong>
-              <span>Market data, research briefs, charts, and stock-aware AI</span>
+              <ArrowUpRight size={16} aria-hidden="true" />
             </span>
           </a>
-          <div className="hero-preview-stack">
-            <a className="hero-preview" href="#/project/jackgpt">
+            <a className="product-preview" href="#/project/jackgpt">
               <img
                 src="/project-images/jackgpt/jackgpt-chat-home.png"
                 alt="JackGPT local AI workspace ready for a new conversation"
               />
-              <span className="hero-preview-caption">
+              <span className="product-preview-caption">
                 <small>Self-hosted AI</small>
                 <strong>AI Workspace</strong>
+                <ArrowUpRight size={16} aria-hidden="true" />
               </span>
             </a>
-            <a className="hero-preview" href="#/project/automatic1111">
+            <a className="product-preview" href="#/project/automatic1111">
               <img
-                src="/project-images/automatic1111/jackgpt-images-dashboard.png"
+                src="/project-images/automatic1111/jackgpt-images-studio-20261019.jpg"
                 alt="JackGPT GPU image and video generation studio"
               />
-              <span className="hero-preview-caption">
+              <span className="product-preview-caption">
                 <small>Shared GPU platform</small>
                 <strong>Image Gen</strong>
+                <ArrowUpRight size={16} aria-hidden="true" />
               </span>
             </a>
-          </div>
         </div>
       </header>
 
@@ -1828,10 +1832,19 @@ function HomePage() {
                 <h3>{link.label}</h3>
                 <p className="project-summary">{link.description}</p>
                 <p className="access-note">{link.note}</p>
-                <span className="view-link">Open service</span>
+                <span className="view-link">Open service <ArrowUpRight size={15} aria-hidden="true" /></span>
               </Motion.a>
             ))}
           </div>
+
+          <aside className="private-service-note" aria-label="Private research workspace">
+            <Shield size={20} aria-hidden="true" />
+            <div>
+              <strong>Portfolio Research <span>Private / owner access</span></strong>
+              <p>ChatGPT sign-in. Not a public demo; portfolio data stays private.</p>
+            </div>
+            <a href="#/project/trade">Read the overview <ArrowRight size={16} aria-hidden="true" /></a>
+          </aside>
 
       </section>
 
@@ -1899,6 +1912,11 @@ function HomePage() {
                     <span className={`project-role ${project.accent}`}>
                       {project.id === "casino" ? "Secondary build" : isFeatured ? "Featured system" : "Case study"}
                     </span>
+                  </div>
+                ) : project.accessLabel ? (
+                  <div className={`project-access-banner ${project.accessTone}`}>
+                    <Icon size={24} aria-hidden="true" />
+                    <span>{project.accessLabel}</span>
                   </div>
                 ) : null}
                 <div className="project-card-body">
@@ -2337,7 +2355,7 @@ function ProjectDetail({ project }) {
   }, [project.id]);
 
   return (
-    <div className="app-shell project-detail-page">
+    <div className="app-shell project-detail-page portfolio-project">
       <PageNav />
 
       <section className="detail-hero section">
@@ -2414,10 +2432,12 @@ function ProjectDetail({ project }) {
         <div className="section-header">
           <div>
             <span className="eyebrow">Demonstration</span>
-            <h2>Screenshots</h2>
+            <h2>{project.screenshotPolicy === "private" ? "Private by design" : "Screenshots"}</h2>
           </div>
           <p>
-            {project.screenshots.length > 0
+            {project.screenshotPolicy === "private"
+              ? "Screenshots and portfolio data are intentionally excluded from this public case study."
+              : project.screenshots.length > 0
               ? "Selected screenshots showing the project in use."
               : "Screenshots will be added as more images are captured."}
           </p>
@@ -2442,7 +2462,7 @@ function ProjectDetail({ project }) {
         ) : (
           <div className="empty-state">
             <Shield size={20} />
-            <span>Screenshot set in progress</span>
+            <span>{project.screenshotPolicy === "private" ? "Owner-only workspace. No public screenshots." : "Screenshot set in progress"}</span>
           </div>
         )}
       </section>

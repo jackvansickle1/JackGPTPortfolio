@@ -11,7 +11,7 @@ test.beforeEach(async ({ page }) => {
 test('all primary routes remain reachable and project navigation clears the fixed header', async ({ page }) => {
   await page.goto('/');
   const nav = page.getByRole('navigation', { name: 'Portfolio navigation' });
-  for (const name of ['Work', 'Demo', 'Architecture', 'Hire', 'Writing', 'Notes']) {
+  for (const name of ['Services', 'Work', 'Demo', 'Architecture', 'Hire', 'Writing', 'Notes']) {
     await expect(nav.getByRole('link', { name, exact: true })).toBeInViewport();
   }
   await nav.getByRole('link', { name: 'Work', exact: true }).click();
@@ -29,12 +29,12 @@ test('grid and list views retain filtering, ordering, image assets and accessibl
   const cards = page.locator('#project-results .project-card');
   await page.getByRole('button', { name: 'List view', exact: true }).click();
   await expect(page.getByRole('button', { name: 'List view', exact: true })).toHaveAttribute('aria-pressed', 'true');
-  await expect(cards).toHaveCount(13);
+  await expect(cards).toHaveCount(15);
   await expect(cards.first()).toContainText('JackGPT Market Desk');
   await expect(cards.last()).toHaveClass(/secondary-project/);
   await page.getByRole('combobox', { name: 'Project category' }).selectOption('ai');
   await expect(cards).toHaveCount(3);
-  await expect(page.locator('.project-count')).toHaveText('3 of 13 projects');
+  await expect(page.locator('.project-count')).toHaveText('3 of 15 projects');
   await expect(page.locator('.project-list')).toBeVisible();
   await expect(cards.first().locator('img')).toBeVisible();
   await expect.poll(() => cards.first().locator('img').evaluate((image) => image.naturalWidth)).toBeGreaterThan(0);
@@ -43,7 +43,7 @@ test('grid and list views retain filtering, ordering, image assets and accessibl
   await expect(page.getByRole('button', { name: 'Grid view', exact: true })).toHaveAttribute('aria-pressed', 'true');
   await expect(cards).toHaveCount(3);
   await page.getByRole('button', { name: 'Clear project filters' }).click();
-  await expect(cards).toHaveCount(13);
+  await expect(cards).toHaveCount(15);
   await expect(page.getByRole('button', { name: 'Clear project filters' })).toBeDisabled();
 });
 
@@ -53,12 +53,12 @@ test('requested viewports retain fit, working navigation, and a visible next sec
     await page.goto('/');
     const proof = await page.locator('.proof-strip').boundingBox();
     expect(proof.y + 30).toBeLessThan(height);
-    const backdrop = page.locator('.hero .hero-preview-main img');
-    await expect.poll(() => backdrop.evaluate((image) => image.naturalWidth)).toBeGreaterThan(0);
-    await expect(backdrop.locator('..')).toHaveAttribute('href', '#/project/market-desk');
-    const scrim = await page.locator('.hero').evaluate((element) => getComputedStyle(element, '::before').backgroundColor);
-    expect(scrim).toBe(width <= 1100 ? 'rgba(16, 17, 18, 0.99)' : 'rgba(16, 17, 18, 0.78)');
-    for (const target of ['.site-nav-inner', '.hero-copy', '.hero-actions']) {
+    const preview = page.locator('.product-preview img').first();
+    await expect.poll(() => preview.evaluate((image) => image.naturalWidth)).toBeGreaterThan(0);
+    await expect(preview.locator('..')).toHaveAttribute('href', '#/project/market-desk');
+    await expect(preview).toHaveCSS('object-fit', 'contain');
+    await expect(page.locator('.portfolio-home')).toHaveCSS('background-color', 'rgb(10, 14, 20)');
+    for (const target of ['.site-nav-inner', '.intro-copy', '.intro-actions']) {
       const bounds = await page.locator(target).boundingBox();
       expect(bounds.x).toBeGreaterThanOrEqual(0);
       expect(bounds.x + bounds.width).toBeLessThanOrEqual(width);
@@ -102,8 +102,8 @@ test('status rows retain measurements and amber unknown states without nested me
   await expect(online).toContainText('42 ms');
   await expect(online).toHaveAttribute('data-status', 'online');
   await expect(unknown.locator('.status-pill')).toHaveText('Unknown');
-  await expect(unknown).toHaveCSS('border-left-color', 'rgb(242, 184, 75)');
-  await expect(unknown.locator('.status-pill')).toHaveCSS('border-top-color', 'rgba(242, 184, 75, 0.38)');
+  await expect(unknown).toHaveCSS('border-left-color', 'rgb(230, 188, 122)');
+  await expect(unknown.locator('.status-pill')).toHaveCSS('border-top-color', 'rgb(104, 83, 54)');
   await expect(online.locator('.metric-box').first()).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
   await expect(page.locator('.status-card a[href*="mesh.jackgpt.org"]')).toHaveCount(0);
 });

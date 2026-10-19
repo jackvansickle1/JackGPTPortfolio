@@ -1,5 +1,7 @@
+import { SITES_BOUNDARY_TARGETS, checkSitesBoundary } from "../../../lib/sites-boundary.js";
 
 const SERVICE_TARGETS = [
+  ...SITES_BOUNDARY_TARGETS,
   {
     key: "openwebui",
     name: "JackGPT AI Workspace",
@@ -163,6 +165,7 @@ async function readOfficeHealth(response) {
 }
 
 async function checkTarget(target) {
+  if (target.key === "sports" || target.key === "trade") return checkSitesBoundary(target.key);
   if (target.maintenance) {
     return {
       ...target,

@@ -8,16 +8,16 @@ export const projectCategories = {
 
 const categoryIds = {
   ai: ["jackgpt", "automatic1111", "jackgpt-search"],
-  finance: ["market-desk", "kalshi-temperature-bot", "moomoo-paper-trader", "kalshi-btc-bot", "ninjatrader-bot"],
+  finance: ["market-desk", "trade", "kalshi-temperature-bot", "moomoo-paper-trader", "kalshi-btc-bot", "ninjatrader-bot"],
   infrastructure: ["ops-control-room", "pearl-desk", "meshcentral", "salad-compute-node"],
-  games: ["casino"],
+  games: ["sports", "casino"],
 };
 
 export function filterProjects(projects, query, category) {
   const terms = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
   return projects.filter((project) => {
     if (category !== "all" && !categoryIds[category]?.includes(project.id)) return false;
-    const text = [project.name, project.subtitle, project.summary, ...project.tags, ...project.tech].join(" ").toLowerCase();
+    const text = [project.id, project.name, project.subtitle, project.summary, ...project.tags, ...project.tech, ...(project.links ?? []).map(({ href }) => href)].join(" ").toLowerCase();
     return terms.every((term) => text.includes(term));
   });
 }
